@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atento × Cốc Cốc — Đề xuất đào tạo 2 buổi</title>
+<meta name="description" content="Đề xuất đào tạo AI 2 buổi cho Cốc Cốc: buổi 1 vận hành và office, buổi 2 build app bằng Claude Code trên case mẫu social listening.">
+<meta name="theme-color" content="#25AF50">
+<meta property="og:title" content="Atento × Cốc Cốc — Đề xuất đào tạo 2 buổi">
+<meta property="og:description" content="Buổi 1: vận hành và office. Buổi 2: build app bằng Claude Code, case mẫu social listening.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2325AF50'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FEEB59'/%3E%3C/svg%3E">
+<style>
+@font-face{font-family:'Poppins';src:url('assets/fonts/SVN-Poppins.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Poppins';src:url('assets/fonts/SVN-PoppinsSemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Poppins';src:url('assets/fonts/SVN-PoppinsBold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+
+:root{
+  --paper:#FAFAF6;
+  --paper-2:#F1F2EB;
+  --white:#fff;
+  --ink:#141814;
+  --ink-2:#3B423C;
+  --muted:#6E746F;
+  --line:#E3E5DC;
+  --line-2:#CBD1C5;
+  --green:#25AF50;
+  --green-2:#14842F;
+  --green-3:#4FBA69;
+  --green-soft:#EAF6EE;
+  --lime:#97C93D;
+  --orange:#F16037;
+  --orange-soft:#FDEDE7;
+  --yellow:#FEEB59;
+  --dark:#0F1512;
+  --max:1160px;
+  --pad:clamp(20px,5vw,56px);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:15.5px;line-height:1.65;font-weight:400;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img{max-width:100%}
+a{color:inherit}
+::selection{background:var(--yellow);color:var(--ink)}
+:focus-visible{outline:2px solid var(--green-2);outline-offset:3px;border-radius:3px}
+
+/* ---------- shell ---------- */
+.wrap{width:100%;max-width:var(--max);margin:0 auto;padding-left:var(--pad);padding-right:var(--pad)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:10px 16px;z-index:100}
+.skip:focus{left:12px;top:12px}
+
+/* ---------- progress ---------- */
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--green),var(--lime),var(--orange));z-index:60;transition:width .1s linear}
+
+/* ---------- nav ---------- */
+.top{
+  position:sticky;top:0;z-index:50;
+  background:rgba(250,250,246,.86);backdrop-filter:saturate(140%) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.top-in{display:flex;align-items:center;gap:28px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14.5px;letter-spacing:-.01em;text-decoration:none;white-space:nowrap}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+.brand .x{color:var(--muted);font-weight:400;margin:0 2px}
+.nav{margin-left:auto;display:flex;gap:26px;font-size:13.5px}
+.nav a{text-decoration:none;color:var(--muted);transition:color .2s}
+.nav a:hover,.nav a.active{color:var(--ink)}
+.top-cta{
+  margin-left:8px;text-decoration:none;font-size:13px;font-weight:600;
+  background:var(--ink);color:#fff;padding:9px 16px;border-radius:999px;
+  transition:transform .2s var(--ease),background .2s;
+}
+.top-cta:hover{background:var(--green-2);transform:translateY(-1px)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;padding:clamp(52px,8vw,96px) 0 clamp(36px,5vw,56px)}
+.hero::before{
+  content:"";position:absolute;inset:-20% -10% auto -10%;height:90%;
+  background:
+    radial-gradient(60% 60% at 80% 0%,rgba(37,175,80,.10),transparent 70%),
+    radial-gradient(40% 50% at 12% 10%,rgba(254,235,89,.28),transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(to right,rgba(20,24,20,.045) 1px,transparent 1px),linear-gradient(to bottom,rgba(20,24,20,.045) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:linear-gradient(to bottom,#000 0%,transparent 78%);
+}
+.hero .wrap{position:relative;z-index:1}
+.kicker{
+  display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;color:var(--green-2);
+  background:var(--green-soft);border:1px solid #D5EDDD;border-radius:999px;padding:6px 13px;margin-bottom:26px;
+}
+.kicker i{width:6px;height:6px;border-radius:50%;background:var(--green);display:block}
+.br-d{display:inline}
+@media (max-width:720px){.br-d{display:none}}
+.nb{white-space:nowrap}
+h1{
+  font-size:clamp(34px,5.4vw,66px);line-height:1.04;letter-spacing:-.035em;font-weight:600;
+  margin:0 0 26px;max-width:20ch;text-wrap:balance;
+}
+h1 .mark{
+  background:linear-gradient(180deg,transparent 58%,var(--yellow) 58%,var(--yellow) 92%,transparent 92%);
+  padding:0 .06em;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+}
+.hero-grid{margin-top:8px}
+.lede{font-size:clamp(16px,1.5vw,18px);line-height:1.62;color:var(--ink-2);margin:0;max-width:54ch}
+.lede b{font-weight:600;color:var(--ink)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;font-size:12.5px;color:var(--muted)}
+.hero-meta span{display:flex;align-items:center;gap:7px}
+.hero-meta span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--line-2)}
+.hero-meta span:first-child::before{background:var(--green)}
+
+
+/* ---------- pipeline ---------- */
+.flow{margin-top:clamp(40px,6vw,64px);border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.7);overflow:hidden}
+.flow-row{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;padding:16px 22px;border-top:1px solid var(--line)}
+.flow-row:first-child{border-top:0}
+.flow-label{font-size:11.5px;line-height:1.35;color:var(--muted)}
+.flow-label b{display:block;font-size:12.5px;color:var(--ink);font-weight:600}
+.flow-steps{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.step{font-size:12.5px;font-weight:600;background:var(--white);border:1px solid var(--line-2);border-radius:999px;padding:7px 13px;white-space:nowrap;line-height:1.2}
+.step.g{background:var(--green-soft);border-color:#BFE4CA;color:var(--green-2)}
+.step.o{background:var(--orange-soft);border-color:#F6C8B8;color:#B8431F}
+.arw{width:18px;height:1px;background:var(--line-2);position:relative;flex:0 0 auto}
+.arw::after{content:"";position:absolute;right:0;top:-2.5px;width:5px;height:5px;border-top:1px solid var(--line-2);border-right:1px solid var(--line-2);transform:rotate(45deg)}
+
+/* ---------- sections ---------- */
+.s{padding:clamp(56px,8vw,96px) 0;border-top:1px solid var(--line);scroll-margin-top:72px}
+.s-alt{background:var(--paper-2)}
+.s-label{display:flex;align-items:baseline;gap:12px;font-size:12.5px;font-weight:600;color:var(--green-2);margin-bottom:16px}
+.s-label .num{font-variant-numeric:tabular-nums;color:var(--green);opacity:.75}
+h2{font-size:clamp(26px,3.4vw,40px);line-height:1.12;letter-spacing:-.03em;font-weight:600;margin:0 0 14px;max-width:24ch;text-wrap:balance}
+.s-intro{font-size:15.5px;color:var(--ink-2);max-width:62ch;margin:0 0 34px}
+.s-intro strong{font-weight:600;color:var(--ink)}
+
+/* question cards */
+.q-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:34px}
+.q{
+  background:var(--white);border:1px solid var(--line);border-radius:14px;padding:24px 24px 20px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.q-grid .q:last-child:nth-child(odd){grid-column:1/-1}
+.q .n{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.06em}
+.q h3{font-size:17px;line-height:1.35;font-weight:600;letter-spacing:-.015em;margin:0}
+.q p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.6}
+.q .to{margin-top:auto;padding-top:6px;font-size:11.5px;font-weight:600;color:var(--green-2)}
+.q .to::before{content:"";display:inline-block;width:14px;height:1px;background:var(--green);vertical-align:4px;margin-right:8px}
+
+/* ---------- program ---------- */
+.prog{display:grid;grid-template-columns:.85fr 1.4fr;gap:clamp(32px,6vw,80px);align-items:start}
+.side{position:sticky;top:92px}
+.side h2{margin-bottom:12px}
+.side p{font-size:14.5px;color:var(--ink-2);margin:0 0 20px}
+.side-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+.side-tags span{font-size:11.5px;font-weight:600;border:1px solid var(--line-2);border-radius:6px;padding:4px 9px;color:var(--ink-2);background:var(--white)}
+.side-note{font-size:12.5px;line-height:1.6;color:var(--muted);border-left:2px solid var(--yellow);padding-left:12px;margin:0}
+.side-note b{color:var(--ink);font-weight:600}
+
+.timeline{list-style:none;margin:0;padding:0}
+.tl{display:grid;grid-template-columns:38px 1fr;gap:18px;padding:17px 0;border-top:1px solid var(--line)}
+.tl:first-child{border-top:1px solid var(--line-2)}
+.tl-group{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--green);padding:26px 0 10px}
+.tl-group:first-child{padding-top:0}
+.tl-num{font-size:11px;font-weight:600;color:var(--green);font-variant-numeric:tabular-nums;padding-top:4px;letter-spacing:.04em}
+.tl-title{font-size:16.5px;font-weight:600;line-height:1.35;letter-spacing:-.015em;margin:0 0 5px}
+.tl p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.62;max-width:64ch}
+.d{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.03em;color:var(--green-2);background:var(--green-soft);border-radius:4px;padding:1px 6px;margin-left:6px;transform:translateY(-1px)}
+.d.alt{background:var(--orange-soft);color:#B8431F}
+
+/* ---------- coverage table ---------- */
+.tbl-wrap{overflow-x:auto;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:15px 16px 15px 0;border-top:1px solid var(--line);vertical-align:top}
+th{font-size:11.5px;font-weight:600;color:var(--muted);border-top:1px solid var(--line-2);padding-bottom:10px}
+td:first-child{font-weight:600;color:var(--ink);width:34%}
+td .sub{display:block;font-weight:400;color:var(--muted);font-size:12.5px;margin-top:3px}
+td.loc{color:var(--green-2);font-weight:600;white-space:nowrap;width:18%}
+td.res{color:var(--ink-2);width:48%}
+
+/* ---------- outcomes ---------- */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px 20px;display:flex;flex-direction:column;gap:8px}
+.card .n{font-size:11px;font-weight:600;color:var(--green);letter-spacing:.06em}
+.card h3{font-size:15.5px;line-height:1.35;font-weight:600;margin:0;letter-spacing:-.01em}
+.card p{font-size:12.5px;color:var(--muted);line-height:1.58;margin:0}
+.cap{display:grid;grid-template-columns:1fr 1fr;gap:2px 34px;margin-top:14px}
+.cap li{list-style:none;position:relative;padding:9px 0 9px 22px;font-size:13.5px;line-height:1.55;border-top:1px solid var(--line)}
+.cap li::before{content:"";position:absolute;left:2px;top:16px;width:6px;height:3px;border-left:1.7px solid var(--green);border-bottom:1.7px solid var(--green);transform:rotate(-45deg)}
+
+.quote{
+  text-wrap:balance;
+  margin:36px 0 0;border-left:3px solid var(--green);padding:6px 0 6px 22px;
+  font-size:clamp(17px,2vw,21px);line-height:1.5;letter-spacing:-.015em;font-weight:600;color:var(--ink);max-width:66ch;
+}
+.quote span{color:var(--muted);font-weight:400;font-size:13.5px;display:block;margin-top:8px;letter-spacing:0}
+
+/* ---------- limits ---------- */
+.limits{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:8px}
+.limit{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:20px 22px;border-left:3px solid var(--orange)}
+.limit h3{font-size:14.5px;font-weight:600;margin:0 0 6px;line-height:1.35}
+.limit p{font-size:13px;color:var(--muted);line-height:1.6;margin:0}
+
+/* ---------- how ---------- */
+.how{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,5vw,64px);align-items:start}
+.how h3{font-size:13px;font-weight:600;color:var(--muted);margin:0 0 12px}
+.steps3{counter-reset:st;list-style:none;margin:0;padding:0}
+.steps3 li{counter-increment:st;position:relative;padding:0 0 18px 34px;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.steps3 li::before{
+  content:counter(st,decimal-leading-zero);position:absolute;left:0;top:1px;
+  font-size:10.5px;font-weight:600;color:var(--green-2);background:var(--green-soft);
+  width:24px;height:24px;border-radius:6px;display:grid;place-items:center;
+}
+.steps3 li b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
+.prep{background:var(--white);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.prep .h{font-size:11.5px;font-weight:600;color:var(--muted);padding:16px 20px 12px;border-bottom:1px solid var(--line);letter-spacing:.06em}
+.prep .row{display:grid;grid-template-columns:104px 1fr;gap:14px;padding:11px 20px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.5}
+.prep .row:first-of-type{border-top:0}
+.prep .row b{font-weight:600;color:var(--ink);font-size:12px}
+.prep .row span{color:var(--muted)}
+
+/* ---------- why ---------- */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.why-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:24px 22px}
+.why-card .ava{width:40px;height:40px;border-radius:50%;background:var(--green-soft);color:var(--green-2);display:grid;place-items:center;font-weight:600;font-size:14px;margin-bottom:14px;border:1px solid #D5EDDD}
+.why-card .ava.o{background:var(--orange-soft);color:#B8431F;border-color:#F6C8B8}
+.why-card .ava.y{background:#FEF8D6;color:#8A6B00;border-color:#F3E7A8}
+.why-card h3{font-size:15px;font-weight:600;line-height:1.4;margin:0 0 6px;letter-spacing:-.01em}
+.why-card p{font-size:12.5px;color:var(--muted);line-height:1.62;margin:0}
+.why-card .role{font-size:11.5px;color:var(--green-2);font-weight:600;margin-bottom:2px}
+
+/* ---------- next ---------- */
+.next{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(28px,5vw,64px);align-items:start}
+.next-steps{list-style:none;margin:26px 0 0;padding:0;counter-reset:nx}
+.next-steps li{counter-increment:nx;display:grid;grid-template-columns:46px 1fr;gap:18px;padding:18px 0;border-top:1px solid var(--line);align-items:start}
+.next-steps li::before{content:"0" counter(nx);font-size:11px;font-weight:600;color:var(--green-2);background:var(--green-soft);border-radius:6px;height:26px;display:grid;place-items:center;width:26px}
+.next-steps b{display:block;font-size:15px;font-weight:600;margin-bottom:2px}
+.next-steps span{font-size:13px;color:var(--muted);line-height:1.6}
+.contact{background:var(--dark);color:#F4F6EF;border-radius:18px;padding:30px 28px;position:relative;overflow:hidden}
+.contact::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(37,175,80,.35),transparent 70%)}
+.contact .k{font-size:11px;font-weight:600;color:var(--green-3);letter-spacing:.07em;margin-bottom:14px}
+.contact h3{font-size:21px;line-height:1.3;font-weight:600;letter-spacing:-.02em;margin:0 0 18px;max-width:18ch}
+.contact a.mail{display:inline-block;background:var(--yellow);color:var(--ink);text-decoration:none;font-size:13px;font-weight:600;padding:11px 16px;border-radius:999px;transition:transform .2s var(--ease)}
+.contact a.mail:hover{transform:translateY(-1px)}
+.contact .meta{font-size:11.5px;color:rgba(244,246,239,.6);margin-top:20px;line-height:1.7}
+.contact .meta a{color:rgba(244,246,239,.85);text-decoration:none;border-bottom:1px solid rgba(244,246,239,.25)}
+
+/* ---------- footer ---------- */
+.foot{border-top:1px solid var(--line);padding:26px 0 40px;font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.foot a{text-decoration:none;border-bottom:1px solid var(--line-2)}
+.foot a:hover{color:var(--ink)}
+
+/* ---------- motion ---------- */
+.rv{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none;transition:none}
+  *{animation:none!important;transition:none!important}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .prog{grid-template-columns:1fr;gap:34px}
+  .side{position:static;margin-bottom:6mm}
+  .prog{display:block}
+  .how,.next{grid-template-columns:1fr}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .why-grid{grid-template-columns:1fr}
+  .cap{grid-template-columns:1fr}
+  .nav{display:none}
+}
+@media (max-width:720px){
+  body{font-size:15px}
+  .top-cta{display:inline-block;padding:8px 13px;font-size:12px}
+  .q-grid,.limits,.cards{grid-template-columns:1fr}
+  .flow-row{grid-template-columns:1fr;gap:10px}
+  .flow-label{display:flex;gap:8px;align-items:baseline}
+  .flow-label b{display:inline}
+  .flow-steps .arw{display:none}
+  .tl{grid-template-columns:30px 1fr;gap:12px}
+  .tl-title{font-size:15px}
+  td:first-child{width:44%}
+  td.loc{white-space:normal}
+  .prep .row{grid-template-columns:1fr;gap:2px}
+  h1{max-width:none}
+}
+
+
+@media (max-width:720px){
+  table.cov thead{display:none}
+  table.cov, table.cov tbody, table.cov tr, table.cov td{display:block;width:auto}
+  table.cov tr{border-top:1px solid var(--line);padding:16px 0}
+  table.cov tr:first-child{border-top:1px solid var(--line-2)}
+  table.cov td{border:0;padding:0}
+  table.cov td:first-child{width:auto;margin-bottom:5px}
+  table.cov td.loc{font-size:11.5px;margin-bottom:5px}
+  table.cov td.res{font-size:12.5px;color:var(--muted)}
+}
+
+/* ---------- print ---------- */
+@media print{
+  @page{size:A4;margin:14mm}
+  body{background:#fff;font-size:10pt;line-height:1.55}
+  #prog,.top,.skip{display:none}
+  .rv{opacity:1!important;transform:none!important}
+  .wrap{max-width:none;padding:0}
+  .hero{padding:0 0 8mm}
+  .hero::before,.hero::after{display:none}
+  .s{padding:9mm 0;break-inside:auto;break-before:page}
+  .s-alt{background:#fff}
+  .s-label,.s-intro{break-after:avoid}
+  h1,h2{break-after:avoid}
+  h1{font-size:30pt;max-width:none}
+  h2{font-size:20pt;max-width:none}
+  .q,.card,.limit,.why-card,.prep,.contact,.flow,.tl,.quote{break-inside:avoid}
+  .side{position:static;margin-bottom:6mm}
+  .prog{display:block}
+  .prog{gap:10mm}
+  .timeline{break-inside:auto}
+  .contact{background:#fff;color:#000;border:1px solid #ccc}
+  .contact a.mail{background:#eee;color:#000}
+  .contact .meta,.contact .k{color:#444}
+  .contact .meta a{color:#000}
+  .contact::after{display:none}
+  .flow-row{display:block}
+  .flow-label{margin-bottom:4px}
+  .flow-steps .arw{display:none}
+  .step{display:inline-block;margin:2px 4px 2px 0;font-size:8.5pt;padding:3px 8px}
+  a{text-decoration:none}
+}
+</style>
+</head>
+<body>
+<noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
+<a class="skip" href="#main">Bỏ qua điều hướng</a>
+<div id="prog" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#top">
+      <span class="dot" aria-hidden="true"></span>
+      Atento <span class="x">×</span> Cốc Cốc
+    </a>
+    <nav class="nav" aria-label="Mục lục">
+      <a href="#problem">Vấn đề</a>
+      <a href="#b1">Buổi 1</a>
+      <a href="#b2">Buổi 2</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="kicker"><i aria-hidden="true"></i> Đề xuất đào tạo · tháng 11.2026</div>
+    <h1><span class="mark">AI</span> for Work</h1>
+
+    <div class="hero-grid">
+      <div>
+        <p class="lede">Dùng AI cho công việc hằng ngày: báo cáo, lead, nội dung.<br>Tự xây dựng một sản phẩm nhỏ với Claude Code.</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- 01 PROBLEM -->
+<section class="s" id="problem">
+  <div class="wrap">
+    <div class="s-label rv"><span class="num">01</span> Vấn đề</div>
+    <h2 class="rv">Năm nhóm việc Cốc Cốc cần AI hỗ trợ.</h2>
+
+    <div class="q-grid">
+      <article class="q rv">
+        <div class="n">01</div>
+        <h3>Xử lý dữ liệu &amp; tự động hoá báo cáo</h3>
+        <p>Chuẩn hoá Excel/Sheets, công thức, hợp nhất đa nguồn; phân tích CRM theo kỳ, tìm bất thường; tự tạo slide, xuất báo cáo, gửi cảnh báo KPI.</p>
+      </article>
+      <article class="q rv">
+        <div class="n">02</div>
+        <h3>Nghiên cứu thị trường &amp; làm giàu dữ liệu khách hàng</h3>
+        <p>Xu hướng ngành, đối thủ; người phụ trách, thông tin liên hệ, lịch sử quảng cáo và khuyến mãi.</p>
+      </article>
+      <article class="q rv">
+        <div class="n">03</div>
+        <h3>Luồng công việc &amp; tự động vận hành</h3>
+        <p>Phân loại, điều phối lead theo ưu tiên; nhắc lịch, khảo sát, chuỗi chăm sóc.</p>
+      </article>
+      <article class="q rv">
+        <div class="n">04</div>
+        <h3>Sáng tạo nội dung</h3>
+        <p>Nội dung đa kênh theo brief; văn phong theo bộ quy chuẩn kiểm duyệt; giọng đọc AI, kịch bản, video ngắn.</p>
+      </article>
+      <article class="q rv">
+        <div class="n">05</div>
+        <h3>Social listening</h3>
+        <p>Tự động nghe thương hiệu Cốc Cốc trên báo chí, diễn đàn, mạng xã hội.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 02 SESSION 1 -->
+<section class="s s-alt" id="b1">
+  <div class="wrap prog">
+    <aside class="side rv">
+      <div class="s-label"><span class="num">02</span> Buổi 1</div>
+      <h2>Vận hành &amp; Office</h2>
+      <p>Hai phần: xử lý dữ liệu đến báo cáo, và từ hồ sơ khách hàng đến nội dung chăm sóc.</p>
+    </aside>
+
+    <ol class="timeline">
+      <li class="tl-group rv">Phần 1 · Dữ liệu và báo cáo</li>
+      <li class="tl rv">
+        <div class="tl-num">01</div>
+        <div>
+          <h3 class="tl-title">Xử lý dữ liệu</h3>
+          <p>Chuẩn hoá, làm sạch và hợp nhất dữ liệu Excel/Sheets; dùng AI viết công thức.</p>
+        </div>
+      </li>
+      <li class="tl rv">
+        <div class="tl-num">02</div>
+        <div>
+          <h3 class="tl-title">Phân tích và báo cáo</h3>
+          <p>Phân tích theo kỳ, tìm bất thường, xuất báo cáo và cảnh báo KPI.</p>
+        </div>
+      </li>
+      <li class="tl-group rv">Phần 2 · Khách hàng và nội dung</li>
+      <li class="tl rv">
+        <div class="tl-num">03</div>
+        <div>
+          <h3 class="tl-title">Nghiên cứu thị trường và làm giàu dữ liệu khách hàng</h3>
+          <p>Research theo lô rồi ghép vào file khách hàng: tín hiệu mua, người phụ trách, hook tiếp cận; hồ sơ đối thủ và khoảng trống nội dung.</p>
+        </div>
+      </li>
+      <li class="tl rv">
+        <div class="tl-num">04</div>
+        <div>
+          <h3 class="tl-title">Điều phối lead và chăm sóc khách hàng</h3>
+          <p>Phân loại lead theo ưu tiên; nhắc lịch, khảo sát, chuỗi chăm sóc.</p>
+        </div>
+      </li>
+      <li class="tl rv">
+        <div class="tl-num">05</div>
+        <div>
+          <h3 class="tl-title">Nội dung đa kênh và video ngắn</h3>
+          <p>Viết nội dung theo brief và quy chuẩn kiểm duyệt; giọng đọc AI, kịch bản, video ngắn.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- 03 SESSION 2 -->
+<section class="s" id="b2">
+  <div class="wrap prog">
+    <aside class="side rv">
+      <div class="s-label"><span class="num">03</span> Buổi 2</div>
+      <h2>Claude Code: từ chat đến app</h2>
+      <p>Buổi này không dạy code. Một nhóm không chuyên tự viết spec, đọc diff, kiểm thử và cho một app nhỏ chạy theo lịch. Case chung là social listening; sản phẩm của mỗi nhóm là bài toán của chính họ.</p>
+    </aside>
+
+    <ol class="timeline">
+      <li class="tl rv">
+        <div class="tl-num">01</div>
+        <div>
+          <h3 class="tl-title">Làm quen với Claude Code</h3>
+          <p>Cách làm việc với coding agent: giao việc, đọc thay đổi, hoàn tác khi sai.</p>
+        </div>
+      </li>
+      <li class="tl rv">
+        <div class="tl-num">02</div>
+        <div>
+          <h3 class="tl-title">Kiến trúc một website</h3>
+          <p>Frontend, backend, database và API: mỗi phần làm gì, ghép với nhau ra sao.</p>
+        </div>
+      </li>
+      <li class="tl rv">
+        <div class="tl-num">03</div>
+        <div>
+          <h3 class="tl-title">Chọn bài toán và viết spec</h3>
+          <p>Chọn một bài toán của nhóm; mô tả đầu vào, đầu ra và tiêu chí đúng.</p>
+        </div>
+      </li>
+      <li class="tl rv">
+        <div class="tl-num">04</div>
+        <div>
+          <h3 class="tl-title">Xây dựng và kiểm thử app</h3>
+          <p>Dựng app theo spec với case mẫu social listening; kiểm tra trên dữ liệu thật và sửa lỗi.</p>
+        </div>
+      </li>
+      <li class="tl rv">
+        <div class="tl-num">05</div>
+        <div>
+          <h3 class="tl-title">Đưa app lên internet</h3>
+          <p>Deploy app theo cách đơn giản để người khác truy cập qua đường link; cho app chạy theo lịch.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot wrap">
+  <span><a href="mailto:admin@atento.vn">admin@atento.vn</a></span>
+</footer>
+
+<script>
+(function(){
+  var prog=document.getElementById('prog');
+  var links=[].slice.call(document.querySelectorAll('.nav a'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))}).filter(Boolean);
+
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight;
+    prog.style.width=(max>0?(h.scrollTop/max)*100:0)+'%';
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+
+  if('IntersectionObserver' in window){
+    var spy=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id)});
+      });
+    },{rootMargin:'-45% 0px -50% 0px'});
+    secs.forEach(function(s){spy.observe(s)});
+
+    var rev=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){e.target.classList.add('in');rev.unobserve(e.target)}
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    [].forEach.call(document.querySelectorAll('.rv'),function(el){rev.observe(el)});
+  } else {
+    [].forEach.call(document.querySelectorAll('.rv'),function(el){el.classList.add('in')});
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+services:
+  lessons:
+    build: .
+    image: coccoc-ai-lessons:latest
+    container_name: coccoc-ai-lessons
+    ports:
+      - "8177:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
