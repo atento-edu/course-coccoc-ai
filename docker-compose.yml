@@ -1,8 +1,8 @@
 services:
-  lessons:
+  coccoc-ai:
     build: .
-    image: coccoc-ai-lessons:latest
-    container_name: coccoc-ai-lessons
+    image: coccoc-ai:latest
+    container_name: coccoc-ai
     ports:
       - "8177:80"
     restart: unless-stopped
