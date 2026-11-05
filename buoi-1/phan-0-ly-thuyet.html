@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiến thức nền AI</title>
+<meta name="description" content="Buổi 1, phần 0: kiến thức nền về AI, đọc trước buổi học.">
+<meta name="theme-color" content="#E4F4E8">
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-Poppins.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-PoppinsSemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-PoppinsBold.woff2') format('woff2');font-weight:700;font-display:swap}
+
+:root{
+  --ink:#12261A; --ink-2:#3E5246; --muted:#6F7F74;
+  --rule:#DCE5DE; --mist:#F2F6F1; --paper:#FFFFFF;
+  --green:#25AF50; --green-deep:#14842F; --green-pale:#D6F0DE; --green-line:#BFE4CA;
+  --forest:#0B3D22; --opener:#E4F4E8;
+  --orange:#F16037; --orange-deep:#B8431F; --orange-pale:#FDEDE7;
+  --yellow:#FEEB59;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:#DCE5DE;color:var(--ink);font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+b{font-weight:600}
+
+/* ---------- stage ---------- */
+#viewport{position:fixed;inset:0}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;transform:translate(-50%,-50%)}
+.slide{
+  position:absolute;inset:0;overflow:hidden;background:var(--paper);
+  padding:92px 104px 124px;display:flex;flex-direction:column;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .28s ease,visibility 0s linear .28s;
+}
+.slide.active{opacity:1;visibility:visible;transition:opacity .28s ease,visibility 0s}
+.slide .notes{display:none}
+.f{opacity:0;transition:opacity .3s ease}
+.f.on{opacity:1}
+
+/* ---------- type ---------- */
+h2{font-size:56px;line-height:1.12;letter-spacing:-.025em;font-weight:600;max-width:36ch;text-wrap:balance}
+.lead{font-size:29px;line-height:1.5;color:var(--ink-2);margin-top:20px;max-width:52ch}
+.fill{display:flex;flex-direction:column;margin-top:48px}
+.foot-note{font-size:19px;color:var(--muted);margin-top:20px}
+
+/* English term next to the Vietnamese one */
+.en{font-weight:400;color:var(--muted);letter-spacing:0}
+h2 .en,h3 .en,.say .en{font-size:.55em;white-space:nowrap}
+.prompt .en{color:#9DBBA6}
+.sticky .en{color:var(--ink-2)}
+
+/* ---------- chrome inside slides ---------- */
+.trk{position:absolute;left:104px;right:290px;bottom:44px;display:grid;grid-template-columns:repeat(10,auto);justify-content:space-between;gap:10px}
+.trk span{font-size:15px;color:var(--muted);padding-top:12px;border-top:4px solid var(--rule);white-space:nowrap}
+.trk span.past{border-top-color:var(--green-line)}
+.trk span.cur{border-top-color:var(--green);color:var(--ink);font-weight:600}
+.pg{position:absolute;right:196px;bottom:44px;font-size:17px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:16px}
+
+/* brand lockup, links to programme home */
+.brand{position:absolute;left:104px;top:18px;z-index:2;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--muted);font-size:16px;line-height:1;gap:10px;border-radius:8px;padding:6px 10px;margin-left:-10px;transition:background .2s}
+.brand:hover,.brand:focus-visible{background:rgba(11,61,34,.06);outline:none}
+.brand img{display:block;height:22px;width:auto}
+.brand b{font-size:19px;font-weight:700;color:var(--ink);letter-spacing:-.02em;margin-left:-4px}
+.brand .x{color:var(--muted)}
+.brand img.cc{height:22px}
+.cover .brand{top:56px}
+.cover .brand img{height:40px}
+.cover .brand b{font-size:35px;margin-left:-6px}
+.cover .brand img.cc{height:40px}
+.cover .brand{gap:20px;font-size:30px}
+
+/* ---------- opener: the one loud thing ---------- */
+.opener{background:var(--opener);color:var(--forest);justify-content:flex-end;padding-bottom:168px}
+.opener .num{position:absolute;right:96px;top:64px;font-size:480px;line-height:.86;font-weight:700;color:var(--green);letter-spacing:-.05em;opacity:.95}
+.opener .say{position:relative;font-size:84px;line-height:1.08;letter-spacing:-.03em;font-weight:600;max-width:19ch;text-wrap:balance}
+.opener .sub{position:relative;font-size:30px;line-height:1.5;color:var(--ink-2);margin-top:30px;max-width:46ch}
+.opener .trk span{border-top-color:rgba(11,61,34,.12)}
+.opener .trk span.past{border-top-color:#9FD5AF}
+.opener .trk span.cur{border-top-color:var(--green-deep);color:var(--forest)}
+@media (prefers-reduced-motion:no-preference){
+  .opener.active .num{animation:rise .7s var(--ease) both}
+  .opener.active .say{animation:fade .6s ease .12s both}
+  .opener.active .sub{animation:fade .6s ease .24s both}
+}
+@keyframes rise{from{opacity:0;transform:translateY(60px)}to{opacity:.95;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* cover */
+.cover .kick{position:relative;font-size:26px;color:var(--green-deep);font-weight:600;margin-bottom:32px}
+.cover h1{position:relative;font-size:124px;line-height:1;letter-spacing:-.04em;font-weight:700;max-width:12ch}
+.cover .sub{max-width:40ch}
+.cover .by{position:relative;display:flex;gap:48px;margin-top:56px;font-size:20px;color:rgba(255,255,255,.72)}
+.cover .note-card{position:absolute;right:120px;top:120px;width:300px;height:320px;background:var(--yellow);transform:rotate(4deg);box-shadow:0 18px 40px rgba(0,0,0,.18);padding:34px 32px;color:var(--ink);font-size:25px;line-height:1.4;font-weight:600}
+.cover .note-card small{display:block;font-weight:400;font-size:20px;line-height:1.45;color:var(--ink-2);margin-top:16px}
+.cover .keys{position:absolute;left:104px;bottom:50px;font-size:18px;color:var(--ink-2);display:flex;gap:28px}
+kbd{font-family:inherit;font-size:.9em;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);border-radius:7px;padding:1px 9px;color:#fff}
+.cover kbd{background:#fff;border-color:var(--green-line);border-bottom-width:3px;color:var(--ink)}
+
+/* quiet statement */
+.quiet{justify-content:center}
+.quiet .say{font-size:96px;line-height:1.05;letter-spacing:-.035em;font-weight:700;color:var(--green-deep)}
+.quiet .sub{font-size:30px;line-height:1.55;color:var(--ink-2);margin-top:34px;max-width:50ch}
+
+/* agenda */
+.agenda{margin-top:40px;border-top:1.5px solid var(--rule)}
+.agenda li{display:grid;grid-template-columns:72px 1fr auto;align-items:baseline;padding:17px 0;border-bottom:1.5px solid var(--rule);font-size:31px}
+.agenda .k{font-weight:700;color:var(--green);font-size:31px}
+.agenda .m{font-size:22px;color:var(--muted)}
+
+/* three columns separated by rules */
+.three{display:grid;grid-template-columns:repeat(3,1fr);margin-top:52px}
+.three>div{padding:0 40px;border-left:1.5px solid var(--rule)}
+.three>div:first-child{padding-left:0;border-left:0}
+.three h3{font-size:33px;line-height:1.2;font-weight:600;letter-spacing:-.02em}
+.three p{font-size:27px;line-height:1.5;color:var(--ink-2);margin-top:16px}
+
+/* sticky note */
+.sticky{background:var(--yellow);padding:22px 30px 24px;box-shadow:0 8px 20px rgba(11,61,34,.14);transform:rotate(-1deg);font-size:24px;line-height:1.5;color:var(--ink);max-width:880px}
+.sticky small{display:block;font-size:17px;color:var(--ink-2);margin-bottom:4px}
+.sticky.r{transform:rotate(1.2deg)}
+
+/* paper sheets */
+.sheets{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:44px;padding:0 8px}
+.sheet{background:#fff;border:1.5px solid var(--rule);box-shadow:0 14px 30px rgba(11,61,34,.10);padding:34px 40px 40px;min-height:340px;position:relative}
+.sheet.l{transform:rotate(-1.2deg)}
+.sheet.r{transform:rotate(.8deg);border-color:var(--green-line)}
+.sheet .who{font-size:19px;color:var(--muted);margin-bottom:18px}
+.sheet.r .who{color:var(--green-deep);font-weight:600}
+.sheet h4{margin:0 0 14px;font-size:28px;line-height:1.3;font-weight:600}
+.sheet p{font-size:26px;line-height:1.55;color:var(--muted)}
+.sheet ul li{font-size:26px;line-height:1.5;color:var(--ink-2);padding-left:24px;position:relative;margin-top:8px}
+.sheet ul li::before{content:"";position:absolute;left:0;top:16px;width:9px;height:9px;border-radius:50%;background:var(--green)}
+
+/* sequence steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:56px;counter-reset:s}
+.steps li{border-top:4px solid var(--green);padding-top:22px}
+.steps li::before{counter-increment:s;content:counter(s);display:block;font-size:54px;line-height:1;font-weight:700;color:var(--green);margin-bottom:14px}
+.steps.four{grid-template-columns:repeat(4,1fr);gap:32px}
+.steps.four h3{font-size:30px;line-height:1.25}
+.steps.four p{font-size:24px}
+.steps h3{font-size:32px;font-weight:600;letter-spacing:-.02em}
+.steps p{font-size:26px;line-height:1.5;color:var(--ink-2);margin-top:10px}
+
+/* bar callout */
+.bar{margin-top:44px;border-left:6px solid var(--green);padding:6px 0 6px 28px;font-size:28px;line-height:1.45;color:var(--ink-2);max-width:56ch}
+.bar b{color:var(--ink)}
+.bar.o{border-left-color:var(--orange)}
+
+/* desk illustration */
+.desks{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:48px}
+.surf{position:relative;height:270px;border-radius:12px;background:linear-gradient(180deg,#EEE3CF,#E3D4BA);overflow:hidden;box-shadow:inset 0 -6px 0 #D5C29F}
+.paper{position:absolute;width:100px;height:128px;background:#fff;border-radius:4px;box-shadow:0 4px 10px rgba(60,40,10,.14)}
+.paper::before{content:"";position:absolute;left:14px;right:14px;top:18px;height:50px;background:repeating-linear-gradient(180deg,var(--rule) 0 3px,transparent 3px 11px)}
+.paper.lost{background:var(--orange-pale);outline:3px solid var(--orange);outline-offset:-3px}
+.paper.y{background:var(--yellow);width:86px;height:86px}
+.paper.y::before{display:none}
+.desk h3{font-size:29px;font-weight:600;margin-top:22px}
+.desk p{font-size:25px;color:var(--ink-2);margin-top:6px;line-height:1.45}
+.desk.full h3{color:var(--orange-deep)}
+
+/* chat */
+.chat{display:flex;flex-direction:column;gap:16px}
+.msg{max-width:88%;border-radius:22px;padding:20px 26px;font-size:26px;line-height:1.5}
+.msg small{display:block;font-size:16px;margin-bottom:4px;opacity:.75}
+.msg.u{align-self:flex-end;background:var(--forest);color:#fff;border-bottom-right-radius:6px}
+.msg.a{align-self:flex-start;background:var(--mist);color:var(--ink);border-bottom-left-radius:6px}
+.msg.flag{background:var(--orange-pale);box-shadow:inset 6px 0 0 var(--orange)}
+.gap{align-self:center;font-size:19px;color:var(--muted);padding:4px 18px;border:1.5px dashed var(--rule);border-radius:999px}
+.tag{display:inline-block;background:var(--orange);color:#fff;font-size:17px;font-weight:600;border-radius:999px;padding:3px 14px;margin-top:10px}
+.split{display:grid;grid-template-columns:1.25fr .9fr;gap:64px;margin-top:40px;align-items:start}
+.split .side p{font-size:28px;line-height:1.5;color:var(--ink-2)}
+.split .side p+p{margin-top:22px}
+.split .side .sticky{margin-top:30px}
+
+/* compare columns */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px}
+.cmp h3{font-size:30px;font-weight:600;letter-spacing:-.015em;padding-bottom:16px;border-bottom:4px solid var(--orange)}
+.cmp .ok h3{border-bottom-color:var(--green)}
+.cmp p{font-size:28px;line-height:1.5;color:var(--ink-2);margin-top:20px}
+.cmp p.m{font-size:23px;color:var(--muted)}
+
+/* prompt box */
+.prompt{background:var(--forest);color:#E7F1EA;border-radius:18px;padding:30px 36px;font-size:25px;line-height:1.6;white-space:pre-wrap}
+.prompt .k{color:var(--yellow);font-weight:600}
+.lbl{font-size:20px;font-weight:600;margin-bottom:12px;color:var(--ink-2)}
+.lbl.o{color:var(--orange-deep)}
+.lbl.g{color:var(--green-deep)}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:40px;font-size:28px}
+.tbl th{text-align:left;font-size:19px;font-weight:600;color:var(--muted);padding:0 24px 12px 0;border-bottom:1.5px solid var(--rule)}
+.tbl td{padding:18px 24px 18px 0;border-bottom:1.5px solid var(--rule);line-height:1.4;vertical-align:top;color:var(--ink-2)}
+.tbl td:first-child{color:var(--ink)}
+.tbl td.no{color:var(--orange-deep);text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:rgba(241,96,55,.5)}
+.tbl td.yes{color:var(--ink);font-weight:600}
+.tbl.tight{font-size:24px}
+.tbl.tight td{padding:11px 20px 11px 0}
+.tbl .pill{display:inline-block;font-size:19px;font-weight:600;padding:4px 14px;border-radius:999px;background:var(--mist);color:var(--ink-2)}
+.tbl .pill.hi{background:var(--green-deep);color:#fff}
+
+/* bulleted lines */
+.lines{margin-top:40px;border-top:1.5px solid var(--rule)}
+.lines li{padding:20px 0 20px 40px;border-bottom:1.5px solid var(--rule);font-size:30px;line-height:1.4;color:var(--ink-2);position:relative}
+.lines li::before{content:"";position:absolute;left:4px;top:35px;width:14px;height:14px;border-radius:50%;background:var(--green)}
+.lines li b{color:var(--ink)}
+
+/* five-part frame */
+.frame{margin-top:40px;border-top:1.5px solid var(--rule)}
+.frame>div{display:grid;grid-template-columns:330px 1fr;padding:20px 0;border-bottom:1.5px solid var(--rule);align-items:baseline}
+.frame b{font-size:31px;font-weight:600}
+.frame span{font-size:28px;color:var(--ink-2)}
+.frame .hl{background:var(--yellow);margin:0 -24px;padding:20px 24px;border-bottom-color:transparent}
+
+/* token rows */
+.tok{margin-top:44px;display:flex;flex-direction:column;gap:14px}
+.tok .row{display:grid;grid-template-columns:210px 1fr;align-items:center;gap:24px}
+.tok .row b{font-size:24px;color:var(--ink-2)}
+.tok .seg{display:flex;gap:6px;height:56px}
+.tok .seg span{display:grid;place-items:center;border-radius:10px;font-size:20px;font-weight:600;width:140px}
+.tok .old{background:var(--mist);border:1.5px dashed #B9C7BC;color:var(--muted)}
+.tok .new{background:var(--green);color:#fff}
+.tok .many{width:780px!important}
+.legend{display:flex;gap:40px;margin-top:28px;font-size:21px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:10px}
+.legend i{width:28px;height:18px;border-radius:5px;display:block}
+
+/* next-word guess */
+.guess{margin-top:8px}
+.guess .ctx{font-size:30px;line-height:1.45;color:var(--ink)}
+.guess .blank{display:inline-block;min-width:150px;border-bottom:4px dashed var(--green);margin-left:8px}
+.guess .cap{font-size:19px;color:var(--muted);margin:26px 0 12px}
+.guess .c{display:grid;grid-template-columns:170px 1fr 64px;align-items:center;gap:18px;height:52px}
+.guess .c b{font-size:25px;font-weight:400;color:var(--ink-2)}
+.guess .c i{display:block;height:26px;border-radius:6px;background:var(--mist);box-shadow:inset 0 0 0 1.5px var(--rule)}
+.guess .c em{font-style:normal;font-size:21px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.guess .c.pick b{font-weight:600;color:var(--ink)}
+.guess .c.pick i{background:var(--green);box-shadow:none}
+.guess .c.pick em{color:var(--green-deep);font-weight:600}
+.guess .c.idk b,.guess .c.idk em{color:var(--orange-deep)}
+.guess .c.idk i{background:var(--orange)}
+.guess .out{margin-top:24px;font-size:25px;line-height:1.5;color:var(--ink-2)}
+.guess .out b{background:var(--orange-pale);color:var(--orange-deep);padding:0 6px;border-radius:4px}
+
+/* two questions */
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:40px}
+.qa h3{font-size:30px;line-height:1.25;font-weight:600;letter-spacing:-.015em;padding-bottom:14px;border-bottom:4px solid var(--green)}
+.qa p{font-size:25px;line-height:1.5;color:var(--ink-2);margin-top:18px}
+.qa+.bar{margin-top:36px}
+
+/* instead-of / ask-this rows */
+.fix{margin-top:26px}
+.fix .hd,.fix .r{display:grid;grid-template-columns:350px 1fr 1.45fr;gap:36px}
+.fix .hd{font-size:19px;font-weight:600;color:var(--muted);padding-bottom:12px;border-bottom:1.5px solid var(--rule)}
+.fix .hd .x{color:var(--orange-deep)}
+.fix .hd .v{color:var(--green-deep)}
+.fix .r{padding:14px 0;border-bottom:1.5px solid var(--rule);align-items:start}
+.fix h3{font-size:25px;line-height:1.25;font-weight:600;letter-spacing:-.015em}
+.fix .why{font-size:18px;line-height:1.4;color:var(--muted);margin-top:6px}
+.fix .why .en{font-size:1em}
+.fix .bad p,.fix .good p{font-size:21px;line-height:1.42}
+.fix .bad p{color:var(--ink-2)}
+.fix .bad .rep{font-size:18px;color:var(--orange-deep);margin-top:6px}
+.fix .good p{color:var(--ink);background:var(--mist);border-left:5px solid var(--green);border-radius:0 8px 8px 0;padding:8px 14px}
+
+/* data record */
+.anon{display:grid;grid-template-columns:150px 1fr;row-gap:14px;column-gap:28px;margin-top:40px;align-items:center}
+.anon .lab{font-size:21px;color:var(--muted)}
+.anon .rec{display:grid;grid-template-columns:1.3fr 1fr 1.4fr 1fr;border:1.5px solid var(--rule);border-radius:12px;overflow:hidden;font-size:25px}
+.anon .rec span{padding:16px 20px;border-left:1.5px solid var(--rule)}
+.anon .rec span:first-child{border-left:0}
+.anon .rec.h span{background:var(--mist);font-size:18px;color:var(--muted);padding:10px 20px}
+.anon .rec.bad span.pii{background:var(--orange-pale);color:var(--orange-deep)}
+.anon .rec.good span.id{background:var(--green-pale);color:var(--green-deep);font-weight:600}
+.anon .rec.good span.gone{color:#AEBDB2}
+
+
+/* ---------- panels outside stage ---------- */
+#progress{position:fixed;left:0;top:0;height:4px;background:var(--green);width:0;z-index:20;transition:width .3s var(--ease)}
+#nav{position:fixed;right:16px;bottom:16px;z-index:25;display:flex;gap:8px}
+#nav button,#nav a{all:unset;cursor:pointer;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.92);border:1.5px solid var(--green-line);color:var(--forest);font-size:22px;line-height:1;box-shadow:0 4px 12px rgba(11,61,34,.10)}
+#nav button:hover,#nav button:focus-visible,#nav a:hover,#nav a:focus-visible{border-color:var(--green);background:#fff}
+#nav button:disabled{opacity:.35;cursor:default}
+#blackout{position:fixed;inset:0;background:#000;z-index:40;display:none}
+#blackout.on{display:block}
+.panel{position:fixed;z-index:30;background:rgba(8,40,22,.97);color:#E7F1EA;cursor:default;user-select:text}
+#notes{left:0;right:0;bottom:0;height:30vh;padding:18px 28px 20px;display:none;font-size:17px;line-height:1.65;overflow:auto;border-top:3px solid var(--yellow)}
+#notes.on{display:block}
+#notes .top{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#9DBBA6;margin-bottom:8px;gap:16px}
+#notes .top b{color:#fff}
+#notes .timer{font-variant-numeric:tabular-nums;font-size:15px;color:var(--yellow)}
+#notes p{margin:0 0 8px}
+#notes .todo{color:#F5B49F}
+#overview{inset:0;display:none;padding:40px;overflow:auto}
+#overview.on{display:block}
+#overview h2{color:#fff;font-size:24px;margin-bottom:20px}
+#overview .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+#overview button{all:unset;cursor:pointer;background:#123F27;border:1.5px solid #1F5236;border-radius:10px;padding:12px 16px;font-size:15px;line-height:1.4;color:#E7F1EA;display:flex;gap:12px}
+#overview button:hover,#overview button:focus-visible{border-color:var(--yellow)}
+#overview button.cur{background:#1C5A37}
+#overview button span{color:#9DBBA6;font-variant-numeric:tabular-nums;min-width:22px}
+#help{left:50%;top:50%;transform:translate(-50%,-50%);display:none;padding:28px 34px;border-radius:16px;min-width:420px;font-size:16px;line-height:2.1}
+#help.on{display:block}
+#help h2{font-size:20px;color:#fff;margin-bottom:6px}
+#help .row{display:flex;justify-content:space-between;gap:30px}
+
+@media print{
+  .pg{right:104px!important}
+  @page{size:1600px 900px;margin:0}
+  html,body{height:auto;overflow:visible;background:#fff}
+  #viewport{position:static}
+  #stage{position:static;transform:none!important;width:1600px;height:auto}
+  .slide{position:relative;opacity:1!important;visibility:visible!important;width:1600px;height:900px;break-after:page;page-break-after:always}
+  .f{opacity:1!important}
+  .opener .num,.opener .say,.opener .sub{animation:none!important}
+  #progress,#notes,#overview,#help,#blackout,#nav,.cover .keys{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="viewport"><div id="stage">
+
+<section class="slide opener cover" data-title="Bìa">
+  <p class="kick">Buổi 1, Vận hành và Office</p>
+  <h1>Kiến thức nền về AI</h1>
+  <div class="keys"><span><kbd>→</kbd> hoặc nút góc dưới để sang slide</span><span><kbd>F</kbd> toàn màn hình</span><span><kbd>O</kbd> danh sách slide</span></div>
+</section>
+
+<!-- 0 -->
+<section class="slide opener" data-sec="0" data-title="0. Bản nháp giờ rất rẻ">
+  <div class="num">0</div>
+  <p class="say">Làm ra bản nháp <span class="en">(draft)</span> bằng AI giờ rất rẻ.</p>
+  <p class="sub">Thứ còn hiếm là người biết chọn bản nào và sửa chỗ nào.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="0. Người dùng AI giỏi">
+  <h2>Người dùng AI giỏi không phải người biết nhiều tool</h2>
+  <ol class="steps four">
+    <li><h3>Biết AI giúp được gì hàng ngày</h3><p>Nhìn một ngày làm việc và thấy chỗ giao được: báo cáo kênh, email khách, đề xuất ngân sách.</p></li>
+    <li><h3>Biết mình muốn gì</h3><p>Hình dung kết quả tốt trông thế nào rồi mới giao, nên giao được rõ ràng.</p></li>
+    <li><h3>Coi kết quả là bản nháp</h3><p>Sửa qua nhiều vòng nhỏ <span class="en">(iterate)</span>, không đòi hoàn hảo ngay lần đầu.</p></li>
+    <li><h3>Kiểm chứng rồi mới dùng</h3><p>Soát số liệu, tên người, nguồn. Người nộp là bạn thì người chịu trách nhiệm cũng là bạn.</p></li>
+  </ol>
+  <p class="bar" style="max-width:none">Công cụ đổi mỗi vài tháng. Bốn thói quen này dùng được với công cụ nào.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="0. Khác nhau ở người góp ý">
+  <h2>Cùng một báo cáo, khác nhau ở người góp ý</h2>
+  <div class="sheets">
+    <div class="sheet l"><p class="who">Claude viết lần đầu (first draft)</p>
+      <h4>Báo cáo hiệu suất kênh tháng 9</h4>
+      <p>Hiệu suất các kênh trong tháng có nhiều biến động đáng chú ý. Nhìn chung các chiến dịch đạt kết quả khả quan và còn nhiều dư địa tối ưu…</p>
+    </div>
+    <div class="sheet r"><p class="who">Sau khi người hiểu việc góp ý</p>
+      <h4>Tháng 9: CPL search giảm 18%, display tăng 25%</h4>
+      <ul><li>Display tiêu 30% ngân sách, chỉ mang về 11% lead</li><li>Đề xuất chuyển 20% ngân sách display sang search từ 7/10</li></ul>
+    </div>
+  </div>
+  <p class="bar"><b>Mẹo:</b> có bản nháp sớm rồi sửa qua nhiều vòng nhỏ <span class="en">(iterate)</span>. Đừng cố viết câu lệnh <span class="en">(prompt)</span> hoàn hảo ngay lần đầu.</p>
+  <p class="foot-note">Số liệu minh hoạ.</p>
+</section>
+
+<!-- 1 -->
+<section class="slide opener" data-sec="1" data-title="1. Claude chỉ biết những gì trên bàn">
+  <div class="num">1</div>
+  <p class="say">Claude chỉ biết những gì đang nằm trên bàn.</p>
+  <p class="sub">Mỗi cuộc trò chuyện là một mặt bàn, tên chuyên môn là context window. Tin nhắn và file chồng lên dần, bàn càng đầy thì Claude càng dễ sót.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="1. Lời dặn bị vùi">
+  <h2>Lời dặn bị vùi sau 37 tin nhắn</h2>
+  <div class="split">
+    <div class="chat">
+      <div class="msg u"><small>Tin nhắn đầu tiên</small>Lưu ý cả buổi nhé: không ghi tên khách hàng, chỉ dùng mã KH.</div>
+      <div class="gap">37 tin nhắn sau</div>
+      <div class="msg u">Liệt kê ba khách chi nhiều nhất tháng 9.</div>
+      <div class="msg a flag">1. Nguyễn Văn Hùng (KH-014): 182.000.000đ…<br><span class="tag">Quên lời dặn</span></div>
+    </div>
+    <div class="side">
+      <p><b>Mỗi việc một cuộc trò chuyện.</b> Thấy Claude bắt đầu lú thì mở cuộc trò chuyện mới <span class="en">(new chat)</span>, dán lại những gì đã chốt.</p>
+      <div class="sticky r">Điều gì hay phải dặn thì ghi vào phần hướng dẫn của Project <span class="en">(project instructions)</span>. Claude đọc phần đó ở đầu mỗi cuộc trò chuyện.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide opener" data-sec="2" data-title="2. Claude không nhớ gì giữa hai cuộc hội thoại">
+  <div class="num">2</div>
+  <p class="say">Claude không nhớ gì giữa hai cuộc hội thoại <span class="en">(stateless)</span>.</p>
+  <p class="sub">Mỗi lần bạn gửi tin, nó đọc lại cả cuộc trò chuyện từ đầu. Đơn vị đo là token, và hạn mức <span class="en">(usage limit)</span> của gói Claude cũng tính bằng token.</p>
+</section>
+
+<section class="slide" data-sec="2" data-title="2. Chat càng dài càng tốn">
+  <h2>Chat càng dài, mỗi tin càng chậm và tốn</h2>
+  <div class="tok">
+    <div class="row"><b>Tin nhắn 1</b><div class="seg"><span class="new">1</span></div></div>
+    <div class="row"><b>Tin nhắn 2</b><div class="seg"><span class="old">1</span><span class="new">2</span></div></div>
+    <div class="row"><b>Tin nhắn 3</b><div class="seg"><span class="old">1</span><span class="old">2</span><span class="new">3</span></div></div>
+    <div class="row"><b>Tin nhắn 30</b><div class="seg"><span class="old many">tin 1 đến 29, gửi lại thêm lần nữa</span><span class="new">30</span></div></div>
+  </div>
+  <div class="fill"><div class="sticky">Dán file 5.000 dòng vào chat rồi hỏi 20 câu, tức là 5.000 dòng đó bị đọc lại cả 20 lần. Đưa file vào Project <span class="en">(project knowledge)</span> thì không phải dán lại ở mỗi chat mới, và phần lặp lại được cache nên nhẹ hơn.</div></div>
+</section>
+
+<!-- 3 -->
+<section class="slide opener" data-sec="3" data-title="3. Model mạnh hơn thì chậm hơn">
+  <div class="num">3</div>
+  <p class="say">Model mạnh hơn thì chậm hơn và tốn hơn.</p>
+  <p class="sub">Việc nhỏ không cần model mạnh nhất. Chọn model ngay khi mở cuộc trò chuyện, vì đổi giữa chừng thì Claude phải tính lại từ đầu.</p>
+</section>
+
+<section class="slide" data-sec="3" data-title="3. Chọn model theo việc">
+  <h2>Chọn model theo việc</h2>
+  <table class="tbl">
+    <thead><tr><th style="width:58%">Việc</th><th>Nên dùng</th></tr></thead>
+    <tbody>
+      <tr><td>Viết lại tiêu đề quảng cáo, đổi bảng sang định dạng khác</td><td><span class="pill">Model nhẹ (Haiku)</span></td></tr>
+      <tr><td>Tóm tắt biên bản họp, soạn email cho khách</td><td><span class="pill">Model mặc định (Sonnet)</span></td></tr>
+      <tr><td>Tìm nguyên nhân CPL tăng, đối chiếu ba file số</td><td><span class="pill hi">Model mạnh (Opus)</span><br><span style="display:inline-block;margin-top:8px">bật nghĩ kỹ <span class="en">(extended thinking)</span></span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 4 -->
+<section class="slide opener" data-sec="4" data-title="4. Câu đúng và câu bịa nghe như nhau">
+  <div class="num">4</div>
+  <p class="say">Câu đúng và câu bịa nghe tự tin như nhau.</p>
+  <p class="sub">AI đoán chữ tiếp theo hợp lý nhất <span class="en">(next-token prediction)</span>, kể cả khi nó không biết. Nó hay bịa <span class="en">(hallucinate)</span> nhất khi bị hỏi điều cụ thể ít người biết, hoặc khi phải tính nhẩm.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="4. Vì sao AI bịa">
+  <h2>AI đoán chữ, không tra cứu</h2>
+  <div class="split">
+    <div class="guess">
+      <p class="ctx">“Giám đốc Marketing của Điện máy Ánh Dương <span style="white-space:nowrap">là chị<span class="blank">&nbsp;</span>”</span></p>
+      <p class="cap">Các chữ có thể điền tiếp, và khả năng mỗi chữ được chọn</p>
+      <div class="c pick"><b>Trần</b><i style="width:100%"></i><em>24%</em></div>
+      <div class="c"><b>Nguyễn</b><i style="width:92%"></i><em>22%</em></div>
+      <div class="c"><b>Lê</b><i style="width:46%"></i><em>11%</em></div>
+      <div class="c"><b>Phạm</b><i style="width:38%"></i><em>9%</em></div>
+      <div class="c idk"><b>(không rõ)</b><i style="width:8%"></i><em>2%</em></div>
+      <p class="out">Nó chọn “Trần”, rồi đoán tiếp các chữ sau, ra <b>Trần Minh Thư</b>: một người không có thật.</p>
+    </div>
+    <div class="side">
+      <p>Claude không có kho dữ liệu nào để tra cứu. Nó chỉ chọn chữ nghe hợp lý nhất, hết chữ này đến chữ khác.</p>
+      <p>Với chuyện phổ biến, chữ hợp lý nhất thường cũng là chữ đúng. Còn với chuyện cụ thể mà ít người viết tới, nó vẫn phải chọn một chữ để điền, và gần như không bao giờ chọn “không rõ”.</p>
+      <div class="sticky r">Dễ bịa nhất: tên người, chức danh, đường link, con số cụ thể, ngày tháng, trích dẫn nguyên văn. Tính nhẩm cũng vậy: khi không có công cụ tính, nó đoán ra chữ số chứ không bấm máy tính.</div>
+    </div>
+  </div>
+  <p class="foot-note">Tỉ lệ minh hoạ.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="4. Câu trả lời nghe rất thật">
+  <h2>Một câu trả lời nghe rất thật</h2>
+  <div class="split">
+    <div class="chat">
+      <div class="msg u">Ai đang phụ trách marketing của Điện máy Ánh Dương? Cho mình link hồ sơ luôn.</div>
+      <div class="msg a">Người phụ trách hiện nay là chị Trần Minh Thư, Giám đốc Marketing từ đầu năm 2023. Hồ sơ: linkedin.com/in/tranminhthu-ad</div>
+      <div class="msg a flag">Không có người này, đường link cũng không tồn tại.<br><span class="tag">Bịa</span></div>
+    </div>
+    <div class="side">
+      <p>Có tên, có chức danh, có cả link, nên càng dễ tin.</p>
+      <p>Bật tìm kiếm web <span class="en">(web search)</span> rồi cũng vẫn phải mở link ra xem.</p>
+    </div>
+  </div>
+  <p class="foot-note">Tên công ty là tên giả.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="4. Đoán chữ thì sao suy luận được">
+  <h2>Đoán chữ thì sao suy luận được?</h2>
+  <div class="qa">
+    <div>
+      <h3>Suy luận học từ chữ người viết</h3>
+      <p>Claude đã đọc rất nhiều sách, báo cáo, lời giải và code. Trong đó người ta viết ra cả cách lập luận từng bước. Muốn đoán đúng chữ tiếp theo của một lời giải, nó phải học được các bước ấy.</p>
+      <p>Bật nghĩ kỹ <span class="en">(extended thinking)</span> là để nó viết nháp các bước ra trước. Bước sau dựa trên bước trước nên ít sai hơn.</p>
+    </div>
+    <div>
+      <h3>Người cũng đoán, nhưng biết lúc mình đoán</h3>
+      <p>Người làm lâu năm cũng đoán theo kinh nghiệm. Nhưng họ thường biết lúc nào mình không chắc, nhớ mình biết điều đó từ đâu, và sẽ nói “để em kiểm tra lại”.</p>
+      <p>Claude không giữ nguồn, và không phải lúc nào cũng biết mình đang đoán. Lúc đoán sai, giọng nó vẫn chắc như lúc nói đúng.</p>
+    </div>
+  </div>
+  <p class="bar"><b>Vậy:</b> nhờ đoán theo xác suất mà Claude viết và suy luận được. Cái thiếu là nó không báo khi đoán yếu, nên người kiểm tra phải là bạn.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="4. Bốn cách để Claude bớt bịa">
+  <h2>Bốn cách để Claude bớt bịa</h2>
+  <div class="fix">
+    <div class="hd"><span>Cách</span><span class="x">Thay vì hỏi</span><span class="v">Hãy hỏi</span></div>
+    <div class="r">
+      <div><h3>Đưa dữ liệu vào <span class="en">(grounding)</span></h3><p class="why">Có tài liệu để dựa vào thì Claude không phải đoán.</p></div>
+      <div class="bad"><p>“Doanh thu quý 3 của Ánh Dương là bao nhiêu?”</p><p class="rep">→ một con số nghe rất thật</p></div>
+      <div class="good"><p>[đính kèm báo cáo] “Doanh thu quý 3 là bao nhiêu? Chỉ dùng file này, không có thì ghi ‘không rõ’.”</p></div>
+    </div>
+    <div class="r">
+      <div><h3>Đừng gợi sẵn đáp án</h3><p class="why">Hỏi kiểu dẫn dắt <span class="en">(leading question)</span> thì Claude dễ xuôi theo bạn, kể cả khi bạn đoán sai.</p></div>
+      <div class="bad"><p>“CPL tháng 9 tăng là do mùa vụ, đúng không?”</p><p class="rep">→ “Đúng vậy, mùa vụ là nguyên nhân chính…”, dù chưa ai kiểm tra</p></div>
+      <div class="good"><p>“CPL tháng 9 tăng 30%. Liệt kê các nguyên nhân có thể, nguyên nhân nào có số liệu ủng hộ.”</p></div>
+    </div>
+    <div class="r">
+      <div><h3>Cho nghĩ từng bước <span class="en">(chain of thought)</span></h3><p class="why">Bước sau dựa trên bước trước, sai ở đâu thấy ở đó. Bật nghĩ kỹ thì model tự làm việc này.</p></div>
+      <div class="bad"><p>“Kênh nào hiệu quả nhất quý 3?”</p><p class="rep">→ “Facebook.”, không rõ tính ra sao</p></div>
+      <div class="good"><p>Bật nghĩ kỹ, hoặc: “Tính CPL từng kênh theo tháng, ghi rõ cách tính, rồi mới kết luận kênh nào hiệu quả nhất.”</p></div>
+    </div>
+    <div class="r">
+      <div><h3>Bắt chứng minh <span class="en">(verify)</span></h3><p class="why">Hỏi “đúng chưa?” thì dễ nhận được “đúng rồi”, dù chưa ai kiểm tra.</p></div>
+      <div class="bad"><p>“Tổng chi phí đúng chưa?”</p><p class="rep">→ “Đúng rồi.”</p></div>
+      <div class="good"><p>“Tổng chi phí có khớp với file gốc không? Chỉ cách bạn kiểm tra, liệt kê dòng bị lỗi hoặc bị bỏ qua.”</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide opener" data-sec="5" data-title="5. Giao việc như cho nhân viên mới">
+  <div class="num">5</div>
+  <p class="say">Giao việc <span class="en">(prompting)</span> cho Claude như giao cho nhân viên giỏi mới vào làm.</p>
+  <p class="sub">Người đó giỏi nhưng chưa biết gì về việc của bạn. Kết quả dở thường là do giao thiếu, ít khi do Claude kém.</p>
+</section>
+
+<section class="slide" data-sec="5" data-title="5. Năm phần của lời giao việc">
+  <h2>Một lời giao việc <span class="en">(prompt)</span> đủ có năm phần</h2>
+  <div class="split" style="grid-template-columns:.72fr 1.28fr;gap:48px">
+    <div><p class="lbl o">Giao sơ sài</p>
+      <div class="prompt">Tóm tắt hiệu suất các kênh tháng 9.</div>
+      <p class="foot-note" style="font-size:23px;line-height:1.5">Claude phải tự đoán viết cho ai, dài bao nhiêu và so với cái gì.</p></div>
+    <div><p class="lbl g">Giao đủ năm phần</p>
+      <div class="prompt" style="font-size:23px"><span class="k">Bối cảnh</span> <span class="en">(context)</span><span class="k">:</span> mình là trưởng nhóm Performance, cần gửi sếp trước buổi họp thứ Hai.
+<span class="k">Mục tiêu</span> <span class="en">(goal)</span><span class="k">:</span> một trang tóm tắt các kênh tháng 9, lấy từ file đã tải lên.
+<span class="k">Ràng buộc</span> <span class="en">(constraints)</span><span class="k">:</span> chỉ dùng số trong file, không đưa tên khách hàng.
+<span class="k">Ví dụ</span> <span class="en">(examples)</span><span class="k">:</span> chia ba phần “Tăng”, “Giảm”, “Đề xuất”.
+<span class="k">Thế nào là xong</span> <span class="en">(definition of done)</span><span class="k">:</span> nhận định nào cũng có số và so với tháng 8; có đúng một đề xuất, kèm người phụ trách và hạn.</div></div>
+  </div>
+  <p class="bar"><b>Khi góp ý</b> <span class="en">(feedback)</span>, nói bằng con số: “rút còn 80 từ” thay vì “ngắn hơn chút”.</p>
+</section>
+
+<!-- 6 -->
+<section class="slide opener" data-sec="6" data-title="6. Skill là sổ tay quy trình">
+  <div class="num">6</div>
+  <p class="say">Skill là cuốn sổ tay quy trình, viết một lần dùng mãi.</p>
+  <p class="sub">Một skill là một thư mục có file hướng dẫn <b>SKILL.md</b>, kèm mẫu hoặc script nếu cần. Claude chỉ đọc dòng mô tả của từng skill, việc nào khớp thì mới mở cả cuốn ra.</p>
+</section>
+
+<section class="slide" data-sec="6" data-title="6. Từ lời dặn lặp lại thành skill">
+  <h2>Lời dặn dán lần thứ ba thì đóng thành skill</h2>
+  <div class="split" style="grid-template-columns:1.2fr .9fr;gap:56px">
+    <div><p class="lbl g">File SKILL.md của skill “bao-cao-kenh”</p>
+      <div class="prompt" style="font-size:22px"><span class="k">---</span>
+<span class="k">name:</span> bao-cao-kenh
+<span class="k">description:</span> Viết báo cáo hiệu suất kênh hàng tháng cho sếp. Dùng khi được nhờ làm báo cáo kênh, tóm tắt CPL, CPA.
+<span class="k">---</span>
+1. Mở đầu bằng một câu kết luận có số.
+2. Chia ba phần: Tăng, Giảm, Đề xuất.
+3. Mọi nhận định đều so với tháng trước.
+4. Không ghi tên khách hàng, chỉ dùng mã KH.
+5. Chỉ có một đề xuất, kèm người phụ trách và hạn.</div></div>
+    <div class="side">
+      <p>Dòng <b>description</b> là thứ Claude đọc để quyết định có dùng skill hay không. Viết rõ “dùng khi nào”.</p>
+      <p>Có skill rồi, bạn chỉ cần nói “làm báo cáo kênh tháng 10”. Năm quy tắc trên khỏi phải dán lại.</p>
+      <div class="sticky r">Ba cách có skill: dùng skill có sẵn (tạo file Excel, Word, PowerPoint, PDF), tự viết rồi tải lên, hoặc kể quy trình và nhờ Claude viết giúp.</div>
+    </div>
+  </div>
+  <p class="foot-note">Nội dung minh hoạ.</p>
+</section>
+
+<!-- 7 -->
+<section class="slide opener" data-sec="7" data-title="7. Connector cho Claude với tay ra ngoài">
+  <div class="num">7</div>
+  <p class="say">Connector cho Claude với tay tới công cụ của bạn.</p>
+  <p class="sub">Thay vì tải file lên, bạn cho Claude quyền đọc Drive, Gmail, Lịch, Sheets. Chuẩn kết nối chung tên là MCP <span class="en">(Model Context Protocol)</span>, giống cổng USB-C: một kiểu cắm cho nhiều công cụ.</p>
+</section>
+
+<section class="slide" data-sec="7" data-title="7. Có và không có connector">
+  <h2>Cùng một câu hỏi, có và không có connector</h2>
+  <div class="cmp">
+    <div>
+      <h3 style="border-bottom-color:var(--orange)">Chưa bật connector</h3>
+      <div class="chat" style="margin-top:24px">
+        <div class="msg u" style="font-size:24px">Tóm tắt các email khách hàng chưa được trả lời tuần này.</div>
+        <div class="msg a" style="font-size:24px">Mình không xem được hộp thư của bạn. Bạn hãy dán nội dung email vào đây nhé.</div>
+      </div>
+    </div>
+    <div class="ok">
+      <h3>Đã bật connector Gmail <span class="en">(chỉ đọc)</span></h3>
+      <div class="chat" style="margin-top:24px">
+        <div class="msg u" style="font-size:24px">Tóm tắt các email khách hàng chưa được trả lời tuần này.</div>
+        <div class="msg a" style="font-size:24px">Có 7 email chưa trả lời. 2 email hỏi báo giá, 1 email phàn nàn về hoá đơn. Mình xếp theo mức gấp, bạn muốn soạn nháp trả lời cái nào trước?</div>
+      </div>
+    </div>
+  </div>
+  <p class="foot-note">Hội thoại minh hoạ.</p>
+</section>
+
+<section class="slide" data-sec="7" data-title="7. Ba điều cần biết khi bật connector">
+  <h2>Ba điều cần biết khi bật connector</h2>
+  <div class="three">
+    <div><h3>Bật và cấp quyền</h3><p>Vào mục Connectors trong phần cài đặt, đăng nhập tài khoản công ty, chọn quyền. Bắt đầu bằng quyền chỉ đọc.</p></div>
+    <div><h3>Connector cũng chiếm bàn</h3><p>Kết quả đọc về nằm trong context window. Chỉ bật cái đang dùng, và hỏi cụ thể: “mail của khách X tuần này” thay vì “đọc hết hộp thư”.</p></div>
+    <div><h3>Đọc thì nhẹ, ghi thì duyệt</h3><p>Gửi mail, sửa sheet, xoá file không quay lại được. Đọc kỹ bản xem trước rồi mới bấm đồng ý.</p></div>
+  </div>
+  <p class="bar o"><b>Cẩn thận:</b> email lạ hay trang web mà Claude đọc về có thể chứa câu lệnh ẩn <span class="en">(prompt injection)</span>. Lệnh của bạn chỉ nằm trong khung chat. Dữ liệu qua connector cũng rời khỏi máy như file tải lên, nên cách ẩn danh ở phần Dữ liệu cuối bài vẫn áp dụng.</p>
+</section>
+
+<!-- 8 -->
+<section class="slide opener" data-sec="8" data-title="8. Việc lặp lại thì hẹn giờ">
+  <div class="num">8</div>
+  <p class="say">Việc lặp lại thì hẹn giờ cho Claude tự chạy.</p>
+  <p class="sub">Bạn mô tả việc một lần và chọn lịch, ví dụ 8 giờ sáng thứ Hai hàng tuần <span class="en">(scheduled task)</span>. Đến giờ, Claude mở một cuộc trò chuyện mới, làm việc và để kết quả đó cho bạn.</p>
+</section>
+
+<section class="slide" data-sec="8" data-title="8. Mỗi lần chạy là chat mới">
+  <h2>Mỗi lần chạy là một cuộc trò chuyện mới</h2>
+  <div class="split" style="grid-template-columns:.72fr 1.28fr;gap:48px">
+    <div><p class="lbl o">Hẹn giờ sơ sài</p>
+      <div class="prompt">Làm báo cáo kênh như tuần trước.</div>
+      <p class="foot-note" style="font-size:23px;line-height:1.5">Claude không nhớ gì giữa hai lần chạy, nên không có “tuần trước” nào cả. Nó sẽ tự đoán.</p></div>
+    <div><p class="lbl g">Hẹn giờ đủ ý</p>
+      <div class="prompt" style="font-size:22px"><span class="k">Lịch:</span> 8 giờ sáng thứ Hai hàng tuần.
+<span class="k">Lấy số từ:</span> Google Sheet “Chi phí kênh”, tab của tuần vừa rồi, qua connector Drive.
+<span class="k">Làm theo:</span> skill bao-cao-kenh, so với tab của tuần trước đó.
+<span class="k">Kết quả:</span> lưu bản nháp vào thư mục “Báo cáo tuần”. Không gửi cho ai.
+<span class="k">Nếu thiếu số:</span> ghi “chưa có số”, không đoán.</div></div>
+  </div>
+  <p class="bar">Lời giao việc cho lịch phải <b>tự đủ ý</b>: bối cảnh, nguồn, cách làm, nơi lưu, khi thiếu thì làm gì.</p>
+</section>
+
+<section class="slide" data-sec="8" data-title="8. Bốn món ghép lại">
+  <h2>Bốn món, bốn câu hỏi</h2>
+  <table class="tbl" style="margin-top:28px">
+    <thead><tr><th style="width:24%">Món</th><th style="width:44%">Trả lời câu hỏi</th><th>Ví dụ</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill">Project</span></td><td>Claude cần biết gì về mảng việc này?</td><td>Tài liệu, quy chuẩn của nhóm</td></tr>
+      <tr><td><span class="pill">Connector</span></td><td>Lấy dữ liệu ở đâu, làm việc ở ứng dụng nào?</td><td>Drive, Gmail, Lịch, Sheets</td></tr>
+      <tr><td><span class="pill">Skill</span></td><td>Làm loại việc này theo cách nào?</td><td>Quy trình báo cáo kênh</td></tr>
+      <tr><td><span class="pill hi">Lịch chạy</span></td><td>Khi nào Claude tự làm?</td><td>8 giờ sáng thứ Hai</td></tr>
+    </tbody>
+  </table>
+  <p class="bar"><b>Thứ tự nên đi:</b> chạy tay vài lần cho ổn, rồi mới hẹn giờ. Bắt đầu với việc chỉ đọc và tạo bản nháp, chưa cho tự gửi ra ngoài.</p>
+</section>
+
+<!-- 9 -->
+<section class="slide opener" data-sec="9" data-title="9. File rời khỏi máy">
+  <div class="num">9</div>
+  <p class="say">File nào Claude đọc, file đó rời khỏi máy bạn.</p>
+  <p class="sub">Dù là file tải lên hay dữ liệu đọc qua connector, nội dung được gửi lên máy chủ của Anthropic để xử lý, rồi kết quả mới quay về.</p>
+</section>
+
+<section class="slide" data-sec="9" data-title="9. Ẩn danh trước">
+  <h2>Ẩn danh dữ liệu cá nhân <span class="en">(PII)</span> trước khi đưa lên</h2>
+  <div class="anon">
+    <span></span>
+    <div class="rec h"><span>Khách hàng</span><span>Số điện thoại</span><span>Email</span><span>Chi tháng 9</span></div>
+    <span class="lab">Bản gốc</span>
+    <div class="rec bad"><span class="pii">Nguyễn Thị Lan</span><span class="pii">0912 345 678</span><span class="pii">lan.nguyen@gmail.com</span><span>12.500.000đ</span></div>
+    <span class="lab">Bản mang lên</span>
+    <div class="rec good"><span class="id">KH-0147</span><span class="gone">đã bỏ</span><span class="gone">đã bỏ</span><span>12.500.000đ</span></div>
+  </div>
+  <p class="bar">Dùng workspace của công ty. Không dán mật khẩu hay API key vào chat.</p>
+  <p class="foot-note">Dữ liệu minh hoạ.</p>
+</section>
+
+<section class="slide" data-title="Gặp chuyện này thì làm gì">
+  <h2>Gặp chuyện này thì làm gì</h2>
+  <table class="tbl tight" style="margin-top:24px">
+    <thead><tr><th style="width:36%">Tình huống</th><th>Việc nên làm</th><th style="width:16%">Phần</th></tr></thead>
+    <tbody>
+      <tr><td>Claude quên lời dặn giữa chừng</td><td class="yes" style="font-weight:400;color:var(--ink-2)">Mở chat mới, dán lại điều đã chốt. Dặn lâu dài thì cho vào Project.</td><td><span class="pill">Context window</span></td></tr>
+      <tr><td>Nhanh hết lượt dùng (token)</td><td class="yes" style="font-weight:400;color:var(--ink-2)">Việc nhỏ dùng model nhẹ, chọn ngay khi mở chat.</td><td><span class="pill">Token, Model</span></td></tr>
+      <tr><td>Tên, con số, link nghe rất thật</td><td class="yes" style="font-weight:400;color:var(--ink-2)">Đưa tài liệu vào, bắt chỉ nguồn, tự mở link ra xem.</td><td><span class="pill">Hallucination</span></td></tr>
+      <tr><td>Kết quả chung chung</td><td class="yes" style="font-weight:400;color:var(--ink-2)">Giao lại đủ năm phần, góp ý bằng con số.</td><td><span class="pill">Giao việc</span></td></tr>
+      <tr><td>Dán lại cùng một lời dặn lần thứ ba</td><td class="yes" style="font-weight:400;color:var(--ink-2)">Đóng thành skill.</td><td><span class="pill">Skill</span></td></tr>
+      <tr><td>Cứ phải copy từ Drive, Gmail sang</td><td class="yes" style="font-weight:400;color:var(--ink-2)">Bật connector, bắt đầu bằng quyền chỉ đọc.</td><td><span class="pill">Connector</span></td></tr>
+      <tr><td>Việc nào cũng lặp lại mỗi tuần</td><td class="yes" style="font-weight:400;color:var(--ink-2)">Chạy tay vài lần, rồi hẹn giờ. Lời giao tự đủ ý.</td><td><span class="pill">Lịch chạy</span></td></tr>
+      <tr><td>Sắp đưa file có tên, số điện thoại khách</td><td class="yes" style="font-weight:400;color:var(--ink-2)">Đổi thành mã khách hàng trước khi tải lên.</td><td><span class="pill">Dữ liệu</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+</div></div>
+
+<nav id="nav"><a id="b-home" href="https://coccoc.atento.vn/" aria-label="Về trang chủ chương trình" title="Về trang chủ coccoc.atento.vn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h5v-6h4v6h5V9"/></svg></a><button id="b-prev" aria-label="Slide trước">‹</button><button id="b-next" aria-label="Slide sau">›</button></nav>
+<div id="blackout"></div>
+<div id="overview" class="panel"><h2>Tất cả slide <span style="font-weight:400;color:#9DBBA6;font-size:16px">Bấm để chuyển, Esc để đóng</span></h2><div class="grid" id="ov-grid"></div></div>
+<div id="help" class="panel"><h2>Phím tắt</h2>
+  <div class="row"><span>Tiếp, lùi</span><span><kbd>→</kbd> <kbd>Space</kbd>, <kbd>←</kbd></span></div>
+  <div class="row"><span>Nút ‹ ›</span><span>góc dưới bên phải</span></div>
+  <div class="row"><span>Trang chủ</span><span>bấm logo, hoặc nút ⌂</span></div>
+  <div class="row"><span>Về đầu, tới cuối</span><span><kbd>Home</kbd>, <kbd>End</kbd></span></div>
+  <div class="row"><span>Toàn màn hình</span><span><kbd>F</kbd></span></div>
+  <div class="row"><span>Danh sách slide</span><span><kbd>O</kbd></span></div>
+  <div class="row"><span>Màn hình đen</span><span><kbd>B</kbd></span></div>
+  <div class="row"><span>In ra PDF</span><span><kbd>Ctrl</kbd> <kbd>P</kbd></span></div>
+</div>
+
+<script>
+(function(){
+  const SECTIONS=['Kỹ năng','Context','Token','Model','Hallucination','Giao việc','Skill','Connector','Lịch chạy','Dữ liệu'];
+  const stage=document.getElementById('stage');
+  const slides=[...stage.querySelectorAll('.slide')];
+  const N=slides.length;
+  const $=id=>document.getElementById(id);
+  const ov=$('overview'),help=$('help'),black=$('blackout');
+  let cur=0;
+
+  slides.forEach((s,k)=>{
+    const br=document.createElement('a');br.className='brand';br.href='https://coccoc.atento.vn/';br.title='Về trang chủ coccoc.atento.vn';
+    br.innerHTML='<img src="../assets/logos/atento.png" alt=""><b>Atento</b><span class="x" aria-hidden="true">×</span><img class="cc" src="../assets/logos/coccoc.png" alt="Cốc Cốc">';
+    s.prepend(br);
+    if(s.dataset.sec!==undefined){
+      const c=+s.dataset.sec,t=document.createElement('div');t.className='trk';
+      SECTIONS.forEach((name,j)=>{const e=document.createElement('span');e.textContent=name;if(j<c)e.className='past';if(j===c)e.className='cur';t.appendChild(e);});
+      s.appendChild(t);
+    }
+    if(k>0){const p=document.createElement('div');p.className='pg';p.textContent=(k+1)+' / '+N;s.appendChild(p);}
+    const b=document.createElement('button');
+    b.innerHTML='<span>'+(k+1)+'</span>'+(s.dataset.title||'Slide '+(k+1));
+    b.addEventListener('click',e=>{e.stopPropagation();go(k);toggle(ov,false);});
+    $('ov-grid').appendChild(b);
+  });
+
+  function go(n){
+    n=Math.max(0,Math.min(N-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===n));
+    cur=n;
+    $('progress').style.width=(N>1?cur/(N-1)*100:100)+'%';
+    [...$('ov-grid').children].forEach((b,k)=>b.classList.toggle('cur',k===cur));
+    $('b-prev').disabled=cur===0;$('b-next').disabled=cur===N-1;
+    try{history.replaceState(null,'','#'+(cur+1));}catch(e){}
+  }
+  const next=()=>go(cur+1),prev=()=>go(cur-1);
+  function fit(){
+    const sc=Math.min(innerWidth/1600,innerHeight/900);
+    stage.style.transform='translate(-50%,-50%) scale('+sc+')';
+  }
+  const toggle=(el,force)=>el.classList.toggle('on',force);
+
+  document.addEventListener('keydown',e=>{
+    if(e.ctrlKey||e.metaKey||e.altKey)return;
+    const k=e.key;
+    if(k==='Escape'){toggle(ov,false);toggle(help,false);black.classList.remove('on');return;}
+    if(ov.classList.contains('on')&&k!=='o'&&k!=='O')return;
+    switch(k){
+      case 'ArrowRight':case 'ArrowDown':case ' ':case 'PageDown':case 'Enter':e.preventDefault();next();break;
+      case 'ArrowLeft':case 'ArrowUp':case 'PageUp':case 'Backspace':e.preventDefault();prev();break;
+      case 'Home':go(0);break;
+      case 'End':go(N-1);break;
+      case 'f':case 'F':
+        if(!document.fullscreenElement){if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});}
+        else document.exitFullscreen();break;
+      case 'o':case 'O':toggle(ov);break;
+      case 'b':case 'B':case '.':black.classList.toggle('on');break;
+      case '?':case 'h':case 'H':toggle(help);break;
+    }
+  });
+
+  let swiped=false,tx=0,ty=0;
+  const vp=$('viewport');
+  vp.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;swiped=false;},{passive:true});
+  vp.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(String(getSelection()))return;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){swiped=true;dx<0?next():prev();}});
+  $('b-prev').addEventListener('click',prev);
+  $('b-next').addEventListener('click',next);
+  black.addEventListener('click',()=>black.classList.remove('on'));
+  help.addEventListener('click',()=>toggle(help,false));
+  addEventListener('resize',fit);
+  document.addEventListener('fullscreenchange',fit);
+  const h=parseInt((location.hash||'').slice(1),10);
+  go(isNaN(h)?0:h-1);
+  fit();
+})();
+</script>
+</body>
+</html>

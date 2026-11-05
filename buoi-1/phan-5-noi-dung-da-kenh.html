@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video ngắn đúng chất Cốc Cốc</title>
+<meta name="description" content="Buổi 1, phần 5: video ngắn đúng chất Cốc Cốc với Claude, Google Flow và VieNeu-TTS.">
+<meta name="theme-color" content="#E4F4E8">
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-Poppins.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-PoppinsSemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-PoppinsBold.woff2') format('woff2');font-weight:700;font-display:swap}
+
+:root{
+  --ink:#12261A; --ink-2:#3E5246; --muted:#6F7F74;
+  --rule:#DCE5DE; --mist:#F2F6F1; --paper:#FFFFFF;
+  --green:#25AF50; --green-deep:#14842F; --green-pale:#D6F0DE; --green-line:#BFE4CA;
+  --forest:#0B3D22; --opener:#E4F4E8;
+  --orange:#F16037; --orange-deep:#B8431F; --orange-pale:#FDEDE7;
+  --yellow:#FEEB59;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:#DCE5DE;color:var(--ink);font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+b{font-weight:600}
+
+/* ---------- stage ---------- */
+#viewport{position:fixed;inset:0}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;transform:translate(-50%,-50%)}
+.slide{
+  position:absolute;inset:0;overflow:hidden;background:var(--paper);
+  padding:92px 104px 124px;display:flex;flex-direction:column;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .28s ease,visibility 0s linear .28s;
+}
+.slide.active{opacity:1;visibility:visible;transition:opacity .28s ease,visibility 0s}
+.slide .notes{display:none}
+.f{opacity:0;transition:opacity .3s ease}
+.f.on{opacity:1}
+
+/* ---------- type ---------- */
+h2{font-size:56px;line-height:1.12;letter-spacing:-.025em;font-weight:600;max-width:36ch;text-wrap:balance}
+.lead{font-size:29px;line-height:1.5;color:var(--ink-2);margin-top:20px;max-width:52ch}
+.fill{display:flex;flex-direction:column;margin-top:48px}
+.foot-note{font-size:19px;color:var(--muted);margin-top:20px}
+
+/* English term next to the Vietnamese one */
+.en{font-weight:400;color:var(--muted);letter-spacing:0}
+h2 .en,h3 .en,.say .en{font-size:.55em;white-space:nowrap}
+.prompt .en{color:#9DBBA6}
+.sticky .en{color:var(--ink-2)}
+
+/* ---------- chrome inside slides ---------- */
+.trk{position:absolute;left:104px;right:340px;bottom:44px;display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.trk span{font-size:16px;color:var(--muted);padding-top:12px;border-top:4px solid var(--rule);white-space:nowrap}
+.trk span.past{border-top-color:var(--green-line)}
+.trk span.cur{border-top-color:var(--green);color:var(--ink);font-weight:600}
+.pg{position:absolute;right:196px;bottom:44px;font-size:17px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:16px}
+
+/* brand lockup, links to programme home */
+.brand{position:absolute;left:104px;top:18px;z-index:2;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--muted);font-size:16px;line-height:1;gap:10px;border-radius:8px;padding:6px 10px;margin-left:-10px;transition:background .2s}
+.brand:hover,.brand:focus-visible{background:rgba(11,61,34,.06);outline:none}
+.brand img{display:block;height:22px;width:auto}
+.brand b{font-size:19px;font-weight:700;color:var(--ink);letter-spacing:-.02em;margin-left:-4px}
+.brand .x{color:var(--muted)}
+.brand img.cc{height:22px}
+.cover .brand{top:56px}
+.cover .brand img{height:40px}
+.cover .brand b{font-size:35px;margin-left:-6px}
+.cover .brand img.cc{height:40px}
+.cover .brand{gap:20px;font-size:30px}
+
+/* ---------- opener: the one loud thing ---------- */
+.opener{background:var(--opener);color:var(--forest);justify-content:flex-end;padding-bottom:168px}
+.opener .num{position:absolute;right:96px;top:64px;font-size:480px;line-height:.86;font-weight:700;color:var(--green);letter-spacing:-.05em;opacity:.95}
+.opener .say{position:relative;font-size:84px;line-height:1.08;letter-spacing:-.03em;font-weight:600;max-width:19ch;text-wrap:balance}
+.opener .sub{position:relative;font-size:30px;line-height:1.5;color:var(--ink-2);margin-top:30px;max-width:46ch}
+.opener .trk span{border-top-color:rgba(11,61,34,.12)}
+.opener .trk span.past{border-top-color:#9FD5AF}
+.opener .trk span.cur{border-top-color:var(--green-deep);color:var(--forest)}
+@media (prefers-reduced-motion:no-preference){
+  .opener.active .num{animation:rise .7s var(--ease) both}
+  .opener.active .say{animation:fade .6s ease .12s both}
+  .opener.active .sub{animation:fade .6s ease .24s both}
+}
+@keyframes rise{from{opacity:0;transform:translateY(60px)}to{opacity:.95;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* cover */
+.cover .kick{position:relative;font-size:26px;color:var(--green-deep);font-weight:600;margin-bottom:32px}
+.cover h1{position:relative;font-size:124px;line-height:1;letter-spacing:-.04em;font-weight:700;max-width:12ch}
+.cover .sub{max-width:40ch}
+.cover .by{position:relative;display:flex;gap:48px;margin-top:56px;font-size:20px;color:rgba(255,255,255,.72)}
+.cover .note-card{position:absolute;right:120px;top:120px;width:300px;height:320px;background:var(--yellow);transform:rotate(4deg);box-shadow:0 18px 40px rgba(0,0,0,.18);padding:34px 32px;color:var(--ink);font-size:25px;line-height:1.4;font-weight:600}
+.cover .note-card small{display:block;font-weight:400;font-size:20px;line-height:1.45;color:var(--ink-2);margin-top:16px}
+.cover .keys{position:absolute;left:104px;bottom:50px;font-size:18px;color:var(--ink-2);display:flex;gap:28px}
+kbd{font-family:inherit;font-size:.9em;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);border-radius:7px;padding:1px 9px;color:#fff}
+.cover kbd{background:#fff;border-color:var(--green-line);border-bottom-width:3px;color:var(--ink)}
+
+/* quiet statement */
+.quiet{justify-content:center}
+.quiet .say{font-size:96px;line-height:1.05;letter-spacing:-.035em;font-weight:700;color:var(--green-deep)}
+.quiet .sub{font-size:30px;line-height:1.55;color:var(--ink-2);margin-top:34px;max-width:50ch}
+
+/* agenda */
+.agenda{margin-top:40px;border-top:1.5px solid var(--rule)}
+.agenda li{display:grid;grid-template-columns:72px 1fr auto;align-items:baseline;padding:17px 0;border-bottom:1.5px solid var(--rule);font-size:31px}
+.agenda .k{font-weight:700;color:var(--green);font-size:31px}
+.agenda .m{font-size:22px;color:var(--muted)}
+
+/* three columns separated by rules */
+.three{display:grid;grid-template-columns:repeat(3,1fr);margin-top:52px}
+.three>div{padding:0 40px;border-left:1.5px solid var(--rule)}
+.three>div:first-child{padding-left:0;border-left:0}
+.three h3{font-size:33px;line-height:1.2;font-weight:600;letter-spacing:-.02em}
+.three p{font-size:27px;line-height:1.5;color:var(--ink-2);margin-top:16px}
+
+/* sticky note */
+.sticky{background:var(--yellow);padding:22px 30px 24px;box-shadow:0 8px 20px rgba(11,61,34,.14);transform:rotate(-1deg);font-size:24px;line-height:1.5;color:var(--ink);max-width:880px}
+.sticky small{display:block;font-size:17px;color:var(--ink-2);margin-bottom:4px}
+.sticky.r{transform:rotate(1.2deg)}
+
+/* paper sheets */
+.sheets{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:44px;padding:0 8px}
+.sheet{background:#fff;border:1.5px solid var(--rule);box-shadow:0 14px 30px rgba(11,61,34,.10);padding:34px 40px 40px;min-height:340px;position:relative}
+.sheet.l{transform:rotate(-1.2deg)}
+.sheet.r{transform:rotate(.8deg);border-color:var(--green-line)}
+.sheet .who{font-size:19px;color:var(--muted);margin-bottom:18px}
+.sheet.r .who{color:var(--green-deep);font-weight:600}
+.sheet h4{margin:0 0 14px;font-size:28px;line-height:1.3;font-weight:600}
+.sheet p{font-size:26px;line-height:1.55;color:var(--muted)}
+.sheet ul li{font-size:26px;line-height:1.5;color:var(--ink-2);padding-left:24px;position:relative;margin-top:8px}
+.sheet ul li::before{content:"";position:absolute;left:0;top:16px;width:9px;height:9px;border-radius:50%;background:var(--green)}
+
+/* sequence steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:56px;counter-reset:s}
+.steps li{border-top:4px solid var(--green);padding-top:22px}
+.steps li::before{counter-increment:s;content:counter(s);display:block;font-size:54px;line-height:1;font-weight:700;color:var(--green);margin-bottom:14px}
+.steps h3{font-size:32px;font-weight:600;letter-spacing:-.02em}
+.steps p{font-size:26px;line-height:1.5;color:var(--ink-2);margin-top:10px}
+
+/* bar callout */
+.bar{margin-top:44px;border-left:6px solid var(--green);padding:6px 0 6px 28px;font-size:28px;line-height:1.45;color:var(--ink-2);max-width:56ch}
+.bar b{color:var(--ink)}
+.bar.o{border-left-color:var(--orange)}
+
+/* desk illustration */
+.desks{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:48px}
+.surf{position:relative;height:270px;border-radius:12px;background:linear-gradient(180deg,#EEE3CF,#E3D4BA);overflow:hidden;box-shadow:inset 0 -6px 0 #D5C29F}
+.paper{position:absolute;width:100px;height:128px;background:#fff;border-radius:4px;box-shadow:0 4px 10px rgba(60,40,10,.14)}
+.paper::before{content:"";position:absolute;left:14px;right:14px;top:18px;height:50px;background:repeating-linear-gradient(180deg,var(--rule) 0 3px,transparent 3px 11px)}
+.paper.lost{background:var(--orange-pale);outline:3px solid var(--orange);outline-offset:-3px}
+.paper.y{background:var(--yellow);width:86px;height:86px}
+.paper.y::before{display:none}
+.desk h3{font-size:29px;font-weight:600;margin-top:22px}
+.desk p{font-size:25px;color:var(--ink-2);margin-top:6px;line-height:1.45}
+.desk.full h3{color:var(--orange-deep)}
+
+/* chat */
+.chat{display:flex;flex-direction:column;gap:16px}
+.msg{max-width:88%;border-radius:22px;padding:20px 26px;font-size:26px;line-height:1.5}
+.msg small{display:block;font-size:16px;margin-bottom:4px;opacity:.75}
+.msg.u{align-self:flex-end;background:var(--forest);color:#fff;border-bottom-right-radius:6px}
+.msg.a{align-self:flex-start;background:var(--mist);color:var(--ink);border-bottom-left-radius:6px}
+.msg.flag{background:var(--orange-pale);box-shadow:inset 6px 0 0 var(--orange)}
+.gap{align-self:center;font-size:19px;color:var(--muted);padding:4px 18px;border:1.5px dashed var(--rule);border-radius:999px}
+.tag{display:inline-block;background:var(--orange);color:#fff;font-size:17px;font-weight:600;border-radius:999px;padding:3px 14px;margin-top:10px}
+.split{display:grid;grid-template-columns:1.25fr .9fr;gap:64px;margin-top:40px;align-items:start}
+.split .side p{font-size:28px;line-height:1.5;color:var(--ink-2)}
+.split .side p+p{margin-top:22px}
+.split .side .sticky{margin-top:30px}
+
+/* compare columns */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px}
+.cmp h3{font-size:30px;font-weight:600;letter-spacing:-.015em;padding-bottom:16px;border-bottom:4px solid var(--orange)}
+.cmp .ok h3{border-bottom-color:var(--green)}
+.cmp p{font-size:28px;line-height:1.5;color:var(--ink-2);margin-top:20px}
+.cmp p.m{font-size:23px;color:var(--muted)}
+
+/* prompt box */
+.prompt{background:var(--forest);color:#E7F1EA;border-radius:18px;padding:30px 36px;font-size:25px;line-height:1.6;white-space:pre-wrap}
+.prompt .k{background:var(--yellow);color:var(--forest);font-weight:400;border-radius:3px;box-shadow:0 0 0 5px var(--yellow);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.lbl{font-size:20px;font-weight:600;margin-bottom:12px;color:var(--ink-2)}
+.lbl.o{color:var(--orange-deep)}
+.lbl.g{color:var(--green-deep)}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:40px;font-size:28px}
+.tbl th{text-align:left;font-size:19px;font-weight:600;color:var(--muted);padding:0 24px 12px 0;border-bottom:1.5px solid var(--rule)}
+.tbl td{padding:18px 24px 18px 0;border-bottom:1.5px solid var(--rule);line-height:1.4;vertical-align:top;color:var(--ink-2)}
+.tbl td:first-child{color:var(--ink)}
+.tbl td.no{color:var(--orange-deep);text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:rgba(241,96,55,.5)}
+.tbl td.yes{color:var(--ink);font-weight:600}
+.tbl .pill{display:inline-block;font-size:19px;font-weight:600;padding:4px 14px;border-radius:999px;background:var(--mist);color:var(--ink-2)}
+.tbl .pill.hi{background:var(--green-deep);color:#fff}
+
+/* bulleted lines */
+.lines{margin-top:40px;border-top:1.5px solid var(--rule)}
+.lines li{padding:20px 0 20px 40px;border-bottom:1.5px solid var(--rule);font-size:30px;line-height:1.4;color:var(--ink-2);position:relative}
+.lines li::before{content:"";position:absolute;left:4px;top:35px;width:14px;height:14px;border-radius:50%;background:var(--green)}
+.lines li b{color:var(--ink)}
+
+/* five-part frame */
+.frame{margin-top:40px;border-top:1.5px solid var(--rule)}
+.frame>div{display:grid;grid-template-columns:330px 1fr;padding:20px 0;border-bottom:1.5px solid var(--rule);align-items:baseline}
+.frame b{font-size:31px;font-weight:600}
+.frame span{font-size:28px;color:var(--ink-2)}
+.frame .hl{background:var(--yellow);margin:0 -24px;padding:20px 24px;border-bottom-color:transparent}
+
+/* token rows */
+.tok{margin-top:44px;display:flex;flex-direction:column;gap:14px}
+.tok .row{display:grid;grid-template-columns:210px 1fr;align-items:center;gap:24px}
+.tok .row b{font-size:24px;color:var(--ink-2)}
+.tok .seg{display:flex;gap:6px;height:56px}
+.tok .seg span{display:grid;place-items:center;border-radius:10px;font-size:20px;font-weight:600;width:140px}
+.tok .old{background:var(--mist);border:1.5px dashed #B9C7BC;color:var(--muted)}
+.tok .new{background:var(--green);color:#fff}
+.tok .many{width:780px!important}
+.legend{display:flex;gap:40px;margin-top:28px;font-size:21px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:10px}
+.legend i{width:28px;height:18px;border-radius:5px;display:block}
+
+/* next-word guess */
+.guess{margin-top:8px}
+.guess .ctx{font-size:30px;line-height:1.45;color:var(--ink)}
+.guess .blank{display:inline-block;min-width:150px;border-bottom:4px dashed var(--green);margin-left:8px}
+.guess .cap{font-size:19px;color:var(--muted);margin:26px 0 12px}
+.guess .c{display:grid;grid-template-columns:170px 1fr 64px;align-items:center;gap:18px;height:52px}
+.guess .c b{font-size:25px;font-weight:400;color:var(--ink-2)}
+.guess .c i{display:block;height:26px;border-radius:6px;background:var(--mist);box-shadow:inset 0 0 0 1.5px var(--rule)}
+.guess .c em{font-style:normal;font-size:21px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.guess .c.pick b{font-weight:600;color:var(--ink)}
+.guess .c.pick i{background:var(--green);box-shadow:none}
+.guess .c.pick em{color:var(--green-deep);font-weight:600}
+.guess .c.idk b,.guess .c.idk em{color:var(--orange-deep)}
+.guess .c.idk i{background:var(--orange)}
+.guess .out{margin-top:24px;font-size:25px;line-height:1.5;color:var(--ink-2)}
+.guess .out b{background:var(--orange-pale);color:var(--orange-deep);padding:0 6px;border-radius:4px}
+
+/* two questions */
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:40px}
+.qa h3{font-size:30px;line-height:1.25;font-weight:600;letter-spacing:-.015em;padding-bottom:14px;border-bottom:4px solid var(--green)}
+.qa p{font-size:25px;line-height:1.5;color:var(--ink-2);margin-top:18px}
+.qa+.bar{margin-top:36px}
+
+/* instead-of / ask-this rows */
+.fix{margin-top:26px}
+.fix .hd,.fix .r{display:grid;grid-template-columns:350px 1fr 1.45fr;gap:36px}
+.fix .hd{font-size:19px;font-weight:600;color:var(--muted);padding-bottom:12px;border-bottom:1.5px solid var(--rule)}
+.fix .hd .x{color:var(--orange-deep)}
+.fix .hd .v{color:var(--green-deep)}
+.fix .r{padding:14px 0;border-bottom:1.5px solid var(--rule);align-items:start}
+.fix h3{font-size:25px;line-height:1.25;font-weight:600;letter-spacing:-.015em}
+.fix .why{font-size:18px;line-height:1.4;color:var(--muted);margin-top:6px}
+.fix .why .en{font-size:1em}
+.fix .bad p,.fix .good p{font-size:21px;line-height:1.42}
+.fix .bad p{color:var(--ink-2)}
+.fix .bad .rep{font-size:18px;color:var(--orange-deep);margin-top:6px}
+.fix .good p{color:var(--ink);background:var(--mist);border-left:5px solid var(--green);border-radius:0 8px 8px 0;padding:8px 14px}
+
+/* data record */
+.anon{display:grid;grid-template-columns:150px 1fr;row-gap:14px;column-gap:28px;margin-top:40px;align-items:center}
+.anon .lab{font-size:21px;color:var(--muted)}
+.anon .rec{display:grid;grid-template-columns:1.3fr 1fr 1.4fr 1fr;border:1.5px solid var(--rule);border-radius:12px;overflow:hidden;font-size:25px}
+.anon .rec span{padding:16px 20px;border-left:1.5px solid var(--rule)}
+.anon .rec span:first-child{border-left:0}
+.anon .rec.h span{background:var(--mist);font-size:18px;color:var(--muted);padding:10px 20px}
+.anon .rec.bad span.pii{background:var(--orange-pale);color:var(--orange-deep)}
+.anon .rec.good span.id{background:var(--green-pale);color:var(--green-deep);font-weight:600}
+.anon .rec.good span.gone{color:#AEBDB2}
+
+/* summary */
+.sum{margin-top:36px}
+.sum li{display:grid;grid-template-columns:1fr 1fr;gap:56px;padding:26px 0;border-top:1.5px solid var(--rule);align-items:baseline}
+.sum h3{font-size:36px;line-height:1.25;font-weight:600;letter-spacing:-.02em}
+.sum p{font-size:28px;line-height:1.5;color:var(--ink-2)}
+
+/* ---------- panels outside stage ---------- */
+#progress{position:fixed;left:0;top:0;height:4px;background:var(--green);width:0;z-index:20;transition:width .3s var(--ease)}
+#nav{position:fixed;right:16px;bottom:16px;z-index:25;display:flex;gap:8px}
+#nav button,#nav a{all:unset;cursor:pointer;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.92);border:1.5px solid var(--green-line);color:var(--forest);font-size:22px;line-height:1;box-shadow:0 4px 12px rgba(11,61,34,.10)}
+#nav button:hover,#nav button:focus-visible,#nav a:hover,#nav a:focus-visible{border-color:var(--green);background:#fff}
+#nav button:disabled{opacity:.35;cursor:default}
+#blackout{position:fixed;inset:0;background:#000;z-index:40;display:none}
+#blackout.on{display:block}
+.panel{position:fixed;z-index:30;background:rgba(8,40,22,.97);color:#E7F1EA;cursor:default;user-select:text}
+#notes{left:0;right:0;bottom:0;height:30vh;padding:18px 28px 20px;display:none;font-size:17px;line-height:1.65;overflow:auto;border-top:3px solid var(--yellow)}
+#notes.on{display:block}
+#notes .top{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#9DBBA6;margin-bottom:8px;gap:16px}
+#notes .top b{color:#fff}
+#notes .timer{font-variant-numeric:tabular-nums;font-size:15px;color:var(--yellow)}
+#notes p{margin:0 0 8px}
+#notes .todo{color:#F5B49F}
+#overview{inset:0;display:none;padding:40px;overflow:auto}
+#overview.on{display:block}
+#overview h2{color:#fff;font-size:24px;margin-bottom:20px}
+#overview .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+#overview button{all:unset;cursor:pointer;background:#123F27;border:1.5px solid #1F5236;border-radius:10px;padding:12px 16px;font-size:15px;line-height:1.4;color:#E7F1EA;display:flex;gap:12px}
+#overview button:hover,#overview button:focus-visible{border-color:var(--yellow)}
+#overview button.cur{background:#1C5A37}
+#overview button span{color:#9DBBA6;font-variant-numeric:tabular-nums;min-width:22px}
+#help{left:50%;top:50%;transform:translate(-50%,-50%);display:none;padding:28px 34px;border-radius:16px;min-width:420px;font-size:16px;line-height:2.1}
+#help.on{display:block}
+#help h2{font-size:20px;color:#fff;margin-bottom:6px}
+#help .row{display:flex;justify-content:space-between;gap:30px}
+
+/* ---------- phần 5 additions ---------- */
+.trk{grid-template-columns:repeat(5,1fr)}
+.cover h1{max-width:14ch;font-size:112px}
+.cover .sub{position:relative}
+.steps.five{grid-template-columns:repeat(5,1fr);gap:28px}
+.steps.five h3{font-size:27px;line-height:1.2}
+.steps.five p{font-size:22px}
+.steps.five li.key{border-top-color:var(--yellow);background:linear-gradient(180deg,rgba(254,235,89,.28),transparent 70%);margin:0 -14px;padding:22px 14px 0}
+.chk{margin-top:4px}
+.chk li{position:relative;padding:10px 0 10px 44px;font-size:25px;line-height:1.4;color:var(--ink-2)}
+.chk li::before{content:"";position:absolute;left:2px;top:15px;width:24px;height:24px;border-radius:6px;border:2.5px solid var(--green)}
+.chk li::after{content:"";position:absolute;left:9px;top:20px;width:8px;height:12px;border:solid var(--green-deep);border-width:0 3px 3px 0;transform:rotate(40deg)}
+.chk.o li::before{border-color:var(--orange)}
+.chk.o li::after{content:"!";border:0;transform:none;left:11px;top:15px;width:auto;height:auto;font-weight:700;font-size:19px;color:var(--orange-deep)}
+.qa .chk{margin-top:14px}
+.fix.chk6 .hd,.fix.chk6 .r{grid-template-columns:300px 1fr 1fr}
+.fix.chk6 .r{padding:11px 0;align-items:center}
+.fix.chk6 h3{font-size:24px}
+.fix.chk6 .bad p,.fix.chk6 .good p{font-size:21px}
+.fix.two{margin-top:40px}
+.fix.two .hd,.fix.two .r{grid-template-columns:.7fr 1.6fr}
+.fix.two .r{padding:20px 0;align-items:center}
+.fix.two .bad p{font-size:27px}
+.fix.two .good p{font-size:25px;padding:12px 18px}
+.tbl.shots{font-size:23px;margin-top:32px}
+.tbl.shots td{padding:15px 20px 15px 0}
+.tbl.shots .pill{font-size:17px;white-space:nowrap}
+.tbl code,.lines li code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.85em;background:var(--mist);border:1.5px solid var(--rule);border-radius:6px;padding:0 8px;color:var(--ink)}
+.lines.src li{font-size:25px}
+.slide a:not(.brand){color:var(--green-deep);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+
+.vidbox{background:#000;border-radius:14px;overflow:hidden;box-shadow:0 14px 30px rgba(11,61,34,.18);line-height:0}
+.vidbox video{width:100%;display:block;aspect-ratio:16/9;background:#000}
+.tbl code{font-size:.72em!important;white-space:nowrap}
+.vidbox.tall video{aspect-ratio:9/16;max-height:600px}
+.vidbox{position:relative}
+.vplay{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:0;background:var(--yellow);color:var(--forest);display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.22);z-index:2;transition:opacity .2s,transform .2s}
+.vplay:hover{transform:scale(1.06)}
+.vplay.hide{opacity:0;pointer-events:none}
+.vplay svg{width:16px;height:16px;display:block}
+.vidbox video{cursor:pointer}
+
+/* storyboard chapters */
+.chapters{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:12px}
+.chap{all:unset;cursor:pointer;display:block;border-radius:7px;overflow:hidden;background:var(--mist);border:2px solid transparent;transition:border-color .2s,transform .2s}
+.chap:hover,.chap:focus-visible{border-color:var(--green-line);transform:translateY(-1px)}
+.chap.cur{border-color:var(--green);background:#fff}
+.chap img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.chap .ct{display:block;padding:5px 6px 6px;line-height:1.2}
+.chap .ct b{display:block;font-size:9px;color:var(--green-deep);letter-spacing:.04em}
+.chap .ct .cn{display:block;font-size:10.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chap .ct i{display:block;font-style:normal;font-size:9px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* voice samples */
+.voices{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.voice{display:grid;grid-template-columns:44px 1fr 38px;grid-template-rows:auto 44px;gap:5px 12px;align-items:center;background:var(--mist);border:1.5px solid var(--rule);border-radius:12px;padding:11px 16px 13px;transition:background .2s,border-color .2s}
+.voice audio{display:none}
+.voice .vh{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.voice .vh b{font-size:19px;line-height:1.2;font-weight:600}
+.voice .vh span{font-size:13px;color:var(--muted);white-space:nowrap}
+.voice .play{all:unset;cursor:pointer;grid-row:2;width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;transition:background .2s,transform .2s}
+.voice .play:hover,.voice .play:focus-visible{background:var(--green-deep);transform:scale(1.04)}
+.voice .play svg{width:17px;height:17px;display:block}
+.voice .vbar{grid-row:2;height:6px;border-radius:999px;background:#D9E4DB;overflow:hidden;cursor:pointer}
+.voice .vbar i{display:block;height:100%;width:0;background:var(--green);border-radius:999px;transition:width .1s linear}
+.voice .vtime{grid-row:2;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.voice.playing{border-color:var(--green-line);background:#fff}
+
+/* use-case grid */
+.uc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.uc article{background:var(--mist);border:1.5px solid var(--rule);border-radius:14px;padding:16px 20px 15px;display:flex;flex-direction:column;gap:5px}
+.uc .hd{display:flex;align-items:center;gap:11px;margin-bottom:2px}
+.uc .ic{flex:0 0 auto;width:36px;height:36px;border-radius:10px;background:#fff;border:1.5px solid var(--green-line);color:var(--green-deep);display:grid;place-items:center}
+.uc .ic svg{width:21px;height:21px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.uc .k{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--green-deep)}
+.uc h3{font-size:22px;line-height:1.2;font-weight:600;letter-spacing:-.015em}
+.uc p{font-size:17px;line-height:1.4;color:var(--ink-2)}
+.tbl.vtab{font-size:22px;margin-top:30px}
+.tbl.vtab td{padding:13px 20px 13px 0}
+.tbl.vtab td.fl{color:var(--orange-deep)}
+.tbl.vtab td.keep{color:var(--muted)}
+@media print{
+  .pg{right:104px!important}
+  @page{size:1600px 900px;margin:0}
+  html,body{height:auto;overflow:visible;background:#fff}
+  #viewport{position:static}
+  #stage{position:static;transform:none!important;width:1600px;height:auto}
+  .slide{position:relative;opacity:1!important;visibility:visible!important;width:1600px;height:900px;break-after:page;page-break-after:always}
+  .f{opacity:1!important}
+  .opener .num,.opener .say,.opener .sub{animation:none!important}
+  #progress,#notes,#overview,#help,#blackout,#nav,.cover .keys{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="viewport"><div id="stage">
+
+<section class="slide opener cover" data-title="Bìa">
+  <p class="kick">Buổi 1, Vận hành và Office</p>
+  <h1>Video ngắn đúng chất Cốc Cốc</h1>
+  <p class="sub">Hai loại video AI: Claude viết video bằng code, Google Flow vẽ từng khung hình. Dùng brand guidelines để video nào cũng nhìn là biết của Cốc Cốc.</p>
+  <div class="keys"><span><kbd>→</kbd> hoặc nút góc dưới để sang slide</span><span><kbd>F</kbd> toàn màn hình</span><span><kbd>O</kbd> danh sách slide</span></div>
+</section>
+
+<!-- 1 Demo -->
+<section class="slide opener" data-sec="0" data-title="1. Hai video AI làm">
+  <div class="num">1</div>
+  <p class="say">Xem trước hai video, mỗi video một cách làm.</p>
+  <p class="sub">Một video Claude viết bằng code. Một cảnh quay Google Flow vẽ ra từ một câu mô tả.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="1. Demo Claude">
+  <h2>Demo 1 · Video giới thiệu Cốc Cốc, Claude làm</h2>
+  <div class="split" style="grid-template-columns:1.3fr 1fr;gap:48px;margin-top:32px;align-items:center">
+    <div>
+      <div class="vidbox"><video id="claude-demo" controls preload="metadata" playsinline poster="../assets/media/claude-demo.jpg" src="../assets/media/CocCoc_Gioi_thieu_v5_90s.mp4"></video></div>
+      <div class="chapters" id="claude-chapters">
+        <button class="chap" data-t="0" aria-label="Cảnh 1: Mở đầu, 0 giây"><img src="../assets/media/story-1.jpg" alt=""><span class="ct"><b>01</b><span class="cn">Mở đầu</span><i>0:00</i></span></button>
+        <button class="chap" data-t="8.2" aria-label="Cảnh 2: Hệ sinh thái, 8 giây"><img src="../assets/media/story-2.jpg" alt=""><span class="ct"><b>02</b><span class="cn">Hệ sinh thái</span><i>0:08</i></span></button>
+        <button class="chap" data-t="16.5" aria-label="Cảnh 3: Tính duyệt, 16 giây"><img src="../assets/media/story-3.jpg" alt=""><span class="ct"><b>03</b><span class="cn">Tính duyệt</span><i>0:16</i></span></button>
+        <button class="chap" data-t="33.2" aria-label="Cảnh 4: Tìm kiếm, 33 giây"><img src="../assets/media/story-4.jpg" alt=""><span class="ct"><b>04</b><span class="cn">Tìm kiếm</span><i>0:33</i></span></button>
+        <button class="chap" data-t="41.5" aria-label="Cảnh 5: Quảng cáo, 41 giây"><img src="../assets/media/story-5.jpg" alt=""><span class="ct"><b>05</b><span class="cn">Quảng cáo</span><i>0:41</i></span></button>
+        <button class="chap" data-t="49.9" aria-label="Cảnh 6: Con người, 49 giây"><img src="../assets/media/story-6.jpg" alt=""><span class="ct"><b>06</b><span class="cn">Con người</span><i>0:49</i></span></button>
+        <button class="chap" data-t="73.5" aria-label="Cảnh 7: Giá trị và kết, 1 phút 13 giây"><img src="../assets/media/story-7.jpg" alt=""><span class="ct"><b>07</b><span class="cn">Giá trị &amp; kết</span><i>1:13</i></span></button>
+      </div>
+    </div>
+    <div>
+      <ul class="chk">
+        <li>90 giây, bảy cảnh, đánh số ở góc phải.</li>
+        <li>Chữ tiếng Việt đúng từng dấu, vì là chữ thật.</li>
+        <li>Thẻ số liệu, sơ đồ, mốc thời gian chạy bằng code.</li>
+        <li>Logo, linh vật và ảnh thật của Cốc Cốc đặt vào, không vẽ lại.</li>
+        <li>Đổi một con số thì sửa đúng ô đó.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="foot-note">Số liệu trong video cần đối chiếu với nguồn của Cốc Cốc trước khi đăng.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="1. Demo Flow">
+  <h2>Demo 2 · Cảnh quay 8 giây, Google Flow vẽ</h2>
+  <div class="split" style="grid-template-columns:330px 1fr;gap:56px;margin-top:28px;align-items:center">
+    <div class="vidbox tall"><video controls preload="metadata" playsinline poster="../assets/media/flow-demo.jpg" src="../assets/media/flow-demo.mp4"></video></div>
+    <div><p class="lbl g">Prompt kiểu này</p>
+      <div class="prompt" style="font-size:20px">Vertical 9:16. A young Vietnamese office worker
+sits in a busy Hanoi café, holding her phone.
+The page keeps loading; she frowns, sighs,
+and glances at her watch. Medium close-up,
+slow push-in, soft daylight, warm tones.
+Phone screen blurred. No text, no logos.</div>
+      <ul class="chk" style="margin-top:14px">
+        <li>Người, quán cà phê, ánh sáng đều do Flow vẽ.</li>
+        <li>Không có chữ, không có logo: phần đó để Claude thêm.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 2 Claude và Flow -->
+<section class="slide opener" data-sec="1" data-title="2. Claude và Flow">
+  <div class="num">2</div>
+  <p class="say">Hai video vừa xem khác nhau ở chỗ nào, và khi nào dùng cái nào.</p>
+  <p class="sub">So sánh Claude và Flow, việc nào hợp loại nào, rồi ba cách làm video với Claude.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="2. Hai loại video">
+  <h2>Video Claude dựng, hay video Flow vẽ</h2>
+  <div class="cmp">
+    <div class="ok">
+      <h3>Claude dựng video bằng code</h3>
+      <p>Chữ, số, biểu đồ, logo, ảnh chụp màn hình chuyển động. Tiếng Việt đúng từng dấu.</p>
+      <p>Sửa một chữ thì sửa đúng chỗ đó, phần còn lại giữ nguyên.</p>
+      <p>Không tự tạo được người hay cảnh quay thật.</p>
+      <p class="m">Như dựng poster trên Canva: khung có sẵn, gõ chữ ra đúng chữ.</p>
+    </div>
+    <div class="ok">
+      <h3>Google Flow vẽ ra từng khung hình</h3>
+      <p>Người, cảnh, sản phẩm trông như thật.</p>
+      <p>Sai một chi tiết thì phải tạo lại cả clip, và clip mới khác clip cũ.</p>
+      <p>Hay viết sai chữ, nhất là tiếng Việt có dấu.</p>
+      <p class="m">Như nhờ hoạ sĩ vẽ: đẹp và có hồn, nhưng sửa một nét là gần như vẽ lại.</p>
+    </div>
+  </div>
+  <p class="bar">Dùng cả hai: cảnh Flow làm nền, <b>Claude thêm chữ, số và logo lên trên.</b></p>
+</section>
+
+<section class="slide" data-sec="1" data-title="2. Use cases">
+  <h2>Use cases</h2>
+  <div class="uc">
+    <article>
+      <div class="hd"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l5 4V6l-5 4H4z"/><path d="M16 9.5a4 4 0 0 1 0 5"/><path d="M19 7a7.5 7.5 0 0 1 0 10"/></svg></span><span class="k">Marketing</span></div>
+      <h3>Quảng cáo &amp; ra mắt</h3>
+      <p>Reels, TikTok dọc; giá và ưu đãi động; đếm ngược; thiệp lễ.</p>
+    </article>
+    <article>
+      <div class="hd"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3H4v8l9 9 8-8-9-9z"/><circle cx="8" cy="7" r="1.4"/></svg></span><span class="k">Sales</span></div>
+      <h3>Bán hàng</h3>
+      <p>Video riêng từng khách, mở đầu thuyết trình, case study 20 giây.</p>
+    </article>
+    <article>
+      <div class="hd"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5h16v11H9.5L4 20V4.5z"/><path d="M8.5 10l2.2 2.2L15 8"/></svg></span><span class="k">Chăm sóc khách hàng</span></div>
+      <h3>Hướng dẫn &amp; trả lời</h3>
+      <p>Hướng dẫn bắt đầu, đổi trả, bảo hành; FAQ gửi Zalo OA, Messenger.</p>
+    </article>
+    <article>
+      <div class="hd"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="3" y="16" width="6" height="5" rx="1"/><rect x="15" y="16" width="6" height="5" rx="1"/><path d="M12 8v4M6 16v-2.5h12V16"/></svg></span><span class="k">Nội bộ</span></div>
+      <h3>Trong công ty</h3>
+      <p>Biểu đồ cho họp, đào tạo nhân viên mới, sơ đồ quy trình.</p>
+    </article>
+    <article>
+      <div class="hd"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18"/><path d="M4 16l5-5 4 3 6.5-7.5"/><path d="M16 6.5h3.5V10"/></svg></span><span class="k">Dữ liệu</span></div>
+      <h3>Số liệu &amp; báo cáo</h3>
+      <p>Báo cáo tháng trong 30 giây; điểm chính của dashboard.</p>
+    </article>
+    <article>
+      <div class="hd"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M7 8h6M7 11h4M12 16v4M8.5 20h7"/></svg></span><span class="k">Giảng dạy</span></div>
+      <h3>Bài giảng &amp; khoá học</h3>
+      <p>Minh hoạ chuyển động cho bài giảng; giới thiệu khoá học.</p>
+    </article>
+    <article>
+      <div class="hd"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10 5 4h14l1 6"/><path d="M4 10h16v10H4z"/><path d="M9 20v-6h6v6"/></svg></span><span class="k">Cửa hàng &amp; sự kiện</span></div>
+      <h3>Màn hình &amp; livestream</h3>
+      <p>Menu, khuyến mãi, bảng giá livestream, màn hình sự kiện.</p>
+    </article>
+    <article>
+      <div class="hd"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8.5h18"/><path d="M10 11.5l4 2.5-4 2.5z"/></svg></span><span class="k">Website &amp; sản phẩm</span></div>
+      <h3>Trên web</h3>
+      <p>Hình chuyển động đầu trang; video từng tính năng.</p>
+    </article>
+    <article>
+      <div class="hd"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="M10 9.3l5 2.7-5 2.7z"/></svg></span><span class="k">YouTube</span></div>
+      <h3>Cho kênh của bạn</h3>
+      <p>Mở đầu, B-roll, sticker, thẻ chương và Shorts.</p>
+    </article>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="2. Việc nào dùng loại nào">
+  <h2>Việc nào dùng loại nào</h2>
+  <table class="tbl" style="font-size:25px;margin-top:30px">
+    <thead><tr><th style="width:44%">Việc</th><th style="width:18%">Dùng</th><th>Vì sao</th></tr></thead>
+    <tbody>
+      <tr><td>Quảng cáo có giá, ưu đãi, con số</td><td><span class="pill hi">Claude</span></td><td>Số phải đúng, đổi giá là sửa một ô</td></tr>
+      <tr><td>Ra mắt tính năng, hướng dẫn khách mới</td><td><span class="pill hi">Claude</span></td><td>Dựng từ ảnh chụp màn hình thật</td></tr>
+      <tr><td>Báo cáo tháng kể lại trong 30 giây</td><td><span class="pill hi">Claude</span></td><td>Biểu đồ chuyển động từ số thật</td></tr>
+      <tr><td>Quảng cáo cảm xúc, cảnh người dùng</td><td><span class="pill">Flow</span></td><td>Cần người và bối cảnh trông như thật</td></tr>
+      <tr><td>Video Sales dựng theo ngành của khách</td><td><span class="pill">Flow + Claude</span></td><td>Cảnh từ Flow, chữ và số do Claude thêm</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide" data-sec="1" data-title="2. Claude làm video bằng gì">
+  <h2>Claude làm video bằng gì</h2>
+  <table class="tbl" style="font-size:23px;margin-top:30px">
+    <thead><tr><th style="width:16%"></th><th style="width:24%">Claude Motion</th><th style="width:30%">Claude Code + HyperFrames</th><th>Claude Code + Remotion</th></tr></thead>
+    <tbody>
+      <tr><td>Là gì</td><td>Tính năng trong app Claude</td><td>Công cụ của HeyGen, video viết bằng HTML</td><td>Thư viện có từ lâu, video viết bằng React</td></tr>
+      <tr><td>Gói Claude</td><td>Team, Enterprise (beta)</td><td>Pro trở lên</td><td>Pro trở lên</td></tr>
+      <tr><td>Cài skill</td><td>Không cần cài</td><td><code>npx skills add heygen-com/hyperframes</code></td><td><code>npx skills add remotion-dev/skills</code></td></tr>
+      <tr><td>Giấy phép</td><td>Theo gói Claude</td><td>Apache 2.0, công ty dùng miễn phí</td><td>Công ty trên 3 người phải mua Company License</td></tr>
+    </tbody>
+  </table>
+  <p class="bar" style="margin-top:30px">Hai skill dùng giống nhau: mô tả video, duyệt kế hoạch, Claude viết code rồi xuất MP4. <b>Chưa biết chọn thì bắt đầu với HyperFrames</b>; team đã quen React hoặc đã mua giấy phép thì dùng Remotion.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="2. Thư viện phong cách">
+  <h2>Chọn phong cách từ thư viện MotionVideo</h2>
+  <div class="split" style="grid-template-columns:1.15fr .85fr;gap:56px;margin-top:30px">
+    <div>
+      <p class="lbl g">Thư viện video motion do AI làm</p>
+      <p style="font-size:26px;line-height:1.5;color:var(--ink-2);margin-top:10px">Mỗi mẫu có video, prompt gốc và tên kỹ thuật chuyển động (Moves). Tìm mẫu gần ý, đọc prompt, rồi đổi màu, font, logo sang bộ Cốc Cốc.</p>
+      <ul class="chk" style="margin-top:6px">
+        <li>Nhóm hợp video sản phẩm: giao diện, điện thoại, biểu đồ, sơ đồ, chữ động.</li>
+        <li>Có skill và MCP để Claude Code dùng trực tiếp.</li>
+      </ul>
+      <p style="margin-top:18px;font-size:25px;font-weight:600"><a href="https://motionvideo.xyz/en" target="_blank" rel="noopener">motionvideo.xyz/en</a> <span style="font-weight:400;color:var(--muted);font-size:20px">— xem trước không cần tài khoản</span></p>
+    </div>
+    <div class="side">
+      <div class="lbl">Cách dùng trong buổi học</div>
+      <ul class="chk">
+        <li>Chọn một mẫu gần với video cần làm.</li>
+        <li>Đưa prompt và video mẫu cho Claude, nói “đổi sang phong cách Cốc Cốc”.</li>
+        <li>Dựng vài giây thử, ưng rồi mới làm cả video.</li>
+      </ul>
+      <div class="sticky r">Mẫu chỉ là điểm xuất phát. Màu, font, logo và lời vẫn theo brand guidelines của Cốc Cốc.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 Thương hiệu -->
+<section class="slide opener" data-sec="2" data-title="3. Đúng chất Cốc Cốc">
+  <div class="num">3</div>
+  <p class="say">Video AI đẹp thì dễ. Khó là nhìn vào biết ngay của Cốc Cốc.</p>
+  <p class="sub">Đưa brand guidelines cho AI một lần, rồi video nào cũng dùng chung một bộ màu, font, logo và giọng văn.</p>
+</section>
+
+<section class="slide" data-sec="2" data-title="3. Bộ thương hiệu">
+  <h2>Bộ thương hiệu, chuẩn bị một lần</h2>
+  <div class="frame">
+    <div><b>Logo</b><span>Bản màu, bản trắng, khoảng trống tối thiểu quanh logo.</span></div>
+    <div><b>Màu và font</b><span>Mã màu chính, màu phụ, font tiêu đề và font chữ thường.</span></div>
+    <div><b>Linh vật, ảnh thật</b><span>Những ảnh, ảnh chụp màn hình được phép dùng.</span></div>
+    <div><b>Giọng văn</b><span>Cách xưng hô, từ cấm, điều không được hứa.</span></div>
+    <div class="hl"><b>Video mẫu</b><span>4–5 video hoặc bài đăng cũ mà team thấy “đúng chất”.</span></div>
+  </div>
+  <p class="bar">Gom tất cả vào một Project của Claude, hoặc một thư mục cạnh skill dựng video. <b>Từ đó mọi video bắt đầu từ cùng một bộ.</b></p>
+</section>
+
+<section class="slide" data-sec="2" data-title="3. Phong cách Cốc Cốc bên Claude">
+  <h2>Bên Claude: tạo phong cách “Cốc Cốc”, dùng lại mãi</h2>
+  <div class="split" style="grid-template-columns:1.2fr .9fr;gap:56px">
+    <div><p class="lbl g">Lời giao việc, làm một lần</p>
+      <div class="prompt" style="font-size:22px">Đây là brand guidelines và 4 video cũ
+của Cốc Cốc (file đính kèm).
+Tạo một phong cách video từ đó:
+đúng mã màu, đúng font, đặt logo theo guideline.
+Chuyển động [gọn, nhẹ / nhanh, vui].
+Lưu phong cách này với tên "Cốc Cốc".</div></div>
+    <div class="side">
+      <p>Video sau chỉ cần nói <b>“dùng phong cách Cốc Cốc”</b>.</p>
+      <p>Nhờ Claude làm thử vài giây theo phong cách đó, ưng rồi mới dùng.</p>
+      <div class="sticky r">Logo, linh vật, ảnh chụp màn hình là file thật, Claude đặt vào chứ không vẽ lại.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="3. Phong cách Cốc Cốc bên Flow">
+  <h2>Bên Flow: một đoạn phong cách cho mọi cảnh</h2>
+  <div class="split" style="grid-template-columns:1.15fr .95fr;gap:56px">
+    <div><p class="lbl g">Nhờ Claude viết đoạn phong cách</p>
+      <div class="prompt" style="font-size:22px">Đọc brand guidelines của Cốc Cốc (đính kèm).
+Viết một đoạn mô tả phong cách tiếng Anh,
+dưới 40 từ, để dán vào cuối mọi prompt Flow:
+màu chủ đạo, ánh sáng, chất liệu, góc máy,
+nhịp chuyển động.
+Thêm câu: no text, no logos.</div></div>
+    <div class="side">
+      <ul class="chk">
+        <li>Dán cùng một đoạn cho mọi cảnh.</li>
+        <li>Đưa ảnh nhân vật làm ảnh tham chiếu, gõ <b>@</b> để gọi, mặt giữ nguyên qua các cảnh.</li>
+        <li>Thử bằng model nhanh, ưng rồi mới chạy bản đẹp.</li>
+      </ul>
+      <div class="sticky r">Không đưa logo hay chữ vào Flow, vì Flow vẽ sai. Logo do Claude đặt lên sau.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="3. Kiểm thương hiệu">
+  <h2>Kiểm thương hiệu trước khi đăng</h2>
+  <div class="qa">
+    <div>
+      <h3>Hình</h3>
+      <ul class="chk">
+        <li>Màu nằm trong bảng màu.</li>
+        <li>Logo đúng bản, không méo, đủ khoảng trống.</li>
+        <li>Font đúng guideline.</li>
+        <li>Không có logo hay nhân vật của bên khác.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Lời</h3>
+      <ul class="chk">
+        <li>Một cách xưng hô.</li>
+        <li>Không từ cấm, không hứa “nhanh nhất”, “100%”.</li>
+        <li>Con số nào cũng có nguồn.</li>
+        <li>Một CTA, ở cảnh cuối.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="bar">Nhờ Claude chấm video theo guideline và <b>chỉ ra đúng giây bị sai.</b></p>
+</section>
+
+<!-- 3 Làm một video -->
+<section class="slide opener" data-sec="3" data-title="4. Làm một video">
+  <div class="num">4</div>
+  <p class="say">Chốt kế hoạch trước khi dựng.</p>
+  <p class="sub">Dựng bằng Claude tốn hạn mức, bằng Flow tốn credit, kể cả khi hỏng. Sửa bằng lời trên kế hoạch rẻ hơn dựng lại.</p>
+</section>
+
+<section class="slide" data-sec="3" data-title="4. Năm bước">
+  <h2>Năm bước làm một video ngắn</h2>
+  <ol class="steps five">
+    <li><h3>Mô tả</h3><p>Sản phẩm, người xem, nơi đăng, một ý chính, một CTA.</p></li>
+    <li><h3>Chọn phong cách</h3><p>“Dùng phong cách Cốc Cốc.”</p></li>
+    <li class="key"><h3>Duyệt kế hoạch</h3><p>Từng cảnh: số giây, hình, lời đọc, dựng bằng Claude hay Flow.</p></li>
+    <li><h3>Dựng</h3><p>Chữ, số giao Claude; người, cảnh giao Flow.</p></li>
+    <li><h3>Xem, sửa</h3><p>Xem trên điện thoại, sửa cụ thể, rồi xuất MP4.</p></li>
+  </ol>
+  <p class="bar">Mô tả như nhắn cho một bạn designer. <b>Kế hoạch sai thì video sai</b>, nên đọc kỹ bước 3.</p>
+</section>
+
+<section class="slide" data-sec="3" data-title="4. Ghép Flow và Claude">
+  <h2>Ghép: cảnh Flow làm nền, Claude thêm chữ và logo</h2>
+  <div class="split" style="grid-template-columns:.78fr 1.22fr;gap:48px;margin-top:20px;align-items:center">
+    <div>
+      <div class="vidbox tall" style="max-width:276px;margin:0 auto"><video id="flow-claude" preload="metadata" playsinline poster="../assets/media/flow-claude.jpg" src="../assets/media/flow-claude.mp4"></video><button class="vplay" id="flow-play" aria-label="Phát video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button></div>
+      <p class="lbl" style="text-align:center;margin-top:10px">Kết quả: Flow + Claude</p>
+    </div>
+    <div>
+      <p class="lbl g">Lời giao việc cho Claude Code</p>
+      <div class="prompt" style="font-size:21px">Đây là clip làm từ Flow (flow-demo.mp4).
+Thêm logo Cốc Cốc, một dòng ý chính
+và CTA ở 2 giây cuối.
+Không che mặt người trong cảnh.
+Dùng phong cách "Cốc Cốc".</div>
+      <ul class="chk" style="margin-top:10px">
+        <li>Chữ là chữ thật nên đúng dấu, sửa được từng chữ.</li>
+        <li>Nền cũng có thể là video bạn tự quay bằng điện thoại.</li>
+      </ul>
+      <div class="sticky r" style="margin-top:10px">Dựng bằng phần mềm khác thì nhờ Claude xuất riêng lớp chữ ra file MOV nền trong suốt.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 Giọng đọc -->
+<section class="slide opener" data-sec="4" data-title="5. Giọng đọc">
+  <div class="num">5</div>
+  <p class="say">Lời đọc tiếng Việt: nhờ Claude dùng VieNeu-TTS.</p>
+  <p class="sub">Lời phải vừa số giây của cảnh. Không kịp thì cắt chữ, đừng đọc nhanh hơn.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="5. VieNeu-TTS">
+  <h2>Nhờ Claude đọc lời bằng VieNeu-TTS</h2>
+  <div class="split" style="grid-template-columns:1.2fr .9fr;gap:56px;margin-top:26px">
+    <div><p class="lbl g">Lời giao việc cho Claude Code</p>
+      <div class="prompt" style="font-size:20px">Cài VieNeu-TTS (pip install vieneu) nếu máy chưa có.
+Đọc lời trong kế hoạch bằng giọng mẫu [tên giọng],
+mỗi cảnh xuất một file WAV, báo số giây từng file.
+Cảnh nào lời dài hơn cảnh thì rút gọn lời,
+đừng tăng tốc độ đọc.
+Xong thì ghép vào video, tắt tiếng gốc của clip Flow.</div></div>
+    <div class="side">
+      <ul class="chk">
+        <li>Mã nguồn mở, chạy ngay trên máy, không cần GPU.</li>
+        <li>Có sẵn giọng mẫu tiếng Việt, hoặc bắt chước một giọng từ file thu 3–8 giây.</li>
+        <li>Nghe lại tên riêng, con số và từ tiếng Anh, nhất là chữ “Cốc Cốc”.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="lbl g" style="margin-top:20px">Nghe thử ba giọng mẫu, cùng một câu</p>
+  <div class="voices">
+    <div class="voice">
+      <audio preload="metadata" src="../assets/media/voice-ngoc-huyen.mp3"></audio>
+      <div class="vh"><b>Ngọc Huyền</b><span>Nữ · Bắc · tự nhiên</span></div>
+      <button class="play" aria-label="Nghe giọng Ngọc Huyền"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+      <div class="vbar" title="Bấm để tua"><i></i></div>
+      <span class="vtime">0:04</span>
+    </div>
+    <div class="voice">
+      <audio preload="metadata" src="../assets/media/voice-thuy-dung.mp3"></audio>
+      <div class="vh"><b>Thùy Dung</b><span>Nữ · Nam · tin tức</span></div>
+      <button class="play" aria-label="Nghe giọng Thùy Dung"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+      <div class="vbar" title="Bấm để tua"><i></i></div>
+      <span class="vtime">0:04</span>
+    </div>
+    <div class="voice">
+      <audio preload="metadata" src="../assets/media/voice-hai-dang.mp3"></audio>
+      <div class="vh"><b>Hải Đăng</b><span>Nam · Bắc · tự nhiên</span></div>
+      <button class="play" aria-label="Nghe giọng Hải Đăng"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+      <div class="vbar" title="Bấm để tua"><i></i></div>
+      <span class="vtime">0:04</span>
+    </div>
+  </div>
+  <p class="bar o" style="margin-top:20px;font-size:24px">Chỉ bắt chước giọng của người đã đồng ý, kể cả đồng nghiệp. Trước khi dùng cho quảng cáo, kiểm giấy phép của model và các thành phần đi kèm.</p>
+</section>
+
+<section class="slide" data-title="Nguồn">
+  <h2>Nguồn</h2>
+  <ul class="lines src">
+    <li><a href="https://support.claude.com/en/articles/17454997" target="_blank" rel="noopener">Claude Help Center: Claude Motion</a>. <a href="https://github.com/heygen-com/hyperframes" target="_blank" rel="noopener">HyperFrames</a> của HeyGen. <a href="https://www.remotion.dev/docs/ai/skills" target="_blank" rel="noopener">Remotion Agent Skills</a>, <a href="https://www.remotion.dev/license" target="_blank" rel="noopener">giấy phép Remotion</a>.</li>
+    <li>Google Flow Help Center: <a href="https://support.google.com/flow/answer/16353334" target="_blank" rel="noopener">tạo video</a>, <a href="https://support.google.com/flow/answer/16352836" target="_blank" rel="noopener">model và tính năng</a>.</li>
+    <li><a href="https://github.com/pnnbao97/VieNeu-TTS" target="_blank" rel="noopener">VieNeu-TTS trên GitHub</a>, <a href="https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo" target="_blank" rel="noopener">model v3 Turbo</a>.</li>
+    <li><a href="https://motionvideo.xyz/en" target="_blank" rel="noopener">MotionVideo</a>: thư viện video motion do AI làm, kèm prompt, kỹ thuật chuyển động (Moves), skill và MCP.</li>
+  </ul>
+  <p class="foot-note">Kiểm tra lần cuối ngày 4/11/2026. Các công cụ cập nhật thường xuyên, tên nút có thể đổi.</p>
+</section>
+
+</div></div>
+
+<nav id="nav"><a id="b-home" href="https://coccoc.atento.vn/" aria-label="Về trang chủ chương trình" title="Về trang chủ coccoc.atento.vn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h5v-6h4v6h5V9"/></svg></a><button id="b-prev" aria-label="Slide trước">‹</button><button id="b-next" aria-label="Slide sau">›</button></nav>
+<div id="blackout"></div>
+<div id="overview" class="panel"><h2>Tất cả slide <span style="font-weight:400;color:#9DBBA6;font-size:16px">Bấm để chuyển, Esc để đóng</span></h2><div class="grid" id="ov-grid"></div></div>
+<div id="help" class="panel"><h2>Phím tắt</h2>
+  <div class="row"><span>Tiếp, lùi</span><span><kbd>→</kbd> <kbd>Space</kbd>, <kbd>←</kbd></span></div>
+  <div class="row"><span>Nút ‹ ›</span><span>góc dưới bên phải</span></div>
+  <div class="row"><span>Trang chủ</span><span>bấm logo, hoặc nút ⌂</span></div>
+  <div class="row"><span>Về đầu, tới cuối</span><span><kbd>Home</kbd>, <kbd>End</kbd></span></div>
+  <div class="row"><span>Toàn màn hình</span><span><kbd>F</kbd></span></div>
+  <div class="row"><span>Danh sách slide</span><span><kbd>O</kbd></span></div>
+  <div class="row"><span>Màn hình đen</span><span><kbd>B</kbd></span></div>
+  <div class="row"><span>In ra PDF</span><span><kbd>Ctrl</kbd> <kbd>P</kbd></span></div>
+</div>
+
+<script>
+(function(){
+  const SECTIONS=['Demo','Claude và Flow','Đúng chất Cốc Cốc','Làm một video','Giọng đọc'];
+  const stage=document.getElementById('stage');
+  const slides=[...stage.querySelectorAll('.slide')];
+  const N=slides.length;
+  const $=id=>document.getElementById(id);
+  const ov=$('overview'),help=$('help'),black=$('blackout');
+  let cur=0;
+
+  slides.forEach((s,k)=>{
+    const br=document.createElement('a');br.className='brand';br.href='https://coccoc.atento.vn/';br.title='Về trang chủ coccoc.atento.vn';
+    br.innerHTML='<img src="../assets/logos/atento.png" alt=""><b>Atento</b><span class="x" aria-hidden="true">×</span><img class="cc" src="../assets/logos/coccoc.png" alt="Cốc Cốc">';
+    s.prepend(br);
+    if(s.dataset.sec!==undefined){
+      const c=+s.dataset.sec,t=document.createElement('div');t.className='trk';
+      SECTIONS.forEach((name,j)=>{const e=document.createElement('span');e.textContent=name;if(j<c)e.className='past';if(j===c)e.className='cur';t.appendChild(e);});
+      s.appendChild(t);
+    }
+    if(k>0){const p=document.createElement('div');p.className='pg';p.textContent=(k+1)+' / '+N;s.appendChild(p);}
+    const b=document.createElement('button');
+    b.innerHTML='<span>'+(k+1)+'</span>'+(s.dataset.title||'Slide '+(k+1));
+    b.addEventListener('click',e=>{e.stopPropagation();go(k);toggle(ov,false);});
+    $('ov-grid').appendChild(b);
+  });
+
+  function go(n){
+    n=Math.max(0,Math.min(N-1,n));
+    slides.forEach((s,k)=>{
+      s.classList.toggle('active',k===n);
+      if(k!==n)s.querySelectorAll('video,audio').forEach(m=>m.pause());
+    });
+    cur=n;
+    $('progress').style.width=(N>1?cur/(N-1)*100:100)+'%';
+    [...$('ov-grid').children].forEach((b,k)=>b.classList.toggle('cur',k===cur));
+    $('b-prev').disabled=cur===0;$('b-next').disabled=cur===N-1;
+    try{history.replaceState(null,'','#'+(cur+1));}catch(e){}
+  }
+  const next=()=>go(cur+1),prev=()=>go(cur-1);
+  function fit(){
+    const sc=Math.min(innerWidth/1600,innerHeight/900);
+    stage.style.transform='translate(-50%,-50%) scale('+sc+')';
+  }
+  const toggle=(el,force)=>el.classList.toggle('on',force);
+
+  document.addEventListener('keydown',e=>{
+    if(e.ctrlKey||e.metaKey||e.altKey)return;
+    const k=e.key;
+    if(k==='Escape'){toggle(ov,false);toggle(help,false);black.classList.remove('on');return;}
+    if(ov.classList.contains('on')&&k!=='o'&&k!=='O')return;
+    switch(k){
+      case 'ArrowRight':case 'ArrowDown':case ' ':case 'PageDown':case 'Enter':e.preventDefault();next();break;
+      case 'ArrowLeft':case 'ArrowUp':case 'PageUp':case 'Backspace':e.preventDefault();prev();break;
+      case 'Home':go(0);break;
+      case 'End':go(N-1);break;
+      case 'f':case 'F':
+        if(!document.fullscreenElement){if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});}
+        else document.exitFullscreen();break;
+      case 'o':case 'O':toggle(ov);break;
+      case 'b':case 'B':case '.':black.classList.toggle('on');break;
+      case '?':case 'h':case 'H':toggle(help);break;
+    }
+  });
+
+  let swiped=false,tx=0,ty=0;
+  const vp=$('viewport');
+  vp.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;swiped=false;},{passive:true});
+  vp.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(String(getSelection()))return;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){swiped=true;dx<0?next():prev();}});
+  $('b-prev').addEventListener('click',prev);
+  $('b-next').addEventListener('click',next);
+  black.addEventListener('click',()=>black.classList.remove('on'));
+  help.addEventListener('click',()=>toggle(help,false));
+  addEventListener('resize',fit);
+  document.addEventListener('fullscreenchange',fit);
+  const h=parseInt((location.hash||'').slice(1),10);
+  go(isNaN(h)?0:h-1);
+  fit();
+
+  /* storyboard chapters */
+  const demo=$('claude-demo');
+  if(demo){
+    const chaps=[...document.querySelectorAll('#claude-chapters .chap')];
+    const mark=()=>{
+      let k=0;
+      chaps.forEach((b,i)=>{if(demo.currentTime+0.06>=+b.dataset.t)k=i;});
+      chaps.forEach((b,i)=>b.classList.toggle('cur',i===k));
+    };
+    chaps.forEach(b=>b.addEventListener('click',()=>{
+      demo.currentTime=+b.dataset.t;
+      demo.play().catch(()=>{});
+      mark();
+    }));
+    demo.addEventListener('timeupdate',mark);
+    demo.addEventListener('seeked',mark);
+    mark();
+  }
+
+  /* Flow + Claude clip: play/pause without native controls */
+  const fv=$('flow-claude'),fb=$('flow-play');
+  if(fv&&fb){
+    const playIcon='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+    const pauseIcon='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+    const sync=()=>{fb.classList.toggle('hide',!fv.paused);fb.innerHTML=fv.paused?playIcon:pauseIcon;};
+    const toggle=()=>{fv.paused?fv.play().catch(()=>{}):fv.pause();};
+    fb.addEventListener('click',e=>{e.stopPropagation();toggle();});
+    fv.addEventListener('click',toggle);
+    fv.addEventListener('play',sync);fv.addEventListener('pause',sync);fv.addEventListener('ended',sync);
+    sync();
+  }
+
+  /* voice samples */
+  const voices=[...document.querySelectorAll('.voice')];
+  const fmt=s=>{s=Math.max(0,Math.round(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+  voices.forEach(card=>{
+    const audio=card.querySelector('audio');
+    const btn=card.querySelector('.play');
+    const bar=card.querySelector('.vbar');
+    const fill=card.querySelector('.vbar i');
+    const time=card.querySelector('.vtime');
+    const playIcon='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+    const pauseIcon='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+    btn.addEventListener('click',()=>{
+      if(audio.paused){
+        voices.forEach(v=>{const a=v.querySelector('audio');if(a!==audio)a.pause();});
+        audio.play().catch(()=>{});
+      } else audio.pause();
+    });
+    audio.addEventListener('play',()=>{card.classList.add('playing');btn.innerHTML=pauseIcon;});
+    audio.addEventListener('pause',()=>{card.classList.remove('playing');btn.innerHTML=playIcon;});
+    audio.addEventListener('ended',()=>{card.classList.remove('playing');btn.innerHTML=playIcon;fill.style.width='0%';time.textContent=fmt(audio.duration);});
+    audio.addEventListener('timeupdate',()=>{const d=audio.duration||0;fill.style.width=(d?audio.currentTime/d*100:0)+'%';time.textContent=fmt(audio.currentTime);});
+    audio.addEventListener('loadedmetadata',()=>{time.textContent=fmt(audio.duration);});
+    bar.addEventListener('click',e=>{const r=bar.getBoundingClientRect();const p=(e.clientX-r.left)/r.width;if(audio.duration){audio.currentTime=Math.max(0,Math.min(1,p))*audio.duration;}});
+  });
+})();
+</script>
+</body>
+</html>
