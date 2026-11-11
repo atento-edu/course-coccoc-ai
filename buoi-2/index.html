@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi 2 · Claude Code</title>
+<meta name="description" content="Tài liệu giảng dạy Buổi 2: Claude Code, từ bảng tính đến app CRM và deploy lên internet.">
+<meta name="theme-color" content="#25AF50">
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-Poppins.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-PoppinsSemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+:root{--paper:#FAFAF6;--ink:#141814;--ink-2:#3B423C;--muted:#6E746F;--line:#E3E5DC;--line-2:#CBD1C5;--green:#25AF50;--green-2:#14842F;--green-soft:#EAF6EE;--green-line:#BFE4CA;--paper-2:#F1F2EB}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:clamp(40px,8vw,88px) 16px 64px}
+.kicker{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:600;color:var(--green-2);background:var(--green-soft);border:1px solid var(--green-line);border-radius:999px;padding:6px 13px;margin-bottom:22px}
+.kicker i{width:6px;height:6px;border-radius:50%;background:var(--green);display:block}
+h1{font-size:clamp(30px,5vw,48px);line-height:1.1;letter-spacing:-.03em;font-weight:600;margin:0 0 14px}
+.lede{color:var(--ink-2);margin:0 0 40px;max-width:56ch}
+.parts{display:grid;gap:14px}
+.part{display:grid;grid-template-columns:56px 1fr auto;gap:18px;align-items:center;padding:20px 22px;border:1px solid var(--line);border-radius:16px;background:#fff;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s,box-shadow .2s}
+a.part:hover,a.part:focus-visible{border-color:var(--green);transform:translateY(-2px);box-shadow:0 8px 24px rgba(20,24,20,.06);outline:none}
+.part .k{display:grid;place-items:center;width:48px;height:48px;border-radius:13px;background:var(--green-soft);color:var(--green-2);font-weight:600;font-size:18px}
+.part h2{font-size:18px;font-weight:600;margin:0;letter-spacing:-.01em}
+.part p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.part .go{font-size:13px;font-weight:600;color:#fff;background:var(--ink);border-radius:999px;padding:8px 15px;white-space:nowrap}
+a.part:hover .go{background:var(--green-2)}
+.part .acts{display:flex;gap:8px;flex-wrap:wrap}
+.part .acts .go{text-decoration:none}
+.part .acts .go:hover,.part .acts .go:focus-visible{background:var(--green-2);outline:none}
+.part.soon{background:transparent;border-style:dashed}
+.part.soon .k{background:var(--paper-2);color:var(--muted)}
+.part.soon .go{background:transparent;color:var(--muted);border:1px solid var(--line-2)}
+.tips{margin-top:36px;font-size:13.5px;color:var(--muted)}
+kbd{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:#fff;border:1px solid var(--line-2);border-bottom-width:2px;border-radius:5px;padding:1px 6px}
+.back{display:block;width:max-content;margin-bottom:22px;font-size:13.5px;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--ink)}
+@media (max-width:560px){.part{grid-template-columns:44px 1fr}.part .k{width:40px;height:40px}.part>.go,.part .acts{grid-column:2;justify-self:start}}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:#fff;border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back" href="../">← Trang chương trình</a>
+  <h1>Buổi 2: Claude Code</h1>
+  <p class="lede">Một app, một buổi. Từ danh sách khách đến một link công khai. Không dạy code: dạy giao việc, đọc thay đổi, kiểm thử và deploy.</p>
+
+  <div class="parts">
+    <a class="part" href="00-doc-truoc.html">
+      <span class="k">0</span>
+      <div><h2>Đọc trước (7 slide)</h2><p>Code khác Chat, một dự án là một thư mục, cài đặt, ba lệnh, vòng lặp bốn bước, checklist máy.</p></div>
+      <span class="go">Đọc trước</span>
+    </a>
+    <a class="part" href="01-buoi-hoc.html">
+      <span class="k">1</span>
+      <div><h2>Buổi học (31 slide)</h2><p>Một app xuyên suốt: xem demo, làm vòng đầu tiên, hiểu bốn lớp, build danh sách và form, kiểm thử, deploy.</p></div>
+      <span class="go">Slide</span>
+    </a>
+    <a class="part" href="02-cheat-sheet.html">
+      <span class="k">2</span>
+      <div><h2>Cheat sheet (1 trang A4)</h2><p>Bốn bước, ba lệnh, năm prompt, bốn lỗi thường gặp và ba điều không làm. In ra giữ bên máy.</p></div>
+      <span class="go">In A4</span>
+    </a>
+  </div>
+
+  <a class="part" href="/crm" target="_blank" rel="noopener" style="margin-top:18px">
+    <span class="k">▣</span>
+    <div><h2>App mẫu</h2><p>Mở bản demo đang chạy tại <code>/crm</code>. Mã nguồn trong <code>crm-app/</code>; xem README để chạy local và deploy.</p></div>
+    <span class="go">Mở demo ↗</span>
+  </a>
+
+  <details style="margin-top:30px">
+    <summary style="cursor:pointer;font-size:14px;color:var(--muted)">Bản cũ (5 phần, 96 slide) — để đối chiếu</summary>
+    <div class="parts" style="margin-top:14px">
+      <a class="part" href="phan-0-claude-code.html"><span class="k">0</span><div><h2>Làm quen Claude Code</h2><p>24 slide đọc trước.</p></div><span class="go">Mở</span></a>
+      <a class="part" href="phan-1-claude-code.html"><span class="k">1</span><div><h2>Kiểm tra máy và vào việc</h2><p>8 slide.</p></div><span class="go">Mở</span></a>
+      <a class="part" href="phan-2-kien-truc.html"><span class="k">2</span><div><h2>Kiến trúc một website</h2><p>17 slide.</p></div><span class="go">Mở</span></a>
+      <a class="part" href="phan-3-spec.html"><span class="k">3</span><div><h2>Chọn lát cắt và viết spec</h2><p>14 slide.</p></div><span class="go">Mở</span></a>
+      <a class="part" href="phan-4-build.html"><span class="k">4</span><div><h2>Xây dựng và kiểm thử</h2><p>15 slide.</p></div><span class="go">Mở</span></a>
+      <a class="part" href="phan-5-deploy.html"><span class="k">5</span><div><h2>Đưa app lên internet</h2><p>18 slide.</p></div><span class="go">Mở</span></a>
+    </div>
+  </details>
+
+  <p class="tips">Trong slide: <kbd>→</kbd> hoặc nút ‹ › ở góc dưới để chuyển slide, <kbd>F</kbd> toàn màn hình, <kbd>O</kbd> danh sách slide, <kbd>?</kbd> xem phím tắt. Dữ liệu CRM là dữ liệu mô phỏng, chốt ngày 31/10/2026.</p>
+</main>
+</body>
+</html>

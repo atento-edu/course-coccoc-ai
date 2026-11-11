@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code: đọc trước buổi 2</title>
+<meta name="description" content="Buổi 2, phần 0: làm quen Claude Code — cài đặt, vòng lặp làm việc, đọc diff, quyền, hoàn tác và an toàn dữ liệu.">
+<meta name="theme-color" content="#E4F4E8">
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-Poppins.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-PoppinsSemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-PoppinsBold.woff2') format('woff2');font-weight:700;font-display:swap}
+
+:root{
+  --ink:#12261A; --ink-2:#3E5246; --muted:#6F7F74;
+  --rule:#DCE5DE; --mist:#F2F6F1; --paper:#FFFFFF;
+  --green:#25AF50; --green-deep:#14842F; --green-pale:#D6F0DE; --green-line:#BFE4CA;
+  --forest:#0B3D22; --opener:#E4F4E8;
+  --orange:#F16037; --orange-deep:#B8431F; --orange-pale:#FDEDE7;
+  --yellow:#FEEB59;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:#DCE5DE;color:var(--ink);font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+b{font-weight:600}
+
+/* ---------- stage ---------- */
+#viewport{position:fixed;inset:0}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center;transform:translate(-50%,-50%)}
+.slide{
+  position:absolute;inset:0;overflow:hidden;background:var(--paper);
+  padding:92px 104px 124px;display:flex;flex-direction:column;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .28s ease,visibility 0s linear .28s;
+}
+.slide.active{opacity:1;visibility:visible;transition:opacity .28s ease,visibility 0s}
+.slide .notes{display:none}
+.f{opacity:0;transition:opacity .3s ease}
+.f.on{opacity:1}
+
+/* ---------- type ---------- */
+h2{font-size:56px;line-height:1.12;letter-spacing:-.025em;font-weight:600;max-width:36ch;text-wrap:balance}
+.lead{font-size:29px;line-height:1.5;color:var(--ink-2);margin-top:20px;max-width:52ch}
+.fill{display:flex;flex-direction:column;margin-top:48px}
+.foot-note{font-size:19px;color:var(--muted);margin-top:20px}
+
+/* English term next to the Vietnamese one */
+.en{font-weight:400;color:var(--muted);letter-spacing:0}
+h2 .en,h3 .en,.say .en{font-size:.55em;white-space:nowrap}
+.prompt .en{color:#9DBBA6}
+.sticky .en{color:var(--ink-2)}
+
+/* inline code and terminal */
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:var(--mist);border:1px solid var(--rule);border-radius:5px;padding:1px 7px;color:var(--ink)}
+.term{background:var(--forest);color:#E7F1EA;border-radius:16px;padding:24px 28px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:22px;line-height:1.8;white-space:pre-wrap}
+.term .c{color:#9DBBA6}
+.term .k{color:var(--yellow)}
+
+/* ---------- chrome inside slides ---------- */
+.trk{position:absolute;left:104px;right:290px;bottom:44px;display:grid;grid-template-columns:repeat(9,auto);justify-content:space-between;gap:10px}
+.trk span{font-size:15px;color:var(--muted);padding-top:12px;border-top:4px solid var(--rule);white-space:nowrap}
+.trk span.past{border-top-color:var(--green-line)}
+.trk span.cur{border-top-color:var(--green);color:var(--ink);font-weight:600}
+.pg{position:absolute;right:196px;bottom:44px;font-size:17px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:16px}
+
+/* brand lockup, links to programme home */
+.brand{position:absolute;left:104px;top:18px;z-index:2;display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--muted);font-size:16px;line-height:1;gap:10px;border-radius:8px;padding:6px 10px;margin-left:-10px;transition:background .2s}
+.brand:hover,.brand:focus-visible{background:rgba(11,61,34,.06);outline:none}
+.brand img{display:block;height:22px;width:auto}
+.brand b{font-size:19px;font-weight:700;color:var(--ink);letter-spacing:-.02em;margin-left:-4px}
+.brand .x{color:var(--muted)}
+.brand img.cc{height:22px}
+.cover .brand{top:56px}
+.cover .brand img{height:40px}
+.cover .brand b{font-size:35px;margin-left:-6px}
+.cover .brand img.cc{height:40px}
+.cover .brand{gap:20px;font-size:30px}
+
+/* ---------- opener: the one loud thing ---------- */
+.opener{background:var(--opener);color:var(--forest);justify-content:flex-end;padding-bottom:168px}
+.opener .num{position:absolute;right:96px;top:64px;font-size:480px;line-height:.86;font-weight:700;color:var(--green);letter-spacing:-.05em;opacity:.95}
+.opener .say{position:relative;font-size:84px;line-height:1.08;letter-spacing:-.03em;font-weight:600;max-width:19ch;text-wrap:balance}
+.opener .sub{position:relative;font-size:30px;line-height:1.5;color:var(--ink-2);margin-top:30px;max-width:46ch}
+.opener .trk span{border-top-color:rgba(11,61,34,.12)}
+.opener .trk span.past{border-top-color:#9FD5AF}
+.opener .trk span.cur{border-top-color:var(--green-deep);color:var(--forest)}
+@media (prefers-reduced-motion:no-preference){
+  .opener.active .num{animation:rise .7s var(--ease) both}
+  .opener.active .say{animation:fade .6s ease .12s both}
+  .opener.active .sub{animation:fade .6s ease .24s both}
+}
+@keyframes rise{from{opacity:0;transform:translateY(60px)}to{opacity:.95;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* cover */
+.cover .kick{position:relative;font-size:26px;color:var(--green-deep);font-weight:600;margin-bottom:32px}
+.cover h1{position:relative;font-size:124px;line-height:1;letter-spacing:-.04em;font-weight:700;max-width:12ch}
+.cover .sub{max-width:40ch}
+.cover .keys{position:absolute;left:104px;bottom:50px;font-size:18px;color:var(--ink-2);display:flex;gap:28px}
+kbd{font-family:inherit;font-size:.9em;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3);border-radius:7px;padding:1px 9px;color:#fff}
+.cover kbd{background:#fff;border-color:var(--green-line);border-bottom-width:3px;color:var(--ink)}
+
+/* quiet statement */
+.quiet{justify-content:center}
+.quiet .say{font-size:96px;line-height:1.05;letter-spacing:-.035em;font-weight:700;color:var(--green-deep)}
+.quiet .sub{font-size:30px;line-height:1.55;color:var(--ink-2);margin-top:34px;max-width:50ch}
+
+/* sticky note */
+.sticky{background:var(--yellow);padding:22px 30px 24px;box-shadow:0 8px 20px rgba(11,61,34,.14);transform:rotate(-1deg);font-size:24px;line-height:1.5;color:var(--ink);max-width:880px}
+.sticky small{display:block;font-size:17px;color:var(--ink-2);margin-bottom:4px}
+.sticky.r{transform:rotate(1.2deg)}
+
+/* paper sheets */
+.sheets{display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-top:44px;padding:0 8px}
+.sheet{background:#fff;border:1.5px solid var(--rule);box-shadow:0 14px 30px rgba(11,61,34,.10);padding:34px 40px 40px;min-height:340px;position:relative}
+.sheet.l{transform:rotate(-1.2deg)}
+.sheet.r{transform:rotate(.8deg);border-color:var(--green-line)}
+.sheet .who{font-size:19px;color:var(--muted);margin-bottom:18px}
+.sheet.r .who{color:var(--green-deep);font-weight:600}
+.sheet h4{margin:0 0 14px;font-size:28px;line-height:1.3;font-weight:600}
+.sheet p{font-size:26px;line-height:1.55;color:var(--muted)}
+.sheet ul li{font-size:26px;line-height:1.5;color:var(--ink-2);padding-left:24px;position:relative;margin-top:8px}
+.sheet ul li::before{content:"";position:absolute;left:0;top:16px;width:9px;height:9px;border-radius:50%;background:var(--green)}
+
+/* sequence steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:56px;counter-reset:s}
+.steps li{border-top:4px solid var(--green);padding-top:22px}
+.steps li::before{counter-increment:s;content:counter(s);display:block;font-size:54px;line-height:1;font-weight:700;color:var(--green);margin-bottom:14px}
+.steps.four{grid-template-columns:repeat(4,1fr);gap:32px}
+.steps.four h3{font-size:30px;line-height:1.25}
+.steps.four p{font-size:24px}
+.steps h3{font-size:32px;font-weight:600;letter-spacing:-.02em}
+.steps p{font-size:26px;line-height:1.5;color:var(--ink-2);margin-top:10px}
+
+/* bar callout */
+.bar{margin-top:44px;border-left:6px solid var(--green);padding:6px 0 6px 28px;font-size:28px;line-height:1.45;color:var(--ink-2);max-width:56ch}
+.bar b{color:var(--ink)}
+.bar.o{border-left-color:var(--orange)}
+
+/* three columns separated by rules */
+.three{display:grid;grid-template-columns:repeat(3,1fr);margin-top:52px}
+.three>div{padding:0 40px;border-left:1.5px solid var(--rule)}
+.three>div:first-child{padding-left:0;border-left:0}
+.three h3{font-size:33px;line-height:1.2;font-weight:600;letter-spacing:-.02em}
+.three p{font-size:27px;line-height:1.5;color:var(--ink-2);margin-top:16px}
+
+/* split layout */
+.split{display:grid;grid-template-columns:1.25fr .9fr;gap:64px;margin-top:40px;align-items:start}
+.split .side p{font-size:28px;line-height:1.5;color:var(--ink-2)}
+.split .side p+p{margin-top:22px}
+.split .side .sticky{margin-top:30px}
+
+/* compare columns */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:48px}
+.cmp h3{font-size:30px;font-weight:600;letter-spacing:-.015em;padding-bottom:16px;border-bottom:4px solid var(--orange)}
+.cmp .ok h3{border-bottom-color:var(--green)}
+.cmp p{font-size:28px;line-height:1.5;color:var(--ink-2);margin-top:20px}
+.cmp p.m{font-size:23px;color:var(--muted)}
+
+/* prompt box */
+.prompt{background:var(--forest);color:#E7F1EA;border-radius:18px;padding:30px 36px;font-size:25px;line-height:1.6;white-space:pre-wrap}
+.prompt .k{color:var(--yellow);font-weight:600}
+.lbl{font-size:20px;font-weight:600;margin-bottom:12px;color:var(--ink-2)}
+.lbl.o{color:var(--orange-deep)}
+.lbl.g{color:var(--green-deep)}
+
+/* diff block */
+.diff{background:#0F2A1B;border-radius:16px;padding:18px 0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:19px;line-height:1.55;color:#D7E6DC;overflow:hidden}
+.diff .ln{display:grid;grid-template-columns:54px 1fr;padding:1px 22px 1px 0}
+.diff .ln i{font-style:normal;color:#5E7A68;text-align:right;padding-right:16px;user-select:none}
+.diff .ln span{white-space:pre}
+.diff .ln.add{background:rgba(37,175,80,.18)}
+.diff .ln.add span{color:#A8E6BC}
+.diff .ln.del{background:rgba(241,96,55,.16)}
+.diff .ln.del span{color:#F5B49F}
+.diff .ln.meta span{color:#7E9A88}
+.diff .ln.head span{color:var(--yellow)}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:40px;font-size:28px}
+.tbl th{text-align:left;font-size:19px;font-weight:600;color:var(--muted);padding:0 24px 12px 0;border-bottom:1.5px solid var(--rule)}
+.tbl td{padding:18px 24px 18px 0;border-bottom:1.5px solid var(--rule);line-height:1.4;vertical-align:top;color:var(--ink-2)}
+.tbl td:first-child{color:var(--ink)}
+.tbl td.no{color:var(--orange-deep);text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:rgba(241,96,55,.5)}
+.tbl td.yes{color:var(--ink);font-weight:600}
+.tbl.tight{font-size:24px}
+.tbl.tight td{padding:11px 20px 11px 0}
+.tbl .pill{display:inline-block;font-size:19px;font-weight:600;padding:4px 14px;border-radius:999px;background:var(--mist);color:var(--ink-2)}
+.tbl .pill.hi{background:var(--green-deep);color:#fff}
+.tbl .pill.no{background:var(--orange-pale);color:var(--orange-deep)}
+
+/* bulleted lines */
+.lines{margin-top:40px;border-top:1.5px solid var(--rule)}
+.lines li{padding:20px 0 20px 40px;border-bottom:1.5px solid var(--rule);font-size:30px;line-height:1.4;color:var(--ink-2);position:relative}
+.lines li::before{content:"";position:absolute;left:4px;top:35px;width:14px;height:14px;border-radius:50%;background:var(--green)}
+.lines li b{color:var(--ink)}
+
+/* checklist */
+.checks{margin-top:34px;border-top:1.5px solid var(--rule)}
+.checks li{display:grid;grid-template-columns:46px 1fr auto;gap:18px;align-items:center;padding:14px 0;border-bottom:1.5px solid var(--rule);font-size:28px;line-height:1.35}
+.checks .box{width:26px;height:26px;border:2.5px solid var(--green);border-radius:6px}
+.checks .cmd{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:19px;color:var(--muted);white-space:nowrap}
+
+/* ---------- panels outside stage ---------- */
+#progress{position:fixed;left:0;top:0;height:4px;background:var(--green);width:0;z-index:20;transition:width .3s var(--ease)}
+#nav{position:fixed;right:16px;bottom:16px;z-index:25;display:flex;gap:8px}
+#nav button,#nav a{all:unset;cursor:pointer;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.92);border:1.5px solid var(--green-line);color:var(--forest);font-size:22px;line-height:1;box-shadow:0 4px 12px rgba(11,61,34,.10)}
+#nav button:hover,#nav button:focus-visible,#nav a:hover,#nav a:focus-visible{border-color:var(--green);background:#fff}
+#nav button:disabled{opacity:.35;cursor:default}
+#blackout{position:fixed;inset:0;background:#000;z-index:40;display:none}
+#blackout.on{display:block}
+.panel{position:fixed;z-index:30;background:rgba(8,40,22,.97);color:#E7F1EA;cursor:default;user-select:text}
+#notes{left:0;right:0;bottom:0;height:30vh;padding:18px 28px 20px;display:none;font-size:17px;line-height:1.65;overflow:auto;border-top:3px solid var(--yellow)}
+#notes.on{display:block}
+#notes .top{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#9DBBA6;margin-bottom:8px;gap:16px}
+#notes .top b{color:#fff}
+#notes .timer{font-variant-numeric:tabular-nums;font-size:15px;color:var(--yellow)}
+#notes p{margin:0 0 8px}
+#notes .todo{color:#F5B49F}
+#overview{inset:0;display:none;padding:40px;overflow:auto}
+#overview.on{display:block}
+#overview h2{color:#fff;font-size:24px;margin-bottom:20px}
+#overview .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+#overview button{all:unset;cursor:pointer;background:#123F27;border:1.5px solid #1F5236;border-radius:10px;padding:12px 16px;font-size:15px;line-height:1.4;color:#E7F1EA;display:flex;gap:12px}
+#overview button:hover,#overview button:focus-visible{border-color:var(--yellow)}
+#overview button.cur{background:#1C5A37}
+#overview button span{color:#9DBBA6;font-variant-numeric:tabular-nums;min-width:22px}
+#help{left:50%;top:50%;transform:translate(-50%,-50%);display:none;padding:28px 34px;border-radius:16px;min-width:420px;font-size:16px;line-height:2.1}
+#help.on{display:block}
+#help h2{font-size:20px;color:#fff;margin-bottom:6px}
+#help .row{display:flex;justify-content:space-between;gap:30px}
+
+@media print{
+  .pg{right:104px!important}
+  @page{size:1600px 900px;margin:0}
+  html,body{height:auto;overflow:visible;background:#fff}
+  #viewport{position:static}
+  #stage{position:static;transform:none!important;width:1600px;height:auto}
+  .slide{position:relative;opacity:1!important;visibility:visible!important;width:1600px;height:900px;break-after:page;page-break-after:always}
+  .f{opacity:1!important}
+  .opener .num,.opener .say,.opener .sub{animation:none!important}
+  #progress,#notes,#overview,#help,#blackout,#nav,.cover .keys{display:none!important}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="viewport"><div id="stage">
+
+<section class="slide opener cover" data-title="Bìa">
+  <p class="kick">Buổi 2, Claude Code</p>
+  <h1>Làm quen Claude Code</h1>
+  <p class="sub">Đọc trước buổi, khoảng 15 phút. Cài đặt, vòng lặp, diff, quyền, hoàn tác.</p>
+  <div class="keys"><span><kbd>→</kbd> hoặc nút góc dưới để sang slide</span><span><kbd>F</kbd> toàn màn hình</span><span><kbd>O</kbd> danh sách slide</span></div>
+</section>
+
+<!-- 0 -->
+<section class="slide opener" data-sec="0" data-title="0. Chat trả lời, Code sửa máy">
+  <div class="num">0</div>
+  <p class="say">Chat trả lời. Code làm.</p>
+  <p class="sub">Cùng một app Claude. Tab Chat trả lời trong khung chat. Tab Code mở thư mục, đọc file, sửa file và chạy lệnh.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="0. Một app, hai tab">
+  <h2>Một app, hai tab</h2>
+  <div class="cmp">
+    <div>
+      <h3>Tab Chat</h3>
+      <p>Dán nội dung vào, nhận câu trả lời bằng chữ.</p>
+      <p>Không đụng file trên máy.</p>
+      <p class="m">Viết, phân tích, hỏi đáp.</p>
+    </div>
+    <div class="ok">
+      <h3>Tab Code</h3>
+      <p>Mở đúng thư mục dự án.</p>
+      <p>Đọc, sửa nhiều file. Chạy lệnh, chạy test.</p>
+      <p class="m">Dựng và sửa một sản phẩm chạy được.</p>
+    </div>
+  </div>
+  <p class="bar"><b>Code không thông minh hơn Chat.</b> Nó có tay, nên có trách nhiệm.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="0. Một dự án là một thư mục">
+  <h2>Một dự án là một thư mục</h2>
+  <div class="split" style="grid-template-columns:1fr .95fr;gap:56px">
+    <div><div class="prompt" style="font-size:20px;line-height:1.75">crm-app/
+├─ app/           <span class="en"># màn hình</span>
+├─ components/    <span class="en"># khối dùng lại</span>
+├─ lib/           <span class="en"># hàm dùng chung</span>
+├─ data/          <span class="en"># dữ liệu mẫu</span>
+└─ package.json   <span class="en"># thư viện</span></div></div>
+    <div class="side">
+      <p>Claude Code chỉ thấy thư mục bạn mở.</p>
+      <p>Muốn sửa đúng chỗ, mở đúng thư mục dự án.</p>
+      <div class="sticky r">Càng ít file, càng dễ đọc diff.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 1 -->
+<section class="slide opener" data-sec="1" data-title="1. Cài trong 10 phút">
+  <div class="num">1</div>
+  <p class="say">Cài trong 5 phút.</p>
+  <p class="sub">Tải app Claude, đăng nhập, mở tab Code. Không phải cài Node cho Claude Code.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="1. Bốn bước cài đặt">
+  <h2>Bốn bước cài đặt</h2>
+  <ol class="lines">
+    <li><b>Cài Node 22</b> — nhờ IT nếu chưa quen.</li>
+    <li><b>Tải app Claude</b> ở claude.com/download.</li>
+    <li><b>Đăng nhập, mở tab Code</b>, chọn thư mục dự án.</li>
+    <li><b>Thử</b> “tóm tắt repo này”.</li>
+  </ol>
+  <p class="bar">Cần tài khoản Claude trả phí. Bản free không có tab Code.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="1. Ba lệnh terminal đủ dùng">
+  <h2>Ba lệnh terminal đủ dùng</h2>
+  <table class="tbl tight">
+    <thead><tr><th style="width:38%">Lệnh</th><th>Để làm gì</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mono">cd crm-app</span></td><td>Vào thư mục dự án.</td></tr>
+      <tr><td><span class="mono">npm run dev</span></td><td>Chạy app ở <span class="mono">localhost:3000</span>.</td></tr>
+      <tr><td><span class="mono">Ctrl</span> + <span class="mono">C</span></td><td>Dừng app.</td></tr>
+    </tbody>
+  </table>
+  <p class="bar">Terminal chỉ là cửa sổ gõ lệnh. Gõ sai thì báo lỗi, không hỏng máy.</p>
+</section>
+
+<!-- 2 -->
+<section class="slide opener" data-sec="2" data-title="2. Bốn bước lặp lại">
+  <div class="num">2</div>
+  <p class="say">Bốn bước, lặp lại đến khi xong.</p>
+  <p class="sub">Giao việc → đọc diff → chạy thử → chốt. Vòng càng dài, càng khó biết hỏng ở đâu.</p>
+</section>
+
+<section class="slide" data-sec="2" data-title="2. Một vòng ngắn">
+  <h2>Một vòng làm việc ngắn</h2>
+  <ol class="steps four">
+    <li><h3>Giao việc</h3><p>Một việc, một kết quả mong muốn. Nói rõ file và cách kiểm.</p></li>
+    <li><h3>Đọc diff</h3><p>File nào đổi, dòng nào thêm bớt. Chưa hiểu thì hỏi.</p></li>
+    <li><h3>Chạy thử</h3><p>Bấm đúng luồng vừa sửa. Lỗi thì dán nguyên văn.</p></li>
+    <li><h3>Chốt</h3><p>Chạy được thì commit. Không thì hoàn tác.</p></li>
+  </ol>
+  <p class="bar">Một việc, một vòng. Đừng giao mười việc một lúc.</p>
+</section>
+
+<section class="slide" data-sec="2" data-title="2. Giao việc cho Code">
+  <h2>Giao việc cho Code khác giao cho Chat</h2>
+  <div class="split" style="grid-template-columns:.72fr 1.28fr;gap:48px">
+    <div><p class="lbl o">Giao sơ sài</p>
+      <div class="prompt">Làm form thêm lead.</div>
+      <p class="foot-note" style="font-size:23px;line-height:1.5">Claude tự chọn file, tự chọn trường, tự đoán cách kiểm.</p></div>
+    <div><p class="lbl g">Giao đủ ý</p>
+      <div class="prompt" style="font-size:22px"><span class="k">Việc:</span> thêm form tạo lead ở trang Lead.
+<span class="k">File:</span> app/leads/new/page.tsx.
+<span class="k">Ràng buộc:</span> không đổi cấu trúc dữ liệu, không thêm thư viện.
+<span class="k">Xong khi:</span> tạo được lead, thiếu trường thì báo đúng trường.</div></div>
+  </div>
+  <p class="bar">Điều gì lặp lại mỗi vòng thì ghi vào <b>CLAUDE.md</b> hoặc <b>AGENTS.md</b> ở gốc dự án.</p>
+</section>
+
+<!-- 3 -->
+<section class="slide opener" data-sec="3" data-title="3. Diff là bản ghi những gì đã đổi">
+  <div class="num">3</div>
+  <p class="say">Diff là bản ghi những gì đã đổi.</p>
+  <p class="sub">Dòng thêm màu xanh, dòng bỏ màu đỏ. Đọc diff là kỹ năng chính của buổi này.</p>
+</section>
+
+<section class="slide" data-sec="3" data-title="3. Một diff đọc trong 20 giây">
+  <h2>Một diff đọc trong 20 giây</h2>
+  <div class="split" style="grid-template-columns:1.3fr .85fr;gap:52px">
+    <div class="diff">
+      <div class="ln head"><i></i><span>--- a/lib/scoring.ts</span></div>
+      <div class="ln head"><i></i><span>+++ b/lib/scoring.ts</span></div>
+      <div class="ln meta"><i></i><span>@@ -12,6 +12,9 @@</span></div>
+      <div class="ln"><i>12</i><span>export function scoreLead(l: Lead) {</span></div>
+      <div class="ln del"><i>13</i><span>  return l.budget &gt; 50 ? 80 : 40</span></div>
+      <div class="ln add"><i>13</i><span>  let score = 40</span></div>
+      <div class="ln add"><i>14</i><span>  if (l.budget &gt; 50) score += 30</span></div>
+      <div class="ln add"><i>15</i><span>  if (l.source === 'referral') score += 20</span></div>
+      <div class="ln add"><i>16</i><span>  if (l.segment === 'enterprise') score += 10</span></div>
+      <div class="ln add"><i>17</i><span>  return Math.min(score, 100)</span></div>
+      <div class="ln"><i>18</i><span>}</span></div>
+    </div>
+    <div class="side">
+      <p>Không cần hiểu code. Cần thấy: <b>một file, một hàm, năm dòng thêm, một dòng bỏ.</b></p>
+      <p>Đọc dòng đỏ trước.</p>
+      <div class="sticky r"><small>Đáng ngờ</small>Sửa file không ai nhờ. Xoá code đang chạy. Thêm thư viện lạ. Đọc dữ liệu nhạy cảm.</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="3. Ba câu hỏi khi đọc diff">
+  <h2>Ba câu hỏi khi đọc diff</h2>
+  <div class="three">
+    <div><h3>Nó sửa file nào?</h3><p>Ngoài file mình nhờ thì phải hỏi tại sao.</p></div>
+    <div><h3>Dòng nào đổi?</h3><p>Đọc dòng đỏ trước. Dòng xanh có đúng việc mình giao không?</p></div>
+    <div><h3>Có gì lạ?</h3><p>Thư viện mới, lệnh lạ, đụng dữ liệu nhạy cảm.</p></div>
+  </div>
+  <p class="bar">Không hiểu diff thì đừng bấm đồng ý. Hỏi: <b>“giải thích đoạn này”</b>.</p>
+</section>
+
+<!-- 4 -->
+<section class="slide opener" data-sec="4" data-title="4. Quyền là phanh">
+  <div class="num">4</div>
+  <p class="say">Quyền là phanh, không phải giấy phép.</p>
+  <p class="sub">Claude Code hỏi trước khi sửa file hoặc chạy lệnh. Mỗi lần đồng ý là một lần bạn nhận trách nhiệm.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="4. Đồng ý cái gì, từ chối cái gì">
+  <h2>Đồng ý cái gì, từ chối cái gì</h2>
+  <table class="tbl tight">
+    <thead><tr><th style="width:40%">Việc</th><th style="width:20%">Mức quyền</th><th>Bạn làm gì</th></tr></thead>
+    <tbody>
+      <tr><td>Đọc file trong dự án</td><td><span class="pill">tự động</span></td><td>Không cần duyệt.</td></tr>
+      <tr><td>Sửa file</td><td><span class="pill">hỏi</span></td><td>Đọc diff trước.</td></tr>
+      <tr><td>Chạy lệnh terminal</td><td><span class="pill">hỏi</span></td><td>Đọc lệnh. Lạ thì từ chối.</td></tr>
+      <tr><td>Xóa file, thư mục</td><td><span class="pill">hỏi</span></td><td>Đọc kỹ đường dẫn.</td></tr>
+      <tr><td>Cài thư viện mới</td><td><span class="pill">hỏi</span></td><td>Biết để làm gì mới đồng ý.</td></tr>
+      <tr><td>Đọc dữ liệu nhạy cảm, gửi dữ liệu ra ngoài</td><td><span class="pill no">chặn</span></td><td>Thêm vào danh sách chặn.</td></tr>
+    </tbody>
+  </table>
+  <p class="bar">Tự đồng ý sửa file chỉ bật khi đã commit. Không bật ở buổi học.</p>
+</section>
+
+<!-- 5 -->
+<section class="slide opener" data-sec="5" data-title="5. Không commit, không có mốc quay về">
+  <div class="num">5</div>
+  <p class="say">Không commit thì không có mốc để quay về.</p>
+  <p class="sub">Git là nút Ctrl+Z của cả dự án. Commit trước mỗi vòng.</p>
+</section>
+
+<section class="slide" data-sec="5" data-title="5. Bốn lệnh git đủ dùng">
+  <h2>Bốn lệnh git đủ dùng</h2>
+  <table class="tbl tight">
+    <thead><tr><th style="width:44%">Lệnh</th><th>Để làm gì</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mono">git status</span></td><td>Có gì đã đổi, chưa chốt.</td></tr>
+      <tr><td><span class="mono">git diff</span></td><td>Từng dòng thêm bớt.</td></tr>
+      <tr><td><span class="mono">git add -A</span> rồi <span class="mono">git commit -m "..."</span></td><td>Chốt một mốc để quay về.</td></tr>
+      <tr><td><span class="mono">git checkout -- .</span></td><td>Bỏ mọi thay đổi chưa commit.</td></tr>
+    </tbody>
+  </table>
+  <p class="bar"><b>Commit nhỏ, ghi rõ đã làm gì.</b> Không đưa mật khẩu hay khóa truy cập vào dự án.</p>
+</section>
+
+<!-- 6 -->
+<section class="slide opener" data-sec="6" data-title="6. Agent hỏng rất tự tin">
+  <div class="num">6</div>
+  <p class="say">Agent hỏng, nhưng hỏng rất tự tin.</p>
+  <p class="sub">Nó hiếm khi nói “không làm được”. Nó sửa thêm file, hoặc bảo xong khi chưa chạy thử.</p>
+</section>
+
+<section class="slide" data-sec="6" data-title="6. Sáu kiểu hỏng thường gặp">
+  <h2>Sáu kiểu hỏng thường gặp</h2>
+  <table class="tbl tight">
+    <thead><tr><th style="width:26%">Kiểu hỏng</th><th style="width:38%">Dấu hiệu</th><th>Xử lý</th></tr></thead>
+    <tbody>
+      <tr><td>Sửa tràn lan</td><td>Diff chạm nhiều file không liên quan.</td><td>Dừng, hoàn tác, giao lại hẹp hơn.</td></tr>
+      <tr><td>Bịa hàm, thư viện</td><td>Gọi hàm không tồn tại, thêm thư viện lạ.</td><td>Chạy thử; đưa lỗi và tài liệu thật.</td></tr>
+      <tr><td>Sửa mãi không xong</td><td>Sửa, lỗi, sửa lại, không tiến thêm.</td><td>Dừng sau hai lần; gửi lại lỗi đầy đủ.</td></tr>
+      <tr><td>Làm hỏng thứ đang chạy</td><td>Xóa code, đổi cấu trúc dữ liệu, app cũ không mở.</td><td>Về commit gần nhất, chạy lại luồng cũ.</td></tr>
+      <tr><td>Báo “đã xong”</td><td>Không chạy lệnh nào, không có kết quả.</td><td>Yêu cầu chạy test và dán kết quả.</td></tr>
+      <tr><td>Thêm thư viện không cần</td><td>Có thư viện mới ngoài yêu cầu.</td><td>Hỏi tại sao; không cần thì gỡ.</td></tr>
+    </tbody>
+  </table>
+  <p class="bar">Câu hỏi nên dùng: <b>“bạn đã chạy gì để biết nó đúng?”</b></p>
+</section>
+
+<!-- 7 -->
+<section class="slide opener" data-sec="7" data-title="7. Máy bạn là môi trường thật">
+  <div class="num">7</div>
+  <p class="say">Máy bạn là môi trường thật.</p>
+  <p class="sub">Code chạy lệnh bằng quyền của bạn. Dữ liệu thật, mật khẩu, khóa truy cập đều trong tầm với.</p>
+</section>
+
+<section class="slide" data-sec="7" data-title="7. Năm điều không làm">
+  <h2>Năm điều không làm</h2>
+  <ol class="lines">
+    <li><b>Không dùng dữ liệu thật.</b> Chỉ dùng bộ dữ liệu mẫu.</li>
+    <li><b>Không đưa mật khẩu, khóa truy cập lên mạng.</b> Không dán vào chat.</li>
+    <li><b>Không chạy lệnh dán từ ngoài.</b> Nhất là lệnh tải và chạy mã lạ.</li>
+    <li><b>Không duyệt lệnh mà chưa đọc.</b> Lệnh xoá, push, cài: đọc rồi bấm.</li>
+    <li><b>Không tin mọi thứ Claude đọc vào.</b> File, web, email đều có thể chứa lệnh ẩn.</li>
+  </ol>
+  <p class="bar o">Bản demo chỉ cần dữ liệu hư cấu.</p>
+</section>
+
+<!-- 8 -->
+<section class="slide opener" data-sec="8" data-title="8. Đến lớp với máy sẵn sàng">
+  <div class="num">8</div>
+  <p class="say">Đến lớp với máy đã sẵn sàng.</p>
+  <p class="sub">Thực hành chiếm hơn nửa buổi. Sửa máy tại lớp thì cả nhóm phải chờ.</p>
+</section>
+
+<section class="slide" data-sec="8" data-title="8. Checklist trước buổi">
+  <h2>Checklist trước buổi</h2>
+  <ul class="checks">
+    <li><span class="box"></span><span>App Claude đã đăng nhập, mở được tab Code</span></li>
+    <li><span class="box"></span><span>Repo mẫu đã tải về máy</span></li>
+    <li><span class="box"></span><span>App mẫu mở được ở localhost</span></li>
+    <li><span class="box"></span><span>Tài khoản GitHub và Vercel đã đăng nhập</span></li>
+    <li><span class="box"></span><span>Máy đã cài Node 22 và Git</span></li>
+  </ul>
+  <p class="bar">Thiếu mục nào thì báo trước buổi.</p>
+</section>
+
+<section class="slide" data-title="Gặp chuyện này thì làm gì">
+  <h2>Gặp chuyện này thì làm gì</h2>
+  <table class="tbl tight" style="margin-top:24px">
+    <thead><tr><th style="width:36%">Tình huống</th><th>Việc nên làm</th><th style="width:16%">Phần</th></tr></thead>
+    <tbody>
+      <tr><td>Claude sửa quá nhiều file</td><td style="color:var(--ink-2)">Dừng, hoàn tác, giao lại một việc hẹp hơn.</td><td><span class="pill">Đọc diff</span></td></tr>
+      <tr><td>Không hiểu diff</td><td style="color:var(--ink-2)">Hỏi giải thích, chưa bấm đồng ý.</td><td><span class="pill">Đọc diff</span></td></tr>
+      <tr><td>Lỡ duyệt một lệnh xóa</td><td style="color:var(--ink-2)">Dừng ngay; khôi phục từ git hoặc bản sao lưu.</td><td><span class="pill">Quyền</span></td></tr>
+      <tr><td>App không chạy sau khi sửa</td><td style="color:var(--ink-2)">Đọc lỗi, xem <span class="mono">git diff</span>, hoàn tác nếu cần.</td><td><span class="pill">Hoàn tác</span></td></tr>
+      <tr><td>Claude báo xong nhưng kết quả sai</td><td style="color:var(--ink-2)">Yêu cầu chạy thử và dán kết quả vào chat.</td><td><span class="pill">Lỗi thường gặp</span></td></tr>
+      <tr><td>Thấy thư viện lạ trong dự án</td><td style="color:var(--ink-2)">Hỏi để làm gì; không cần thì gỡ.</td><td><span class="pill">Lỗi thường gặp</span></td></tr>
+      <tr><td>Sắp đưa mật khẩu lên mạng</td><td style="color:var(--ink-2)">Dừng lại, xoá khỏi dự án.</td><td><span class="pill">An toàn</span></td></tr>
+      <tr><td>Máy chưa cài được</td><td style="color:var(--ink-2)">Xem hướng dẫn cài; báo trước buổi.</td><td><span class="pill">Cài đặt</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+</div></div>
+
+<nav id="nav"><a id="b-home" href="https://coccoc.atento.vn/" aria-label="Về trang chủ chương trình" title="Về trang chủ coccoc.atento.vn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h5v-6h4v6h5V9"/></svg></a><button id="b-prev" aria-label="Slide trước">‹</button><button id="b-next" aria-label="Slide sau">›</button></nav>
+<div id="blackout"></div>
+<div id="overview" class="panel"><h2>Tất cả slide <span style="font-weight:400;color:#9DBBA6;font-size:16px">Bấm để chuyển, Esc để đóng</span></h2><div class="grid" id="ov-grid"></div></div>
+<div id="help" class="panel"><h2>Phím tắt</h2>
+  <div class="row"><span>Tiếp, lùi</span><span><kbd>→</kbd> <kbd>Space</kbd>, <kbd>←</kbd></span></div>
+  <div class="row"><span>Nút ‹ ›</span><span>góc dưới bên phải</span></div>
+  <div class="row"><span>Trang chủ</span><span>bấm logo, hoặc nút ⌂</span></div>
+  <div class="row"><span>Về đầu, tới cuối</span><span><kbd>Home</kbd>, <kbd>End</kbd></span></div>
+  <div class="row"><span>Toàn màn hình</span><span><kbd>F</kbd></span></div>
+  <div class="row"><span>Danh sách slide</span><span><kbd>O</kbd></span></div>
+  <div class="row"><span>Màn hình đen</span><span><kbd>B</kbd></span></div>
+  <div class="row"><span>In ra PDF</span><span><kbd>Ctrl</kbd> <kbd>P</kbd></span></div>
+</div>
+
+<script>
+(function(){
+  const SECTIONS=['Chat vs Code','Cài đặt','Vòng lặp','Đọc diff','Quyền','Hoàn tác','Lỗi thường gặp','An toàn','Trước buổi'];
+  const stage=document.getElementById('stage');
+  const slides=[...stage.querySelectorAll('.slide')];
+  const N=slides.length;
+  const $=id=>document.getElementById(id);
+  const ov=$('overview'),help=$('help'),black=$('blackout');
+  let cur=0;
+
+  slides.forEach((s,k)=>{
+    const br=document.createElement('a');br.className='brand';br.href='https://coccoc.atento.vn/';br.title='Về trang chủ coccoc.atento.vn';
+    br.innerHTML='<img src="../assets/logos/atento.png" alt=""><b>Atento</b><span class="x" aria-hidden="true">×</span><img class="cc" src="../assets/logos/coccoc.png" alt="Cốc Cốc">';
+    s.prepend(br);
+    if(s.dataset.sec!==undefined){
+      const c=+s.dataset.sec,t=document.createElement('div');t.className='trk';
+      SECTIONS.forEach((name,j)=>{const e=document.createElement('span');e.textContent=name;if(j<c)e.className='past';if(j===c)e.className='cur';t.appendChild(e);});
+      s.appendChild(t);
+    }
+    if(k>0){const p=document.createElement('div');p.className='pg';p.textContent=(k+1)+' / '+N;s.appendChild(p);}
+    const b=document.createElement('button');
+    b.innerHTML='<span>'+(k+1)+'</span>'+(s.dataset.title||'Slide '+(k+1));
+    b.addEventListener('click',e=>{e.stopPropagation();go(k);toggle(ov,false);});
+    $('ov-grid').appendChild(b);
+  });
+
+  function go(n){
+    n=Math.max(0,Math.min(N-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===n));
+    cur=n;
+    $('progress').style.width=(N>1?cur/(N-1)*100:100)+'%';
+    [...$('ov-grid').children].forEach((b,k)=>b.classList.toggle('cur',k===cur));
+    $('b-prev').disabled=cur===0;$('b-next').disabled=cur===N-1;
+    try{history.replaceState(null,'','#'+(cur+1));}catch(e){}
+  }
+  const next=()=>go(cur+1),prev=()=>go(cur-1);
+  function fit(){
+    const sc=Math.min(innerWidth/1600,innerHeight/900);
+    stage.style.transform='translate(-50%,-50%) scale('+sc+')';
+  }
+  const toggle=(el,force)=>el.classList.toggle('on',force);
+
+  document.addEventListener('keydown',e=>{
+    if(e.ctrlKey||e.metaKey||e.altKey)return;
+    const k=e.key;
+    if(k==='Escape'){toggle(ov,false);toggle(help,false);black.classList.remove('on');return;}
+    if(ov.classList.contains('on')&&k!=='o'&&k!=='O')return;
+    switch(k){
+      case 'ArrowRight':case 'ArrowDown':case ' ':case 'PageDown':case 'Enter':e.preventDefault();next();break;
+      case 'ArrowLeft':case 'ArrowUp':case 'PageUp':case 'Backspace':e.preventDefault();prev();break;
+      case 'Home':go(0);break;
+      case 'End':go(N-1);break;
+      case 'f':case 'F':
+        if(!document.fullscreenElement){if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});}
+        else document.exitFullscreen();break;
+      case 'o':case 'O':toggle(ov);break;
+      case 'b':case 'B':case '.':black.classList.toggle('on');break;
+      case '?':case 'h':case 'H':toggle(help);break;
+    }
+  });
+
+  let swiped=false,tx=0,ty=0;
+  const vp=$('viewport');
+  vp.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;swiped=false;},{passive:true});
+  vp.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(String(getSelection()))return;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){swiped=true;dx<0?next():prev();}});
+  $('b-prev').addEventListener('click',prev);
+  $('b-next').addEventListener('click',next);
+  black.addEventListener('click',()=>black.classList.remove('on'));
+  help.addEventListener('click',()=>toggle(help,false));
+  addEventListener('resize',fit);
+  document.addEventListener('fullscreenchange',fit);
+  const h=parseInt((location.hash||'').slice(1),10);
+  go(isNaN(h)?0:h-1);
+  fit();
+})();
+</script>
+</body>
+</html>

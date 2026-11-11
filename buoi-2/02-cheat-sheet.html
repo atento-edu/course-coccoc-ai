@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi 2 · Cheat sheet Claude Code</title>
+<meta name="description" content="Một trang: bốn bước, ba lệnh, năm prompt và ba điều không làm khi dùng Claude Code.">
+<meta name="theme-color" content="#FAFAF6">
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-Poppins.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Poppins';src:url('../assets/fonts/SVN-PoppinsSemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+:root{--ink:#12261A;--ink-2:#3E5246;--muted:#6F7F74;--line:#DCE5DE;--paper:#FAFAF6;--green:#25AF50;--green-deep:#14842F;--green-pale:#D6F0DE;--green-line:#BFE4CA;--forest:#0B3D22;--yellow:#FEEB59;--orange:#F16037;--orange-pale:#FDEDE7}
+*{box-sizing:border-box}
+html,body{margin:0;background:#DCE5DE;color:var(--ink);font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+.sheet{width:210mm;min-height:297mm;margin:24px auto;background:var(--paper);padding:12mm 13mm 10mm;box-shadow:0 12px 40px rgba(11,61,34,.18)}
+.top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--green);padding-bottom:10px;margin-bottom:14px}
+.top .k{font-size:9.5pt;font-weight:600;color:var(--green-deep);letter-spacing:.04em;text-transform:uppercase}
+.top .d{font-size:8pt;color:var(--muted)}
+h1{font-size:27pt;line-height:1.05;letter-spacing:-.03em;margin:0 0 6px;font-weight:600}
+.lede{font-size:10pt;line-height:1.45;color:var(--ink-2);margin:0 0 14px;max-width:60ch}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.card{border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:#fff;break-inside:avoid}
+.card.wide{grid-column:1 / -1}
+.card h2{font-size:9pt;font-weight:600;color:var(--green-deep);text-transform:uppercase;letter-spacing:.06em;margin:0 0 7px;display:flex;align-items:center;gap:6px}
+.card h2 span{display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--green);color:#fff;font-size:8pt;letter-spacing:0}
+.card ol,.card ul{margin:0;padding:0;list-style:none;font-size:9.5pt;line-height:1.5;color:var(--ink-2)}
+.card ol li{display:block;padding:4px 0}
+.card ol li b{display:block;color:var(--green-deep);font-size:8.5pt;margin-bottom:1px}
+.card ul li{padding-left:14px;position:relative;margin:4px 0}
+.card ul li::before{content:"";position:absolute;left:0;top:6px;width:6px;height:6px;border-radius:50%;background:var(--green)}
+.card li b{color:var(--ink)}
+pre{margin:0;background:var(--forest);color:#E7F1EA;border-radius:6px;padding:9px 11px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:7.8pt;line-height:1.55;white-space:pre-wrap}
+pre .c{color:#9DBBA6}
+pre .k{color:var(--yellow)}
+.prompts{display:grid;grid-template-columns:1fr 1fr;gap:7px 10px}
+.prompts .p{background:#F2F6F1;border-left:3px solid var(--green);border-radius:0 5px 5px 0;padding:7px 10px;font-size:8.4pt;line-height:1.45;color:var(--ink-2)}
+.prompts .p b{display:block;color:var(--green-deep);font-size:7.5pt;margin-bottom:1px}
+.warn{background:var(--orange-pale);border-left:4px solid var(--orange);padding:8px 10px;border-radius:0 5px 5px 0;font-size:8.5pt;line-height:1.45;color:var(--ink-2)}
+.warn b{color:#B8431F}
+.fix{width:100%;border-collapse:collapse;font-size:9pt}
+.fix td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.4;color:var(--ink-2)}
+.fix td:first-child{color:var(--ink);font-weight:600;width:42%}
+.band{display:flex;align-items:center;gap:18px;background:var(--green-pale);border:1px solid var(--green-line);border-radius:6px;padding:9px 14px;margin-top:11px;font-size:9pt;color:var(--ink-2)}
+.band b{color:var(--green-deep);white-space:nowrap}
+.band span{padding-left:18px;border-left:1px solid var(--green-line)}
+.foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);margin-top:11px;padding-top:8px;font-size:7.5pt;color:var(--muted)}
+.foot b{color:var(--ink-2)}
+a{color:var(--green-deep);text-decoration:none}
+@media print{
+  @page{size:A4;margin:0}
+  html,body{background:#fff}
+  .sheet{margin:0;box-shadow:none;width:210mm;min-height:296mm}
+}
+</style>
+</head>
+<body>
+<main class="sheet">
+  <div class="top">
+    <div>
+      <div class="k">Atento × Cốc Cốc · Buổi 2</div>
+      <h1>Claude Code, một trang</h1>
+    </div>
+    <div class="d">In A4 · giữ bên máy</div>
+  </div>
+  <p class="lede">Bốn bước, ba lệnh, năm prompt. Đủ để làm lại một app khác mà không cần mở slide.</p>
+
+  <div class="grid">
+    <section class="card">
+      <h2><span>1</span>Bốn bước, lặp lại</h2>
+      <ol>
+        <li><b>Giao việc</b><span>Một việc. Một file. Một tiêu chí đúng.</span></li>
+        <li><b>Xem diff</b><span>Đúng file, đúng chỗ, không có gì lạ.</span></li>
+        <li><b>Chạy thử</b><span>Mở app, bấm như người dùng.</span></li>
+        <li><b>Commit</b><span>Đúng thì lưu mốc. Sai thì lùi.</span></li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2><span>2</span>Ba lệnh terminal</h2>
+      <pre><span class="c"># tải thư viện, chạy một lần</span>
+npm install
+
+<span class="c"># chạy app ở localhost:3000</span>
+npm run dev
+
+<span class="c"># xem file nào vừa đổi</span>
+git status</pre>
+    </section>
+
+    <section class="card">
+      <h2><span>3</span>Khi app hỏng</h2>
+      <table class="fix">
+        <tr><td>Claude sửa lan</td><td>Hoàn tác. Chia việc nhỏ hơn. Nói rõ file nào được sửa.</td></tr>
+        <tr><td>App không chạy</td><td>Quay lại commit gần nhất. Đọc lỗi trong terminal.</td></tr>
+        <tr><td>Nó báo “đã xong”</td><td>Mở app, bấm đúng luồng. Chưa thấy thì chưa xong.</td></tr>
+        <tr><td>Làm mãi không ra</td><td>Dừng. Mô tả lại: mở đâu, bấm gì, thấy gì, mong đợi gì.</td></tr>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2><span>4</span>Ba không</h2>
+      <ul>
+        <li><b>Không</b> dán dữ liệu khách thật.</li>
+        <li><b>Không</b> đưa mật khẩu, API key vào chat.</li>
+        <li><b>Không</b> bấm Yes khi chưa đọc diff hoặc lệnh.</li>
+      </ul>
+      <div class="warn" style="margin-top:8px"><b>Commit trước mỗi việc.</b> Không có mốc thì không có hoàn tác.</div>
+    </section>
+
+    <section class="card wide">
+      <h2><span>5</span>Năm prompt dùng lại</h2>
+      <div class="prompts">
+        <div class="p"><b>Đổi một câu</b>Đổi tiêu đề trang chủ thành “CRM hôm nay”. Chỉ sửa app/page.tsx.</div>
+        <div class="p"><b>Danh sách</b>Đọc data/khach-hang.csv. Tạo trang /khach-hang hiển thị bảng: tên, công ty, trạng thái, ngày gọi cuối.</div>
+        <div class="p"><b>Tìm và lọc</b>Thêm ô tìm theo tên. Thêm lọc theo trạng thái. Giữ nguyên các cột.</div>
+        <div class="p"><b>Form</b>Thêm form sửa khách: trạng thái, ngày gọi cuối, ghi chú. Bấm Lưu thì quay về danh sách.</div>
+        <div class="p" style="grid-column:1 / -1"><b>Báo lỗi</b>Mở /khach-hang. Bấm lọc “Đang chăm”. Vẫn thấy khách “Chờ gọi”. Mong đợi: chỉ còn “Đang chăm”.</div>
+      </div>
+    </section>
+  </div>
+
+  <div class="band">
+    <b>Trước khi bấm Yes</b>
+    <span>Nó sửa file nào?</span>
+    <span>Có gì ngoài phạm vi?</span>
+    <span>Chạy lại được không?</span>
+  </div>
+
+  <div class="foot">
+    <span><b>Buổi 2 · Claude Code</b> — một app, một buổi.</span>
+    <span>Slide: <a href="01-buoi-hoc.html">01-buoi-hoc.html</a> · Đọc trước: <a href="00-doc-truoc.html">00-doc-truoc.html</a></span>
+  </div>
+</main>
+</body>
+</html>

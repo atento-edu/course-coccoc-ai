@@ -1,4 +1,4 @@
-# Buổi 1 · Phần 0: Kiến thức nền về AI
+# Buổi 1 · Phần 0: Kiến thức nền tảng AI
 
 Slide: `phan-0-ly-thuyet.html`, 28 slide. Gửi học viên đọc trước buổi, mất khoảng 15 phút. Trên lớp chỉ nhắc lại nhanh bảng tra ở slide cuối, không giảng lại. Connector, Skill và Lịch chạy sẽ được dùng lại ở phần thực hành.
 

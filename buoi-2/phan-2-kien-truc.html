@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi 2 · Phần 2: Kiến trúc một website</title>
+<meta name="description" content="Buổi 2, phần 2: bốn lớp của một app, dữ liệu, phân quyền và đưa app lên internet.">
+<meta name="theme-color" content="#E4F4E8">
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="slide.css">
+</head>
+<body>
+<div id="progress"></div>
+<div id="viewport"><div id="stage">
+
+<section class="slide opener cover" data-title="Bìa">
+  <p class="kick">Buổi 2, phần 2</p>
+  <h1>Kiến trúc một website</h1>
+  <div class="note-card">Đích đến<small>Hiểu app gồm những lớp nào, và đưa bộ khung lên internet ngay hôm nay.</small></div>
+  <div class="keys"><span><kbd>→</kbd> hoặc nút góc dưới để sang slide</span><span><kbd>F</kbd> toàn màn hình</span><span><kbd>O</kbd> danh sách slide</span></div>
+</section>
+
+<section class="slide opener" data-sec="0" data-title="2. Bốn lớp">
+  <div class="num">2</div>
+  <p class="say">Website là bốn lớp, không phải một file HTML.</p>
+  <p class="sub">Giao diện, máy chủ, xử lý, dữ liệu. Biết bốn lớp thì biết lỗi nằm ở đâu.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="2. Bốn lớp">
+  <h2>Bốn lớp của một app</h2>
+  <div class="arch four">
+    <div class="box hi"><h3>Giao diện</h3><p>Thứ người dùng nhìn và bấm.</p></div>
+    <div class="arw">→</div>
+    <div class="box"><h3>Cửa giao tiếp</h3><p>Nhận yêu cầu, kiểm quyền, trả dữ liệu.</p></div>
+    <div class="arw">→</div>
+    <div class="box"><h3>Xử lý</h3><p>Tính điểm, đổi giai đoạn, lưu lịch sử.</p></div>
+    <div class="arw">→</div>
+    <div class="box hi"><h3>Dữ liệu</h3><p>Còn lại sau khi tắt máy.</p></div>
+  </div>
+  <p class="bar" style="max-width:none">Cửa giao tiếp và phần xử lý thường nằm chung một dự án. Vai trò vẫn tách.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="2. Nhà hàng">
+  <h2>Dễ nhất là nghĩ như một nhà hàng</h2>
+  <table class="tbl tight">
+    <thead><tr><th style="width:24%">Trong nhà hàng</th><th style="width:22%">Trong app</th><th>Làm gì</th></tr></thead>
+    <tbody>
+      <tr><td>Thực đơn, phòng khách</td><td><span class="pill g">Giao diện</span></td><td>Khách thấy gì, bấm gì.</td></tr>
+      <tr><td>Người phục vụ</td><td><span class="pill">Kết nối</span></td><td>Mang order vào, mang kết quả ra.</td></tr>
+      <tr><td>Bếp</td><td><span class="pill o">Xử lý</span></td><td>Tính toán, kiểm tra quy tắc.</td></tr>
+      <tr><td>Kho nguyên liệu</td><td><span class="pill y">Dữ liệu</span></td><td>Giữ dữ liệu lâu dài.</td></tr>
+    </tbody>
+  </table>
+  <p class="bar" style="max-width:none">Khách không vào bếp. Form cũng không ghi thẳng vào database.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="2. Một dự án, nhiều màn hình">
+  <h2>Một dự án, nhiều màn hình</h2>
+  <div class="two">
+    <div>
+      <div class="code sm">/            <span class="c">Tổng quan</span>
+/leads       <span class="c">Lead</span>
+/deals       <span class="c">Deal</span>
+/customers   <span class="c">Khách hàng</span>
+/reports     <span class="c">Báo cáo</span></div>
+    </div>
+    <div>
+      <h3>Ba thứ đủ dùng</h3>
+      <ul>
+        <li><b>Màn hình</b> — một đường dẫn, một trang.</li>
+        <li><b>Khung chung</b> — sidebar, header, font.</li>
+        <li><b>Khối dùng lại</b> — bảng, nhãn, form.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="bar" style="max-width:none">Mỗi màn hình là một đường dẫn. Cả app vẫn là một dự án.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="2. Một lần bấm Lưu">
+  <h2>Một lần bấm Lưu đi qua đâu</h2>
+  <div class="deploy">
+    <div class="n hi"><b>1</b><h3>Trình duyệt</h3><p>Bấm “Lead mới”, gửi form.</p></div>
+    <div class="n"><b>2</b><h3>Máy chủ</h3><p>Nhận yêu cầu, kiểm quyền.</p></div>
+    <div class="n"><b>3</b><h3>Xử lý</h3><p>Kiểm dữ liệu, tính điểm.</p></div>
+    <div class="n"><b>4</b><h3>Dữ liệu</h3><p>Ghi lead, trả bản ghi.</p></div>
+    <div class="n hi"><b>5</b><h3>Trang mới</h3><p>Trình duyệt nhận kết quả.</p></div>
+  </div>
+  <p class="bar" style="max-width:none">App sai thì hỏi lần lượt: giao diện, kết nối, dữ liệu.</p>
+</section>
+
+<section class="slide" data-sec="2" data-title="2. Dữ liệu">
+  <h2>Dữ liệu: bảng, liên kết, quan hệ</h2>
+  <div class="arch four">
+    <div class="box hi"><div class="lab">1 → nhiều</div><h3>Khách hàng</h3><p>70 khách, mỗi khách nhiều deal.</p></div>
+    <div class="arw">→</div>
+    <div class="box"><div class="lab">1 → nhiều</div><h3>Deal</h3><p>232 chiến dịch, thuộc một khách.</p></div>
+    <div class="arw">→</div>
+    <div class="box hi"><div class="lab">1 → nhiều</div><h3>Hoạt động</h3><p>677 lần gọi, email, họp.</p></div>
+    <div class="arw">→</div>
+    <div class="box"><div class="lab">0..1</div><h3>Lead</h3><p>48 lead, có thể thành khách.</p></div>
+  </div>
+  <p class="bar" style="max-width:none">Liên kết giữa các bảng giữ dữ liệu không mồ côi.</p>
+</section>
+
+<section class="slide" data-sec="2" data-title="2. Cấu trúc một deal">
+  <h2>Cấu trúc một deal</h2>
+  <table class="tbl tight">
+    <thead><tr><th style="width:30%">Trường</th><th>Ví dụ</th></tr></thead>
+    <tbody>
+      <tr><td>Tên chiến dịch</td><td>Chạy branding quý 4</td></tr>
+      <tr><td>Khách hàng</td><td>Công ty A</td></tr>
+      <tr><td>Người phụ trách</td><td>Một sales</td></tr>
+      <tr><td>Giá trị</td><td>120.000.000</td></tr>
+      <tr><td>Giai đoạn</td><td>Đàm phán</td></tr>
+      <tr><td>Xác suất</td><td>60%</td></tr>
+      <tr><td>Bước tiếp theo</td><td>Gửi IO, hạn 20/11</td></tr>
+    </tbody>
+  </table>
+  <p class="bar" style="max-width:none">Đây là cấu trúc dữ liệu. Sửa cấu trúc thì phải cập nhật cả dữ liệu cũ.</p>
+</section>
+
+<section class="slide" data-sec="2" data-title="2. Ghi dữ liệu">
+  <h2>Một lần ghi dữ liệu đi qua bốn bước</h2>
+  <ol class="steps four">
+    <li><h3>Kiểm tra</h3><p>Bắt buộc tên, đúng định dạng email.</p></li>
+    <li><h3>Ghi</h3><p>App tạo hoặc cập nhật bản ghi.</p></li>
+    <li><h3>Lưu lịch sử</h3><p>Ghi ai đổi gì, khi nào.</p></li>
+    <li><h3>Hiện lại</h3><p>Trang và KPI cập nhật ngay.</p></li>
+  </ol>
+  <p class="bar" style="max-width:none">Đây là chỗ app hơn Excel: một cửa có kiểm tra, có lịch sử.</p>
+</section>
+
+<section class="slide" data-sec="3" data-title="2. Phân quyền">
+  <h2>Phân quyền theo dòng dữ liệu</h2>
+  <div class="two">
+    <div>
+      <h3>Sales</h3>
+      <ul>
+        <li>Chỉ thấy lead, deal, khách của mình.</li>
+        <li>Không mở được link của người khác.</li>
+        <li>Vẫn thấy báo cáo cá nhân.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Quản lý</h3>
+      <ul>
+        <li>Thấy toàn bộ team.</li>
+        <li>Giao lead, đổi người phụ trách.</li>
+        <li>Xem tải việc và pipeline rủi ro.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="warn"><b>Đây là lý do chính để làm app.</b> Excel chia sẻ cả file; rất khó chặn từng dòng.</div>
+</section>
+
+<section class="slide" data-sec="3" data-title="2. App hơn file Excel ở đâu">
+  <h2>App làm được gì mà file Excel không làm được</h2>
+  <table class="tbl tight" style="margin-top:26px">
+    <thead><tr><th style="width:24%">Việc</th><th style="width:36%">File Excel/Sheets</th><th>App CRM</th></tr></thead>
+    <tbody>
+      <tr><td><b>Nhiều người nhập</b></td><td>Khoá dòng, dễ ghi đè, sinh ra “bản cuối 2”.</td><td>Mỗi người một phiên; dữ liệu về một chỗ, cập nhật ngay.</td></tr>
+      <tr><td><b>Phân quyền</b></td><td>Chia sẻ cả file hoặc cả tab.</td><td>Sales chỉ thấy dòng của mình; quản lý thấy cả team.</td></tr>
+      <tr><td><b>Quy trình</b></td><td>Dễ dán đè, xoá công thức, chuyển giai đoạn sai.</td><td>Form bắt buộc, chặn sai, lưu lịch sử.</td></tr>
+      <tr><td><b>Nhắc việc</b></td><td>Người dùng tự lọc, tự nhớ, tự mở file.</td><td>Danh sách “hôm nay gọi ai”, cảnh báo quá hạn, deal nguội.</td></tr>
+      <tr><td><b>Dữ liệu từ ngoài</b></td><td>Dán tay từ email hoặc form.</td><td>Form hoặc kết nối ngoài đưa lead vào thẳng, tự chấm điểm.</td></tr>
+    </tbody>
+  </table>
+  <p class="bar" style="max-width:none;margin-top:22px;font-size:24px"><b>Excel để phân tích. App để vận hành.</b></p>
+  <p class="foot-note">Excel vẫn thắng khi cần phân tích nhanh. Đừng làm app để thay phần đó.</p>
+</section>
+
+<section class="slide" data-sec="3" data-title="2. Thử đổi người dùng">
+  <h2>Thử đổi người dùng, thấy dữ liệu đổi</h2>
+  <div class="kpis">
+    <div class="k"><div class="l">Quản lý</div><div class="v">76</div><div class="h">deal đang mở</div></div>
+    <div class="k"><div class="l">Một sales</div><div class="v">8</div><div class="h">deal đang mở</div></div>
+    <div class="k"><div class="l">Lead quản lý thấy</div><div class="v">39</div><div class="h">đang chăm</div></div>
+    <div class="k"><div class="l">Lead sales thấy</div><div class="v">0–7</div><div class="h">tùy người</div></div>
+  </div>
+  <p class="bar" style="max-width:none">Cùng một dữ liệu, cùng một đường link. Quyền quyết định người dùng thấy gì.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="2. Trên máy và trên internet">
+  <h2>Trên máy và trên internet khác nhau ở đâu</h2>
+  <table class="tbl tight">
+    <thead><tr><th style="width:22%"></th><th style="width:38%">Trên máy bạn</th><th>Trên internet</th></tr></thead>
+    <tbody>
+      <tr><td>Địa chỉ</td><td><code>localhost:3000</code></td><td><code>crm-coc-coc.vercel.app</code></td></tr>
+      <tr><td>Dữ liệu</td><td>Lưu trên máy</td><td>Lưu trên cloud</td></tr>
+      <tr><td>Người dùng</td><td>Chỉ bạn</td><td>Cả team</td></tr>
+      <tr><td>Bảo vệ</td><td>Không cần</td><td>Mật khẩu, HTTPS</td></tr>
+    </tbody>
+  </table>
+  <p class="bar" style="max-width:none">Cùng một app. Trên máy để thử, trên internet để dùng thật.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="2. Đưa lên sớm">
+  <h2>Đưa bộ khung lên internet ngay</h2>
+  <div class="deploy">
+    <div class="n hi"><b>1</b><h3>GitHub</h3><p>Đưa code lên repo.</p></div>
+    <div class="n"><b>2</b><h3>Vercel</h3><p>Kết nối repo, chọn dự án.</p></div>
+    <div class="n"><b>3</b><h3>Dữ liệu</h3><p>Nối database.</p></div>
+    <div class="n"><b>4</b><h3>Deploy</h3><p>Bấm Deploy, đợi vài phút.</p></div>
+    <div class="n hi"><b>5</b><h3>Link</h3><p>Mở trên điện thoại.</p></div>
+  </div>
+  <p class="bar" style="max-width:none"><b>Đưa lên sớm để giảm rủi ro.</b> Lỗi tài khoản lộ ra từ phút 50, không phải phút cuối.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="2. Đưa lên thường xuyên">
+  <h2>Đưa lên internet là thói quen, không phải sự kiện</h2>
+  <div class="two">
+    <div>
+      <h3>Mỗi vòng feature</h3>
+      <ul>
+        <li>Commit code.</li>
+        <li>Push lên GitHub.</li>
+        <li>Vercel tự cập nhật bản mới.</li>
+        <li>Mở link kiểm tra.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Vì sao</h3>
+      <ul>
+        <li>Luôn có bản chạy được để chiếu.</li>
+        <li>Lỗi cấu hình lộ ra sớm.</li>
+        <li>Rollback dễ.</li>
+        <li>Người khác dùng thử được ngay.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="bar" style="max-width:none">Cuối buổi không phải lần đầu đưa lên internet.</p>
+</section>
+
+<section class="slide" data-sec="5" data-title="2. Bài tập">
+  <h2>Bài tập 10 phút</h2>
+  <ul class="check">
+    <li>Vẽ 4 bảng dữ liệu và quan hệ giữa chúng.</li>
+    <li>Chỉ ra 4 lớp trong app mẫu.</li>
+    <li>Mở app, xem một lần bấm “Lưu” gửi gì đi.</li>
+    <li>Sửa thử một deal trong app.</li>
+  </ul>
+  <p class="bar" style="max-width:none">Không cần thuộc code. Cần biết dữ liệu đi qua đâu.</p>
+</section>
+
+<section class="slide" data-sec="5" data-title="2. Tóm lại">
+  <h2>Hiểu kiến trúc để biết hỏi Claude câu gì</h2>
+  <div class="three">
+    <div><h3>Giao diện sai</h3><p>“Nút này không hiện”, “bảng bị tràn”. Sửa màn hình.</p></div>
+    <div><h3>Xử lý sai</h3><p>“Bấm lưu báo lỗi”. Xem thông báo lỗi.</p></div>
+    <div><h3>Dữ liệu sai</h3><p>“Thiếu deal”, “số liệu lệch”. Kiểm dữ liệu.</p></div>
+  </div>
+  <p class="bar" style="max-width:none">Nói đúng lớp đang sai thì Claude sửa nhanh hơn.</p>
+</section>
+
+</div></div>
+
+<nav id="nav"><a id="b-home" href="https://coccoc.atento.vn/" aria-label="Về trang chủ chương trình" title="Về trang chủ coccoc.atento.vn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h5v-6h4v6h5V9"/></svg></a><button id="b-prev" aria-label="Slide trước">‹</button><button id="b-next" aria-label="Slide sau">›</button></nav>
+<div id="blackout"></div>
+<div id="overview" class="panel"><h2>Tất cả slide <span style="font-weight:400;color:#9DBBA6;font-size:16px">Bấm để chuyển, Esc để đóng</span></h2><div class="grid" id="ov-grid"></div></div>
+<div id="help" class="panel"><h2>Phím tắt</h2>
+  <div class="row"><span>Tiếp, lùi</span><span><kbd>→</kbd> <kbd>Space</kbd>, <kbd>←</kbd></span></div>
+  <div class="row"><span>Nút ‹ ›</span><span>góc dưới bên phải</span></div>
+  <div class="row"><span>Trang chủ</span><span>bấm logo, hoặc nút ⌂</span></div>
+  <div class="row"><span>Về đầu, tới cuối</span><span><kbd>Home</kbd>, <kbd>End</kbd></span></div>
+  <div class="row"><span>Toàn màn hình</span><span><kbd>F</kbd></span></div>
+  <div class="row"><span>Danh sách slide</span><span><kbd>O</kbd></span></div>
+  <div class="row"><span>Màn hình đen</span><span><kbd>B</kbd></span></div>
+  <div class="row"><span>In ra PDF</span><span><kbd>Ctrl</kbd> <kbd>P</kbd></span></div>
+</div>
+
+<script>window.DECK_SECTIONS=['Bốn lớp','Các màn hình','Dữ liệu','Phân quyền','Đưa lên internet','Bài tập'];</script>
+<script src="slide.js"></script>
+</body>
+</html>

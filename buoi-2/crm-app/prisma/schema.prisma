@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  team      String?
+  role      String   @default("SALES") // SALES | MANAGER | ADMIN
+  capacity  Int      @default(20)
+  createdAt DateTime @default(now())
+
+  leads      Lead[]     @relation("LeadOwner")
+  deals      Deal[]     @relation("DealOwner")
+  customers  Customer[]
+  activities Activity[]
+}
+
+model Customer {
+  id           String    @id
+  name         String
+  industry     String?
+  segment      String?
+  annualBudget Int? // triệu VNĐ/năm
+  city         String?
+  agency       String?
+  ownerId      String?
+  owner        User?     @relation(fields: [ownerId], references: [id])
+  contactName  String?
+  contactTitle String?
+  createdAt    DateTime?
+  status       String?
+
+  deals Deal[]
+  leads Lead[]
+
+  @@index([ownerId])
+}
+
+model Lead {
+  id                 String    @id
+  receivedAt         DateTime?
+  source             String?
+  company            String
+  industry           String?
+  annualBudget       Int?
+  agency             String?
+  contactName        String?
+  contactTitle       String?
+  email              String?
+  phone              String?
+  need               String?
+  productInterest    String?
+  ownerId            String?
+  owner              User?     @relation("LeadOwner", fields: [ownerId], references: [id])
+  assignedAt         DateTime?
+  firstContactAt     DateTime?
+  status             String?
+  note               String?
+  segment            String?
+  buyingChannel      String?
+  customerId         String?
+  customer           Customer? @relation(fields: [customerId], references: [id])
+  duplicateOf        String?
+  score              Int?
+  priority           String?
+  slaHours           Int?
+  responseHours      Float?
+  slaStatus          String?
+  suggestedOwner     String?
+  assignmentWarning  String?
+  dealId             String?   @unique
+  deal               Deal?     @relation(fields: [dealId], references: [id])
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([ownerId])
+  @@index([status])
+  @@index([priority])
+}
+
+model Deal {
+  id               String    @id
+  name             String
+  customerId       String
+  customer         Customer  @relation(fields: [customerId], references: [id])
+  ownerId          String?
+  owner            User?     @relation("DealOwner", fields: [ownerId], references: [id])
+  team             String?
+  source           String?
+  format           String?
+  value            Decimal   @db.Decimal(15, 0)
+  stage            String
+  status           String?
+  probability      Int       @default(0)
+  expectedValue    Decimal   @db.Decimal(15, 0)
+  createdAt        DateTime?
+  expectedCloseAt  DateTime?
+  actualCloseAt    DateTime?
+  campaignEndAt    DateTime?
+  lostReason       String?
+  nextStep         String?
+  nextStepDueAt    DateTime?
+  reminder         String?
+  lastInteractionAt DateTime?
+  createdAtDb      DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  lead       Lead?
+  activities Activity[]
+
+  @@index([ownerId])
+  @@index([customerId])
+  @@index([stage])
+  @@index([status])
+}
+
+model Activity {
+  id        String   @id
+  date      DateTime
+  dealId    String
+  deal      Deal     @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  ownerId   String?
+  owner     User?    @relation(fields: [ownerId], references: [id])
+  type      String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([dealId])
+  @@index([date])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  userName  String?
+  action    String
+  entity    String
+  entityId  String
+  before    Json?
+  after     Json?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+}

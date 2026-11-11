@@ -2,3 +2,7 @@ README.md
 docker-compose.yml
 .dockerignore
 buoi-1/*.md
+buoi-2/*.md
+buoi-2/crm-app
+buoi-2/*.md
+buoi-2/crm-app/

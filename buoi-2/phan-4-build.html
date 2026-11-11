@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi 2 · Phần 4: Xây dựng và kiểm thử</title>
+<meta name="description" content="Buổi 2, phần 4: build lát cắt CRM theo spec, kiểm thử và sửa lỗi.">
+<meta name="theme-color" content="#E4F4E8">
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="slide.css">
+</head>
+<body>
+<div id="progress"></div>
+<div id="viewport"><div id="stage">
+
+<section class="slide opener cover" data-title="Bìa">
+  <p class="kick">Buổi 2, phần 4</p>
+  <h1>Xây dựng và kiểm thử</h1>
+  <div class="note-card">Đích đến<small>Một lát cắt chạy được trên máy, có 5 test case và ít nhất một lỗi được sửa.</small></div>
+  <div class="keys"><span><kbd>→</kbd> hoặc nút góc dưới để sang slide</span><span><kbd>F</kbd> toàn màn hình</span><span><kbd>O</kbd> danh sách slide</span></div>
+</section>
+
+<section class="slide opener" data-sec="0" data-title="4. Một tính năng một vòng">
+  <div class="num">4</div>
+  <p class="say">Một tính năng một vòng. Đừng bảo Claude làm cả app.</p>
+  <p class="sub">Mỗi vòng: giao một việc, xem diff, chạy thử, commit. Vòng nhỏ thì sửa nhanh, rollback dễ.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="4. Thứ tự build">
+  <h2>Thứ tự build một lát cắt</h2>
+  <div class="deploy">
+    <div class="n hi"><b>1</b><h3>Schema</h3><p>Bảng, trường, quan hệ, khóa ngoại.</p></div>
+    <div class="n"><b>2</b><h3>Seed</h3><p>Đưa dữ liệu mẫu vào, kiểm số dòng.</p></div>
+    <div class="n"><b>3</b><h3>Danh sách</h3><p>Query, lọc, phân trang.</p></div>
+    <div class="n"><b>4</b><h3>Chi tiết</h3><p>Một bản ghi, quan hệ, lịch sử.</p></div>
+    <div class="n"><b>5</b><h3>Form + action</h3><p>Tạo/sửa, validate, ghi audit.</p></div>
+  </div>
+  <p class="bar" style="max-width:none">Xong một bước thì chạy thử và commit. Đừng để đến cuối mới chạy.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="4. Seed dữ liệu">
+  <h2>Seed: từ CSV đến Postgres</h2>
+  <div class="two">
+    <div>
+      <div class="code sm"><span class="c"># 4 file từ Buổi 1</span>
+data/customers.csv   70
+data/deals.csv      232
+data/leads.csv       48
+data/activities.csv 677
+
+<span class="c"># chạy seed</span>
+npm run db:seed</div>
+    </div>
+    <div>
+      <h3>Kiểm ngay sau khi seed</h3>
+      <ul>
+        <li>Số dòng khớp CSV.</li>
+        <li>Không có deal mồ côi.</li>
+        <li>Ngày đúng múi giờ Việt Nam.</li>
+        <li>Tiếng Việt có dấu không bị lỗi font.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="bar" style="max-width:none">Seed là dữ liệu mô phỏng. Không seed dữ liệu khách thật lên bản deploy.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="4. Kết quả cần thấy">
+  <h2>Kết quả cần thấy sau bước seed</h2>
+  <div class="two" style="grid-template-columns:1.1fr .9fr;align-items:center">
+    <div class="screen" style="max-height:540px;overflow:hidden"><img src="img/dashboard.png" alt="Dashboard CRM" style="width:100%;max-height:540px;object-fit:cover;object-position:top"></div>
+    <div>
+      <h3>Dashboard đọc được dữ liệu</h3>
+      <ul>
+        <li>Doanh số, pipeline, tỷ lệ thắng.</li>
+        <li>23 deal quá hạn bước tiếp theo.</li>
+        <li>6 deal nguội hơn 14 ngày.</li>
+        <li>6 lead trễ SLA.</li>
+      </ul>
+      <p class="tiny" style="margin-top:18px">Nếu dashboard trắng, kiểm tra seed và kết nối database trước khi viết feature.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="4. Danh sách">
+  <h2>Danh sách: query, lọc, phân trang</h2>
+  <div class="two">
+    <div>
+      <div class="code sm"><span class="k">const</span> where = {
+  ...scope,                    <span class="c">// quyền</span>
+  ...(status ? { status } : {}),
+  ...(q ? { company: {
+    contains: q, mode: <span class="o">"insensitive"</span>
+  }} : {}),
+};
+
+<span class="k">await</span> db.lead.findMany({
+  where,
+  orderBy: { receivedAt: <span class="o">"desc"</span> },
+  skip: (page - 1) * 25,
+  take: 25,
+});</div>
+    </div>
+    <div>
+      <h3>Kiểm</h3>
+      <ul>
+        <li>Lọc trạng thái, ưu tiên, sales.</li>
+        <li>Tìm theo tên có dấu và không dấu.</li>
+        <li>Trang 2 giữ nguyên bộ lọc.</li>
+        <li>Sales chỉ thấy lead của mình.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="4. Chi tiết và form">
+  <h2>Chi tiết và form: một thao tác ghi</h2>
+  <div class="code sm"><span class="k">export async function</span> createLead(fd: FormData) {
+  <span class="k">const</span> user = <span class="k">await</span> getCurrentUser();
+  <span class="k">const</span> data = parseLead(fd);
+
+  <span class="k">if</span> (!data.company) redirect(<span class="o">"/leads/new?error=..."</span>);
+
+  <span class="k">const</span> lead = <span class="k">await</span> db.lead.create({ data });
+  <span class="k">await</span> logAudit({ user, action: <span class="o">"create"</span>, entity: <span class="o">"lead"</span>,
+    entityId: lead.id, after: lead });
+
+  revalidatePath(<span class="o">"/leads"</span>);
+  redirect(<span class="o">`/leads/${lead.id}`</span>);
+}</div>
+  <p class="bar" style="max-width:none">Form không ghi thẳng vào database. Nó gọi action; action kiểm tra, ghi, ghi log, rồi trả trang mới.</p>
+</section>
+
+<section class="slide" data-sec="3" data-title="4. Ghi hoạt động">
+  <h2>Một lần ghi hoạt động đổi ba thứ</h2>
+  <ol class="steps four">
+    <li><h3>Activity</h3><p>Thêm dòng vào nhật ký: ai, khi nào, loại gì, nội dung.</p></li>
+    <li><h3>Tương tác cuối</h3><p>Cập nhật deal để cờ “nguội 14 ngày” biến mất.</p></li>
+    <li><h3>Audit</h3><p>Ghi ai vừa thêm, để sau này truy lại.</p></li>
+    <li><h3>Giao diện</h3><p>Render lại timeline và dashboard, không cần F5 thủ công.</p></li>
+  </ol>
+  <p class="bar" style="max-width:none">Đây là loại việc file Excel không làm được: một hành động, nhiều bảng cùng cập nhật, có lịch sử.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="4. Tự động hoá">
+  <h2>Tự động hoá: quy tắc viết một lần</h2>
+  <table class="tbl tight">
+    <thead><tr><th style="width:28%">Quy tắc</th><th style="width:34%">Tính thế nào</th><th>Dùng ở đâu</th></tr></thead>
+    <tbody>
+      <tr><td><b>Điểm lead</b></td><td>Ngân sách + nguồn + phân khúc</td><td>Xếp ưu tiên, gợi ý sales</td></tr>
+      <tr><td><b>SLA</b></td><td>Cao 4h, Trung bình 24h, Thấp 48h</td><td>Cảnh báo lead trễ</td></tr>
+      <tr><td><b>Deal nguội</b></td><td>Hơn 14 ngày không có hoạt động</td><td>Worklist, báo cáo sáng</td></tr>
+      <tr><td><b>Quá hạn bước</b></td><td>Hạn bước tiếp theo trước hôm nay</td><td>Cờ đỏ trên pipeline</td></tr>
+      <tr><td><b>Digest 7:00</b></td><td>Cron gọi API tổng hợp</td><td>Email/Slack cho từng sales</td></tr>
+    </tbody>
+  </table>
+  <p class="bar" style="max-width:none">Quy tắc nằm trong code, không nằm trong đầu người dùng. Đó là lý do app đáng làm.</p>
+</section>
+
+<section class="slide" data-sec="5" data-title="4. Năm loại kiểm thử">
+  <h2>Năm loại kiểm thử, không cần framework</h2>
+  <ul class="check">
+    <li><b>Luồng đúng.</b> Làm đúng các bước như người dùng thật, thấy kết quả đúng.</li>
+    <li><b>Dữ liệu biên.</b> Ô trống, số 0, tên dài, tiếng Việt có dấu, hai bản ghi trùng.</li>
+    <li><b>Quyền.</b> Đổi sang sales khác, thử mở link của người khác.</li>
+    <li><b>Dữ liệu bẩn.</b> Email sai, ngày sai, giá trị âm, sales đã nghỉ.</li>
+    <li><b>Thiết bị.</b> Mở trên điện thoại, bấm bằng một tay, mạng chậm.</li>
+  </ul>
+  <p class="bar" style="max-width:none">Ghi mỗi test case một dòng: làm gì, thấy gì, đúng hay sai. Đây là bằng chứng nhóm đã kiểm.</p>
+</section>
+
+<section class="slide" data-sec="5" data-title="4. Đọc lỗi">
+  <h2>Lỗi nằm ở đâu, đọc ở đó</h2>
+  <div class="three">
+    <div><h3>Terminal</h3><p>Lỗi build, lỗi Prisma, lỗi server action. Đọc dòng cuối trước.</p></div>
+    <div><h3>Trình duyệt</h3><p>Console cho lỗi JavaScript; Network cho request 4xx/5xx.</p></div>
+    <div><h3>Database</h3><p>Prisma Studio hoặc query: bản ghi có được tạo không, trường nào null.</p></div>
+  </div>
+  <div class="code sm" style="margin-top:32px"><span class="c"># dán nguyên văn lỗi cho Claude, kèm việc đang làm</span>
+npm run build
+<span class="c"># TypeError: Cannot read properties of null (reading 'name')</span>
+<span class="c"># ở app/deals/[id]/page.tsx dòng 42, sau khi xoá một customer</span></div>
+  <p class="bar" style="max-width:none">Đừng nói “app bị lỗi”. Nói “bấm Lưu ở /leads/new thì terminal báo lỗi này”.</p>
+</section>
+
+<section class="slide" data-sec="6" data-title="4. Đối chiếu Sheet">
+  <h2>Đối chiếu số với Google Sheet</h2>
+  <div class="two">
+    <div>
+      <h3>Cùng điều kiện</h3>
+      <ul>
+        <li>Cùng kỳ: năm 2026, chốt 31/10.</li>
+        <li>Cùng bộ lọc: team, trạng thái, sales.</li>
+        <li>Cùng định nghĩa: doanh số = deal Thành công.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Chênh lệch thường do</h3>
+      <ul>
+        <li>Sheet tính theo ngày chốt, app theo ngày tạo.</li>
+        <li>Sheet có chỉ tiêu, app chưa nhập.</li>
+        <li>Dữ liệu seed thiếu cột tự tính.</li>
+        <li>Một bên lọc “Đang mở” khác định nghĩa.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="bar" style="max-width:none">Không cần khớp tuyệt đối. Cần giải thích được vì sao lệch. Sai mà không biết vì sao mới nguy hiểm.</p>
+</section>
+
+<section class="slide" data-sec="6" data-title="4. Commit và deploy lại">
+  <h2>Mỗi vòng: commit và deploy lại</h2>
+  <div class="deploy">
+    <div class="n hi"><b>1</b><h3>Chạy build</h3><p><code>npm run build</code> phải qua.</p></div>
+    <div class="n"><b>2</b><h3>Commit</h3><p>Một việc, một commit, message rõ.</p></div>
+    <div class="n"><b>3</b><h3>Push</h3><p>Đẩy lên GitHub.</p></div>
+    <div class="n"><b>4</b><h3>Deploy</h3><p>Vercel tự build bản mới.</p></div>
+    <div class="n hi"><b>5</b><h3>Kiểm link</h3><p>Mở bản deploy, bấm lại luồng chính.</p></div>
+  </div>
+  <p class="bar" style="max-width:none">Luôn có một bản chạy được trên internet. Nếu bản mới hỏng, promote bản trước.</p>
+</section>
+
+<section class="slide" data-sec="6" data-title="4. Bài tập">
+  <h2>Bài tập 45 phút</h2>
+  <ul class="check">
+    <li>Build lát cắt theo spec, theo thứ tự schema → seed → list → detail → form → action.</li>
+    <li>Viết 5 test case và chạy đủ 5.</li>
+    <li>Sửa ít nhất một lỗi tìm được.</li>
+    <li>Commit và deploy lại bản mới.</li>
+    <li>Ghi lại một câu: lỗi khó nhất là gì, sửa bằng cách nào.</li>
+  </ul>
+  <p class="bar" style="max-width:none">Chạy được quan trọng hơn hoàn hảo. Feature thiếu ghi vào “việc tiếp theo”, đừng cố nhồi.</p>
+</section>
+
+<section class="slide" data-sec="6" data-title="4. Tóm lại">
+  <h2>Chạy được &gt; hoàn hảo</h2>
+  <div class="three">
+    <div><h3>Vòng nhỏ</h3><p>Một việc, một diff, một commit. Sai thì hoàn tác nhanh.</p></div>
+    <div><h3>Kiểm bằng mắt</h3><p>Năm test case viết tay đủ cho một lát cắt.</p></div>
+    <div><h3>Luôn deploy được</h3><p>Mỗi vòng để lại một link chạy được cho người khác xem.</p></div>
+  </div>
+  <p class="bar" style="max-width:none">Phần 5 biến bản trên máy thành sản phẩm thật: có database, có bảo vệ, có lịch chạy.</p>
+</section>
+
+</div></div>
+
+<nav id="nav"><a id="b-home" href="https://coccoc.atento.vn/" aria-label="Về trang chủ chương trình" title="Về trang chủ coccoc.atento.vn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h5v-6h4v6h5V9"/></svg></a><button id="b-prev" aria-label="Slide trước">‹</button><button id="b-next" aria-label="Slide sau">›</button></nav>
+<div id="blackout"></div>
+<div id="overview" class="panel"><h2>Tất cả slide <span style="font-weight:400;color:#9DBBA6;font-size:16px">Bấm để chuyển, Esc để đóng</span></h2><div class="grid" id="ov-grid"></div></div>
+<div id="help" class="panel"><h2>Phím tắt</h2>
+  <div class="row"><span>Tiếp, lùi</span><span><kbd>→</kbd> <kbd>Space</kbd>, <kbd>←</kbd></span></div>
+  <div class="row"><span>Nút ‹ ›</span><span>góc dưới bên phải</span></div>
+  <div class="row"><span>Trang chủ</span><span>bấm logo, hoặc nút ⌂</span></div>
+  <div class="row"><span>Về đầu, tới cuối</span><span><kbd>Home</kbd>, <kbd>End</kbd></span></div>
+  <div class="row"><span>Toàn màn hình</span><span><kbd>F</kbd></span></div>
+  <div class="row"><span>Danh sách slide</span><span><kbd>O</kbd></span></div>
+  <div class="row"><span>Màn hình đen</span><span><kbd>B</kbd></span></div>
+  <div class="row"><span>In ra PDF</span><span><kbd>Ctrl</kbd> <kbd>P</kbd></span></div>
+</div>
+
+<script>window.DECK_SECTIONS=['Thứ tự','Seed','Màn hình','Ghi dữ liệu','Tự động','Kiểm thử','Sửa lỗi'];</script>
+<script src="slide.js"></script>
+</body>
+</html>

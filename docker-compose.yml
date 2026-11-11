@@ -12,3 +12,40 @@ services:
       timeout: 3s
       retries: 3
       start_period: 5s
+
+  crm-site-db:
+    image: postgres:16-alpine
+    container_name: crm-site-db
+    environment:
+      POSTGRES_USER: crm
+      POSTGRES_PASSWORD: ${CRM_DB_PASSWORD:-crm_demo_change_me}
+      POSTGRES_DB: crm
+    ports:
+      - "127.0.0.1:5434:5432"
+    volumes:
+      - crm-site-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U crm -d crm"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  crm-site-app:
+    build:
+      context: ./buoi-2/crm-app
+      args:
+        NEXT_PUBLIC_BASE_PATH: /crm
+    image: crm-site-app:latest
+    container_name: crm-site-app
+    environment:
+      DATABASE_URL: postgresql://crm:${CRM_DB_PASSWORD:-crm_demo_change_me}@crm-site-db:5432/crm?schema=public
+      CRON_SECRET: ${CRM_CRON_SECRET:-change-me}
+      NEXT_PUBLIC_BASE_PATH: /crm
+    depends_on:
+      crm-site-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  crm-site-db-data:
