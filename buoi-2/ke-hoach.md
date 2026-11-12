@@ -1,6 +1,6 @@
 # Buổi 2 · Báo giá
 
-> Bài giảng: ba file slide `phan-0-claude-code.html`, `phan-1-build-apps.html`, `phan-2-kien-truc.html` (37 slide).
+> Bài giảng: bốn file slide `phan-0-agentic-ai.html`, `phan-0-claude-code.html`, `phan-1-build-apps.html`, `phan-2-kien-truc.html` (43 slide).
 > File mẫu: `mau/app.html`, `mau/app-hoan-chinh.html`, `mau/bang-gia.csv`.
 > Bản CRM đầy đủ trong `crm-app/` chỉ để tham khảo ở cuối buổi.
 
@@ -62,7 +62,7 @@ in ra tờ giấy mà khách nhìn thấy.
 
 | Phút | Phần | Việc | Sản phẩm |
 |---|---|---|---|
-| 0–30 | **Phần 0 · Lý thuyết: Claude Code** | Chat khác Code, bốn nhịp làm việc, thư mục dự án, `CLAUDE.md`, quyền sửa file, cài đặt, vòng lặp bốn bước, đổi một dòng tiêu đề, spec ba dòng, sai thì nhắn lại | Máy sẵn sàng, 1 thay đổi chạy được |
+| 0–30 | **Phần 0 · Lý thuyết** | Agentic AI: agent khác chat, vòng lặp, harness. Claude Code: Chat khác Code, bốn nhịp làm việc, thư mục dự án, `CLAUDE.md`, quyền sửa file, cài đặt, vòng lặp bốn bước, đổi một dòng tiêu đề, spec ba dòng, sai thì nhắn lại | Máy sẵn sàng, 1 thay đổi chạy được |
 | 30–140 | **Phần 1 · Build apps** | | |
 | 30–35 | 1A Build HTML app | Chiếu app hoàn chỉnh, chốt đích đến | Thấy đích |
 | 35–75 | 1A Build HTML app | Nạp CSV → thêm dòng → tính tiền → chiết khấu và trần → kiểm số | Ra đúng con số |

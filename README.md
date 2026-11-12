@@ -86,10 +86,12 @@ mật khẩu `coccoc2026`.
 
 ## Slide Buổi 2
 
-Mở `/buoi-2/`. Bài giảng 37 slide, một app xuyên suốt: **Báo giá trong 5 phút**.
+Mở `/buoi-2/`. Bài giảng 43 slide, một app xuyên suốt: **Báo giá trong 5 phút**.
 
 - Bài giảng 3 giờ, mỗi phần một file slide:
-  - `phan-0-claude-code.html` · Lý thuyết (30 phút): Claude Code khác Chat, bốn nhịp làm việc,
+  - `phan-0-agentic-ai.html` · Lý thuyết: AI Agent khác AI Chat, vòng lặp của agent, harness,
+    giao việc cho agent.
+  - `phan-0-claude-code.html` · Lý thuyết: Claude Code khác Chat, bốn nhịp làm việc,
     `CLAUDE.md`, cài đặt, vòng lặp bốn bước, spec ba dòng, sai thì nhắn lại.
   - `phan-1-build-apps.html` · Build apps (110 phút): 1A dựng app báo giá bằng một file HTML (nạp
     bảng giá, tính tiền, chiết khấu theo bậc và trần, bản in A4); 1B publish lên
@@ -143,6 +145,7 @@ buoi-2/ke-hoach.md            # kế hoạch buổi, app báo giá, công thức
 buoi-2/chuan-bi.md            # việc cần chuẩn bị cho giảng viên và trợ giảng
 buoi-2/slide.css              # khung slide dùng chung
 buoi-2/slide.js               # điều hướng slide dùng chung
+buoi-2/phan-0-agentic-ai.html  # Phần 0: Agentic AI (6 slide)
 buoi-2/phan-0-claude-code.html # Phần 0: Claude Code (13 slide)
 buoi-2/phan-1-build-apps.html  # Phần 1: build app báo giá + publish (15 slide)
 buoi-2/phan-2-kien-truc.html   # Phần 2: kiến trúc website + chốt (14 slide)
