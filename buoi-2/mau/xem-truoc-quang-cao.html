@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xem trước quảng cáo</title>
+<style>
+:root{--paper:#F4F6EC;--paper-2:#E9EDDF;--ink:#12261A;--ink-2:#3C4C41;--muted:#5F6D63;--line:#D2DAC8;--line-strong:#A4B3A1;--green:#25AF50;--green-deep:#0E4A2B;--forest:#0B3D22;--yellow:#F7E45C;--orange:#DF5227;--orange-pale:#FBE6DD}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+header{background:var(--forest);color:#fff;padding:22px 0;border-bottom:4px solid var(--green)}
+header .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+h1{margin:0;font-size:26px;letter-spacing:-.02em}
+#sub{margin:3px 0 0;color:#B9D8C3;font-size:13px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--green);background:var(--green);color:#fff;font:inherit;font-size:13.5px;font-weight:600;padding:9px 13px;border-radius:2px;cursor:pointer;white-space:nowrap}
+.btn:hover{filter:brightness(.95)}
+.btn.ghost{background:transparent;border-color:#5E8A6D;color:#E7F1EA}
+.btn.ghost:hover{background:rgba(255,255,255,.08);filter:none}
+
+main.grid{display:grid;grid-template-columns:350px minmax(0,1fr);gap:26px;padding:26px 20px 60px;align-items:start}
+main.grid>*{min-width:0}
+.card{background:#fff;border:1.5px solid var(--ink);padding:16px 18px;margin-bottom:14px}
+.card h2{font-size:13px;font-weight:600;color:var(--green-deep);margin:0 0 10px}
+.fields{display:grid;gap:10px}
+.fields label{display:block;font-size:11.5px;color:var(--muted)}
+.fields input,.fields textarea{width:100%;margin-top:3px;border:1px solid var(--line-strong);background:#fff;padding:7px 9px;font:inherit;font-size:13.5px;color:var(--ink);border-radius:2px}
+.fields textarea{height:64px;resize:vertical}
+.fields input[type=color]{height:36px;padding:2px;width:70px}
+.cnt{float:right;font-variant-numeric:tabular-nums}
+.cnt.bad{color:var(--orange);font-weight:600}
+.sets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px;font-size:11.5px;color:var(--muted)}
+.sets span{width:100%}
+.sets button{border:1px solid var(--line-strong);background:#fff;font:inherit;font-size:12.5px;padding:5px 10px;cursor:pointer;border-radius:2px;color:var(--ink)}
+.sets button.on{background:var(--forest);color:#fff;border-color:var(--forest)}
+.up{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.up:last-child{border-bottom:0}
+.up .th{width:52px;height:40px;background:var(--paper-2) center/cover no-repeat;border:1px solid var(--line)}
+.up b{display:block;font-size:13px}
+.up span{display:block;font-size:11px;color:var(--muted)}
+.up label{font-size:12px;font-weight:600;color:var(--green-deep);cursor:pointer;border:1px solid var(--line-strong);padding:4px 8px;border-radius:2px;white-space:nowrap}
+.up label:hover{border-color:var(--green-deep)}
+.up input{display:none}
+.up .reset{border:0;background:none;color:var(--muted);font-size:11px;cursor:pointer;padding:0;text-decoration:underline;margin-top:2px}
+
+.tabs{display:flex;gap:0;border-bottom:1.5px solid var(--ink);margin-bottom:14px;flex-wrap:wrap}
+.tabs button{border:0;background:none;font:inherit;font-size:14px;font-weight:600;padding:9px 16px;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1.5px}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--green)}
+.tabs button .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:6px;vertical-align:middle}
+.stage{background:#DCE2D3;border:1px solid var(--line-strong);padding:22px;display:flex;justify-content:center;min-height:440px}
+
+/* Khung trình duyệt máy tính */
+.browser{width:100%;max-width:980px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 8px 24px rgba(18,38,26,.18)}
+.bbar{background:#EEF0EC;padding:8px 12px;display:flex;align-items:center;gap:10px;font-size:12px;color:#555}
+.bbar .dots{display:flex;gap:5px}.bbar .dots i{width:10px;height:10px;border-radius:50%;background:#C9CEC6}
+.bbar .tab{background:#fff;padding:4px 14px;border-radius:6px 6px 0 0}
+.bbar .addr{flex:1;background:#fff;border-radius:14px;padding:4px 12px;color:#777}
+.newtab{padding:34px 4% 26px;text-align:center;background:linear-gradient(#F7FAF4,#fff)}
+.logo-cc{font-size:30px;font-weight:800;letter-spacing:-.03em;color:var(--green-deep)}
+.logo-cc span{color:var(--green)}
+.sbox{margin:12px auto 22px;max-width:520px;border:1px solid #D6DBD3;border-radius:22px;padding:10px 18px;text-align:left;color:#999;font-size:13px;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.tiles{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;max-width:560px;margin:0 auto 24px}
+.tiles i{display:block;aspect-ratio:1;border-radius:10px;background:#EEF1EB}
+.nt-slot{position:relative;max-width:970px;margin:0 auto}
+.nt-slot img{display:block;width:100%;height:auto}
+.nt-tag{position:absolute;top:4px;right:4px;background:rgba(255,255,255,.85);font-size:9.5px;color:#555;padding:1px 5px;border-radius:2px}
+
+.serp{padding:18px 5% 26px}
+.serp .q{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.serp .q .logo-cc{font-size:20px}
+.serp .q .sbox{margin:0;flex:1;color:#222}
+.res{margin:0 0 18px;max-width:620px}
+.res .u{font-size:12px;color:#1B6E35;display:flex;align-items:center;gap:6px}
+.res .u .sp{font-weight:700;color:#222}
+.res .t{font-size:18px;color:#1A3FB5;margin:2px 0;line-height:1.3}
+.res .d{font-size:13px;color:#4D5156}
+.res.org .t{background:#E6E9EE;color:transparent;height:16px;width:62%;border-radius:2px}
+.res.org .d{background:#F0F2F4;height:28px;border-radius:2px}
+.res.org .u{background:#F0F2F4;height:10px;width:30%;border-radius:2px}
+
+/* Khung điện thoại */
+.phones{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;align-items:flex-start}
+.phone{width:300px;background:#111;border-radius:34px;padding:12px;box-shadow:0 10px 26px rgba(18,38,26,.25)}
+.screen{background:#fff;border-radius:24px;overflow:hidden;aspect-ratio:9/16;position:relative}
+.news-h{padding:14px 14px 10px;font-weight:800;font-size:17px;color:var(--green-deep);border-bottom:1px solid #eee}
+.news{padding:0 12px;height:calc(100% - 46px);overflow:hidden}
+.ni{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0}
+.ni i{flex:0 0 78px;height:56px;background:#E9ECE6;border-radius:4px}
+.ni div{flex:1}.ni div b{display:block;height:9px;background:#E3E6E0;margin:3px 0 7px;border-radius:2px}.ni div b+b{width:70%}
+.native{padding:10px 0 12px;border-bottom:1px solid #f0f0f0}
+.native img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:6px;display:block;background:#eee}
+.native .nt{font-size:14.5px;font-weight:700;line-height:1.35;margin:8px 0 3px;color:#111}
+.native .nd{font-size:12px;color:#555;line-height:1.4}
+.native .nm{display:flex;justify-content:space-between;align-items:center;margin-top:7px;font-size:11px;color:#777}
+.native .cta{background:var(--brand,#25AF50);color:#fff;font-weight:600;padding:4px 10px;border-radius:3px;font-size:11.5px}
+.splash img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.splash .skip{position:absolute;top:14px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:4px 10px;border-radius:12px}
+.splash .tag{position:absolute;top:14px;left:12px;background:rgba(255,255,255,.85);font-size:10px;padding:2px 6px;border-radius:2px;color:#444}
+.cap{text-align:center;font-size:12px;color:var(--muted);margin-top:8px}
+
+/* Kiểm quy cách */
+.checks{background:#fff;border:1.5px solid var(--ink);padding:14px 18px;margin-top:16px}
+.checks h2{font-size:13px;font-weight:600;color:var(--green-deep);margin:0 0 4px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.checks h2 small{font-weight:400;color:var(--muted);font-size:11.5px}
+.ck{display:grid;grid-template-columns:160px minmax(0,1fr);gap:4px 14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.ck:last-child{border-bottom:0}
+.ck .pl b{display:block}
+.ck .pl span{font-size:11px;color:var(--muted)}
+.ck ul{list-style:none;margin:0;padding:0}
+.ck li{padding:1px 0 1px 22px;position:relative}
+.ck li::before{position:absolute;left:0;top:1px;font-weight:700}
+.ck li.ok::before{content:"✓";color:var(--green)}
+.ck li.bad{color:#8A3016}
+.ck li.bad::before{content:"✕";color:var(--orange)}
+.ck li.demo{color:var(--muted)}
+.ck li.demo::before{content:"•";color:var(--muted)}
+
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(16px);background:var(--forest);color:#fff;font-size:13px;padding:9px 15px;border-radius:2px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:50}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:980px){main.grid{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:560px){.stage{padding:10px}.ck{grid-template-columns:1fr}}
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  header,.build,.tabs,#toast{display:none!important}
+  body{background:#fff}
+  main.grid{display:block;padding:0}
+  .stage{background:#fff;border:0;padding:0;min-height:0}
+  .browser,.phone{box-shadow:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .checks{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div>
+      <h1>Xem trước quảng cáo</h1>
+      <p id="sub">Tải banner của khách lên để xem nó chạy trên Cốc Cốc trông thế nào, và kiểm quy cách trước khi gửi duyệt.</p>
+    </div>
+    <div class="tools">
+      <button class="btn ghost" id="btn-copy">Copy kết quả kiểm</button>
+      <button class="btn ghost" id="btn-print">In bản xem trước</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap grid">
+  <section class="build">
+    <div class="card">
+      <h2>Nội dung quảng cáo</h2>
+      <div class="fields">
+        <label>Thương hiệu<input id="f-brand" value="Điện máy Sao Việt"></label>
+        <label>Tiêu đề <span class="cnt" id="c-title"></span><input id="f-title" value="Tivi 4K giảm đến 40%, trả góp 0% trong 12 tháng"></label>
+        <label>Mô tả <span class="cnt" id="c-desc"></span><textarea id="f-desc">Giao nhanh 2 giờ trong nội thành. Đổi trả 30 ngày, bảo hành chính hãng tại nhà.</textarea></label>
+        <label>Đường dẫn hiển thị<input id="f-url" value="saoviet.vn/tivi-4k"></label>
+        <label>Nút bấm<input id="f-cta" value="Mua ngay"></label>
+        <label>Màu thương hiệu (cho ảnh mẫu)<br><input type="color" id="f-color" value="#C8102E"></label>
+        <label>Từ khoá người dùng gõ (cho Search)<input id="f-q" value="mua tivi trả góp"></label>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Ảnh của khách</h2>
+      <div class="sets" id="sets">
+        <span>Bộ ảnh mẫu</span>
+        <button data-set="dat">Đúng quy cách</button>
+        <button data-set="loi">Có lỗi</button>
+        <button data-set="ve">Tự vẽ theo nội dung</button>
+      </div>
+      <div id="uploads"></div>
+      <p style="font-size:11.5px;color:var(--muted);margin:8px 0 0">Bộ “Có lỗi” cố tình sai: banner quá nặng, ảnh native vuông, splash sai kích thước. Ảnh bạn tải lên chỉ nằm trên máy, không gửi đi đâu.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="tabs" id="tabs"></div>
+    <div class="stage" id="stage"></div>
+    <div class="checks">
+      <h2>Kiểm quy cách <small>Quy cách mẫu của khoá học. Đối chiếu lại với quy cách chính thức trước khi gửi duyệt.</small></h2>
+      <div id="checks"></div>
+    </div>
+  </section>
+</main>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="anh-mau.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const kb=n=>Math.round(n/1024).toLocaleString('vi-VN')+' KB';
+
+// Quy cách mẫu (dùng trong lớp, không phải quy cách chính thức).
+const IMAGES={
+  banner:{ten:'Banner trang chủ',ma:'HOME-01',w:970,h:250,max:150*1024,exact:true,note:'970×250, tối đa 150 KB'},
+  native:{ten:'Ảnh native',ma:'NEWS-02',ratio:3/2,minW:600,max:300*1024,note:'Tỷ lệ 3:2, rộng từ 600px, tối đa 300 KB'},
+  splash:{ten:'Ảnh splash',ma:'APP-01',w:1080,h:1920,max:500*1024,exact:true,note:'1080×1920, tối đa 500 KB'}
+};
+const TEXT={title:60,desc:120};
+const TYPES=['image/jpeg','image/png','image/gif','image/webp'];
+
+const PLACES=[
+  {k:'home',ten:'New tab',ma:'HOME-01',img:['banner'],txt:[]},
+  {k:'search',ten:'Search',ma:'SRCH-01',img:[],txt:['title','desc','url']},
+  {k:'news',ten:'CCNews',ma:'NEWS-02',img:['native'],txt:['title','desc']},
+  {k:'splash',ten:'Splash',ma:'APP-01',img:['splash'],txt:[]}
+];
+let tab=['home','search','news','splash'].includes(location.hash.slice(1))?location.hash.slice(1):'home';
+const imgs={}; // key -> {url,w,h,size,type,name,demo}
+let bo=window.ANH_MAU?'dat':'ve'; // bộ ảnh mẫu đang chọn
+
+// Ảnh dùng dạng data: URL (trang chủ chặn blob: bằng Content-Security-Policy).
+function dataSize(url){const b=url.slice(url.indexOf(',')+1);return Math.floor(b.length*3/4)-(b.endsWith('==')?2:b.endsWith('=')?1:0);}
+
+// Lấy một ảnh trong bộ ảnh mẫu (anh-mau.js), đọc kích thước như ảnh thật.
+function fromSet(set,key){
+  const a=window.ANH_MAU[set][key], url='data:image/jpeg;base64,'+a.data;
+  return new Promise(res=>{const im=new Image();im.onload=()=>res({url,w:im.naturalWidth,h:im.naturalHeight,size:dataSize(url),type:'image/jpeg',name:a.name,demo:false,mau:true});im.src=url;});
+}
+async function loadSlot(key){
+  imgs[key]=bo==='ve'||!window.ANH_MAU?await drawDemo(key):await fromSet(bo,key);
+}
+async function useSet(name){
+  bo=name;
+  for(const k of Object.keys(IMAGES)) await loadSlot(k);
+  render();
+}
+
+// Vẽ ảnh mẫu đúng kích thước bằng canvas, theo màu và chữ của thương hiệu.
+function drawDemo(key){
+  const brand=$('f-brand').value||'Thương hiệu', title=$('f-title').value||'', cta=$('f-cta').value||'Xem ngay', col=$('f-color').value;
+  const dims={banner:[970,250],native:[900,600],splash:[1080,1920]}[key];
+  const [W,H]=dims, c=document.createElement('canvas'); c.width=W; c.height=H;
+  const g=c.getContext('2d');
+  const grd=g.createLinearGradient(0,0,W,H); grd.addColorStop(0,col); grd.addColorStop(1,shade(col,-45));
+  g.fillStyle=grd; g.fillRect(0,0,W,H);
+  g.fillStyle='rgba(255,255,255,.08)'; g.beginPath(); g.arc(W*.85,H*.3,Math.max(W,H)*.35,0,7); g.fill();
+  const u=Math.min(W,H)/250*(key==='banner'?1:.55);
+  g.fillStyle='#fff'; g.textBaseline='top';
+  const pad=key==='banner'?40:W*.08;
+  g.font=`700 ${Math.round(20*u)}px system-ui,sans-serif`; g.fillText(brand.toUpperCase(),pad,key==='splash'?H*.12:pad*.9);
+  g.font=`700 ${Math.round((key==='banner'?34:46)*u)}px system-ui,sans-serif`;
+  const maxW=key==='banner'?W*.62:W-pad*2;
+  const lines=wrap(g,title,maxW).slice(0,key==='splash'?5:3), lh=(key==='banner'?40:56)*u;
+  const y0=key==='splash'?H*.36:key==='banner'?H*.33:H*.3;
+  lines.forEach((l,i)=>g.fillText(l,pad,y0+i*lh));
+  g.font=`600 ${Math.round(18*u)}px system-ui,sans-serif`;
+  const tw=g.measureText(cta).width, bx=key==='banner'?W-tw-80:pad, by=key==='banner'?H/2-22*u:key==='splash'?H*.78:H-pad-48*u;
+  g.fillStyle='#fff'; roundRect(g,bx,by,tw+44*u,44*u,6*u); g.fill();
+  g.fillStyle=col; g.fillText(cta,bx+22*u,by+12*u);
+  const url=c.toDataURL('image/jpeg',.85);
+  return Promise.resolve({url,w:W,h:H,size:dataSize(url),type:'image/jpeg',name:'ảnh tự vẽ',demo:true});
+}
+function wrap(g,t,max){const w=t.split(' '),out=[];let l='';w.forEach(x=>{const tr=l?l+' '+x:x;if(g.measureText(tr).width>max&&l){out.push(l);l=x;}else l=tr;});if(l)out.push(l);return out;}
+function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function shade(hex,amt){const n=parseInt(hex.slice(1),16);const f=v=>Math.max(0,Math.min(255,v+amt));return'#'+[f(n>>16),f(n>>8&255),f(n&255)].map(v=>v.toString(16).padStart(2,'0')).join('');}
+
+async function refreshDemos(){
+  for(const k of Object.keys(IMAGES)){
+    if(!imgs[k]||imgs[k].demo){ imgs[k]=await drawDemo(k); }
+  }
+  render();
+}
+function loadFile(key,file){
+  const fr=new FileReader();
+  fr.onload=()=>{
+    const url=fr.result, im=new Image();
+    im.onload=()=>{ imgs[key]={url,w:im.naturalWidth,h:im.naturalHeight,size:file.size,type:file.type,name:file.name,demo:false};
+      render(); toast('Đã tải '+file.name); };
+    im.onerror=()=>toast('Không mở được ảnh này.');
+    im.src=url;
+  };
+  fr.readAsDataURL(file);
+}
+
+function checkImage(key){
+  const s=IMAGES[key], i=imgs[key], out=[];
+  if(!i) return out;
+  if(i.demo) out.push(['demo','Ảnh do app tự vẽ. Tải ảnh thật của khách để kiểm.']);
+  if(s.exact){
+    const ok=i.w===s.w&&i.h===s.h;
+    out.push([ok?'ok':'bad',`Kích thước ${i.w}×${i.h}`+(ok?'':`, cần đúng ${s.w}×${s.h}`)]);
+  }else{
+    const r=i.w/i.h, ok=Math.abs(r-s.ratio)/s.ratio<.01;
+    out.push([ok?'ok':'bad',`Tỷ lệ ${(r).toFixed(2).replace('.',',')} (${i.w}×${i.h})`+(ok?'':', cần 3:2 (1,50)')]);
+    out.push([i.w>=s.minW?'ok':'bad',`Chiều rộng ${i.w}px`+(i.w>=s.minW?'':`, cần từ ${s.minW}px`)]);
+  }
+  out.push([i.size<=s.max?'ok':'bad',`Dung lượng ${kb(i.size)}`+(i.size<=s.max?'':`, vượt mức ${kb(s.max)}`)]);
+  out.push([TYPES.includes(i.type)?'ok':'bad',`Định dạng ${(i.type.split('/')[1]||'?').toUpperCase()}`+(TYPES.includes(i.type)?'':', cần JPG, PNG, GIF hoặc WebP')]);
+  return out;
+}
+function checkText(k){
+  if(k==='url'){const v=$('f-url').value.trim();return[[v?'ok':'bad',v?'Có đường dẫn hiển thị':'Thiếu đường dẫn hiển thị']];}
+  const v=$('f-'+k).value.trim(), n=[...v].length, max=TEXT[k], name=k==='title'?'Tiêu đề':'Mô tả';
+  if(!n) return[['bad',name+' đang trống']];
+  return[[n<=max?'ok':'bad',`${name} ${n}/${max} ký tự`+(n<=max?'':`, thừa ${n-max} ký tự`)]];
+}
+function placeChecks(p){ return [...p.img.flatMap(checkImage),...p.txt.flatMap(checkText)]; }
+
+function stageHTML(){
+  const brand=esc($('f-brand').value), title=esc($('f-title').value), desc=esc($('f-desc').value), url=esc($('f-url').value), cta=esc($('f-cta').value);
+  const tiles='<i></i>'.repeat(8);
+  if(tab==='home') return `<div class="browser"><div class="bbar"><span class="dots"><i></i><i></i><i></i></span><span class="tab">Thẻ mới</span><span class="addr">Tìm kiếm hoặc nhập địa chỉ</span></div>
+    <div class="newtab"><div class="logo-cc">cốc <span>cốc</span></div><div class="sbox">Tìm kiếm trên Cốc Cốc</div><div class="tiles">${tiles}</div>
+    <div class="nt-slot"><img src="${imgs.banner?.url||''}" alt=""><span class="nt-tag">Quảng cáo</span></div></div></div>`;
+  if(tab==='search'){
+    const org='<div class="res org"><div class="u"></div><div class="t">.</div><div class="d"></div></div>';
+    return `<div class="browser"><div class="bbar"><span class="dots"><i></i><i></i><i></i></span><span class="tab">${esc($('f-q').value)}</span><span class="addr">coccoc.com/search?query=${esc($('f-q').value)}</span></div>
+    <div class="serp"><div class="q"><div class="logo-cc">cốc <span>cốc</span></div><div class="sbox">${esc($('f-q').value)}</div></div>
+    <div class="res"><div class="u"><span class="sp">Tài trợ</span> · ${url}</div><div class="t">${title}</div><div class="d">${desc}</div></div>${org}${org}${org}</div></div>`;
+  }
+  if(tab==='news'){
+    const ni='<div class="ni"><i></i><div><b></b><b></b></div></div>';
+    return `<div><div class="phone"><div class="screen"><div class="news-h">CCNews</div><div class="news">${ni}
+      <div class="native" style="--brand:${$('f-color').value}"><img src="${imgs.native?.url||''}" alt=""><div class="nt">${title}</div><div class="nd">${desc}</div><div class="nm"><span>Tài trợ · ${brand}</span><span class="cta">${cta}</span></div></div>${ni}${ni}${ni}</div></div></div><div class="cap">Native newsfeed trên CCNews</div></div>`;
+  }
+  return `<div><div class="phone"><div class="screen splash"><img src="${imgs.splash?.url||''}" alt=""><span class="tag">Quảng cáo</span><span class="skip">Bỏ qua 3</span></div></div><div class="cap">Splash khi mở app, 3 giây</div></div>`;
+}
+
+function render(){
+  $('c-title').textContent=[...$('f-title').value].length+'/'+TEXT.title;
+  $('c-title').className='cnt'+([...$('f-title').value].length>TEXT.title?' bad':'');
+  $('c-desc').textContent=[...$('f-desc').value].length+'/'+TEXT.desc;
+  $('c-desc').className='cnt'+([...$('f-desc').value].length>TEXT.desc?' bad':'');
+
+  $('uploads').innerHTML=Object.entries(IMAGES).map(([k,s])=>{const i=imgs[k];return `<div class="up">
+    <div class="th" style="background-image:url('${i?.url||''}')"></div>
+    <div><b>${s.ten}</b><span>${s.note}</span><span>${i?(i.demo?'Ảnh tự vẽ':esc(i.name)):''}</span>${i&&!i.demo&&!i.mau?`<button class="reset" data-reset="${k}">Về ảnh mẫu</button>`:''}</div>
+    <label>Tải ảnh<input type="file" accept="image/*" data-up="${k}"></label></div>`;}).join('');
+
+  [...$('sets').querySelectorAll('button')].forEach(b=>b.classList.toggle('on',b.dataset.set===bo&&Object.values(imgs).every(x=>x.demo||x.mau)));
+  if(!window.ANH_MAU)$('sets').hidden=true;
+  $('tabs').innerHTML=PLACES.map(p=>{const bad=placeChecks(p).some(x=>x[0]==='bad');
+    return `<button data-t="${p.k}" class="${p.k===tab?'on':''}">${p.ten}<span class="dot" style="background:${bad?'var(--orange)':'var(--green)'}"></span></button>`;}).join('');
+  $('stage').innerHTML=stageHTML();
+
+  $('checks').innerHTML=PLACES.map(p=>`<div class="ck"><div class="pl"><b>${p.ten}</b><span>${p.ma}</span></div>
+    <ul>${placeChecks(p).map(([c,t])=>`<li class="${c}">${esc(t)}</li>`).join('')}</ul></div>`).join('');
+}
+
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),1800);}
+async function copyChecks(){
+  const lines=PLACES.map(p=>{const bad=placeChecks(p).filter(x=>x[0]==='bad');
+    return `${p.ten} (${p.ma}): `+(bad.length?bad.map(x=>x[1]).join('; '):'đạt quy cách');}).join('\n');
+  const text=`Kết quả kiểm quảng cáo ${$('f-brand').value}\n${lines}`;
+  try{await navigator.clipboard.writeText(text);}
+  catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();}
+  toast('Đã copy. Gửi cho khách nếu cần sửa ảnh hoặc chữ.');
+}
+
+let t0;
+['f-brand','f-title','f-cta','f-color'].forEach(id=>$(id).addEventListener('input',()=>{render();clearTimeout(t0);t0=setTimeout(refreshDemos,250);}));
+['f-desc','f-url','f-q'].forEach(id=>$(id).addEventListener('input',render));
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;tab=b.dataset.t;render();});
+$('uploads').addEventListener('change',e=>{const k=e.target.dataset.up,f=e.target.files[0];if(k&&f)loadFile(k,f);});
+$('uploads').addEventListener('click',async e=>{const k=e.target.dataset.reset;if(!k)return;await loadSlot(k);render();});
+$('sets').addEventListener('click',e=>{const b=e.target.closest('[data-set]');if(b)useSet(b.dataset.set);});
+$('btn-copy').addEventListener('click',copyChecks);
+$('btn-print').addEventListener('click',()=>window.print());
+useSet(bo);
+</script>
+</body>
+</html>

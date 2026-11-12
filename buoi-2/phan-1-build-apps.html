@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi 2 · Phần 1 · Build apps</title>
+<meta name="description" content="Buổi 2, Phần 1: dựng app báo giá bằng một file HTML, rồi đưa lên Internet bằng GitHub Pages.">
+<meta name="theme-color" content="#F4F6EC">
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="slide.css">
+</head>
+<body>
+<div id="progress"></div>
+<div id="viewport"><div id="stage">
+
+<section class="slide opener" data-sec="1" data-title="Phần 1. Build apps">
+  <span class="sec">Phần 1 / Build apps</span>
+  <div class="num">1</div>
+  <p class="say">Dựng một app báo giá, rồi đưa lên mạng.</p>
+  <p class="sub">1A: dựng app trong một file HTML. 1B: đưa lên Internet để có một link gửi khách.</p>
+</section>
+
+<section class="slide" data-sec="0" data-title="1A. Xem bản hoàn chỉnh">
+  <h2 style="max-width:20ch">Mở bản hoàn chỉnh trước</h2>
+  <div class="demo" style="grid-template-columns:420px minmax(0,1fr)">
+    <div class="quote" style="font-size:11px">
+      <div class="qh"><b>Cốc Cốc<small>QUẢNG CÁO TRỰC TUYẾN</small></b><span class="doc">BÁO GIÁ</span></div>
+      <div class="meta"><span>BG-121126-01</span><span>Hiệu lực 30 ngày</span></div>
+      <div class="client">An Gia Media · Chị Hạnh</div>
+      <table>
+        <thead><tr><th>Hạng mục</th><th class="n">SL</th><th class="n">Thành tiền</th></tr></thead>
+        <tbody>
+          <tr><td>Banner trang chủ</td><td class="n">1.000.000</td><td class="n">180.000.000</td></tr>
+          <tr><td>Pre-roll 15s</td><td class="n">500.000</td><td class="n">110.000.000</td></tr>
+          <tr><td>Bài PR</td><td class="n">2</td><td class="n">36.000.000</td></tr>
+        </tbody>
+      </table>
+      <div class="qsum">
+        <div><span>Tạm tính</span><span>326.000.000</span></div>
+        <div><span>Chiết khấu 8%</span><span>−26.080.000</span></div>
+        <div><span>VAT 10%</span><span>29.992.000</span></div>
+        <div class="tot"><span>Tổng cộng</span><span>329.912.000 đ</span></div>
+      </div>
+    </div>
+    <div>
+      <ol class="check" style="margin-top:0">
+        <li>Chọn hai format, nhập số lượng.</li>
+        <li>Đọc tạm tính, chiết khấu, tổng.</li>
+        <li>Bấm In PDF, xem có đúng một trang.</li>
+      </ol>
+      <p class="lede" style="margin-top:22px">Một file HTML. Không server, không database, không build.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="0" data-title="1A. Cuối Phần 1 có gì">
+  <h2>Hết Phần 1, bạn có</h2>
+  <div class="ledger">
+    <div class="r"><b>Một file <code>app.html</code></b><span>Mở bằng trình duyệt, đọc bảng giá của bạn.<em>Nằm trong thư mục, không phụ thuộc mạng.</em></span></div>
+    <div class="r"><b>Một tờ báo giá</b><span>In ra A4, gửi khách ngay trong buổi họp.<em>Không cần Excel, không chỉnh tay từng dòng.</em></span></div>
+    <div class="r"><b>Một link</b><span>Mở được trên máy khách, trên điện thoại.<em>Cùng file đó, đặt trên GitHub Pages.</em></span></div>
+  </div>
+  <div class="split" style="margin-top:22px">
+    <p class="lede">Không cần hoàn hảo. Bản in đúng số là đủ.</p>
+    <div class="aside"><div class="tag">Đo bằng gì</div><p>Tuần này có một báo giá thật đi ra từ file đó.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="1A. Sáu bước dựng app">
+  <h2>Dựng app trong sáu bước</h2>
+  <table class="tbl" style="margin-top:18px">
+    <thead><tr><th>Bước</th><th>Giao cho Claude</th><th>Bạn kiểm</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Đổi tiêu đề thành “Báo giá Cốc Cốc”</td><td>Thấy tiêu đề mới</td></tr>
+      <tr><td><b>2</b></td><td>Nạp bảng giá từ file CSV</td><td>Đủ 12 dòng</td></tr>
+      <tr><td><b>3</b></td><td>Thêm dòng hàng, tính thành tiền</td><td>Dòng đầu khớp máy tính</td></tr>
+      <tr><td><b>4</b></td><td>Chiết khấu theo bậc, trần theo format</td><td>Không dòng nào vượt trần</td></tr>
+      <tr><td><b>5</b></td><td>Bản in A4</td><td>Đúng một trang</td></tr>
+      <tr><td><b>6</b></td><td>Copy tóm tắt</td><td>Dán vào Zalo, số khớp bản in</td></tr>
+    </tbody>
+  </table>
+  <p class="lede" style="margin-top:20px">Mỗi bước là một vòng bốn bước ở Phần 0. Xong bước này mới sang bước sau.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="1A. Bước 1: mở thư mục, đổi tiêu đề">
+  <p class="kick">Bước 1</p>
+  <h2>Mở thư mục <code style="font-size:.9em">bao-gia</code>, đổi tiêu đề</h2>
+  <div class="split" style="margin-top:22px">
+    <div>
+      <div class="tree">bao-gia/
+├─ app.html        <span class="c"># file trống, chỉ có tiêu đề</span>
+├─ bang-gia.csv    <span class="c"># 12 format, số mẫu</span>
+└─ CLAUDE.md       <span class="c"># luật: VAT, bậc chiết khấu, bản in</span></div>
+      <div class="prompt">Việc: đổi tiêu đề thành “Báo giá Cốc Cốc”.
+Xong khi: mở app.html, thấy tiêu đề mới.
+Không đụng: phần còn lại.</div>
+    </div>
+    <div class="aside"><div class="tag">Trong tab Code</div><p>Chọn thư mục <code>bao-gia</code>, không phải thư mục <code>du-an</code> ở Phần 0.</p><p>Mở <code>app.html</code> bằng Chrome, để sẵn cạnh cửa sổ Claude. Mỗi bước xong thì bấm F5 xem lại.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="1A. Bước 2: nạp bảng giá">
+  <p class="kick">Bước 2</p>
+  <h2>Nạp bảng giá</h2>
+  <div class="split" style="margin-top:22px">
+    <div class="ticket">
+      <div class="line"><b>Việc</b><span>thêm nút “Nạp bảng giá”, đọc file CSV người dùng chọn, hiện bảng: mã, tên, đơn vị, đơn giá, trần chiết khấu.</span></div>
+      <div class="line"><b>Xong khi</b><span>chọn <code>bang-gia.csv</code>, thấy đủ 12 dòng.</span></div>
+      <div class="line"><b>Không đụng</b><span>tiêu đề và file CSV.</span></div>
+    </div>
+    <div class="aside"><div class="tag">Vì sao cần nút</div><p>Một file HTML không tự đọc file bên cạnh. Người dùng phải chọn file bằng tay.</p><p>Việc thật về sau là thay file mẫu bằng bảng giá của công ty.</p></div>
+  </div>
+  <p class="lede" style="margin-top:24px">Nạp xong, đếm số dòng. File 12 dòng thì phải thấy 12.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="1A. Bước 3: thêm dòng, ra thành tiền">
+  <p class="kick">Bước 3</p>
+  <h2>Thêm dòng hàng, ra thành tiền</h2>
+  <div class="split" style="margin-top:18px">
+    <div>
+      <div class="ticket">
+        <div class="line"><b>Việc</b><span>chọn format từ bảng giá, nhập số lượng, bấm Thêm. Tính thành tiền theo đơn vị trong CSV.</span></div>
+        <div class="line"><b>Xong khi</b><span>Banner trang chủ, 1.000.000 lượt, ra 180.000.000.</span></div>
+        <div class="line"><b>Không đụng</b><span>phần nạp bảng giá.</span></div>
+      </div>
+      <div class="calc" style="margin-top:18px">180.000 / 1.000 × 1.000.000 = <em>180.000.000</em></div>
+    </div>
+    <div class="aside"><div class="tag">Sai đơn vị là sai 1.000 lần</div><p>CPM tính theo 1.000 lượt. CPC theo click. CPT theo ngày. Gói theo số gói.</p><p>Kiểm dòng đầu tiên bằng máy tính.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="1A. Bước 4: chiết khấu và trần">
+  <p class="kick">Bước 4</p>
+  <h2>Chiết khấu theo bậc, trần theo format</h2>
+  <div class="split" style="margin-top:18px">
+    <div class="ticket">
+      <div class="line"><b>Việc</b><span>áp chiết khấu theo bậc trong <code>CLAUDE.md</code>, tính trên tạm tính. Dòng nào vượt trần của format thì lấy trần và hiện cảnh báo. Thêm VAT 10% và tổng.</span></div>
+      <div class="line"><b>Xong khi</b><span>đơn 616 triệu có Pre-roll: bậc 11%, dòng Pre-roll chỉ được 10%, có cảnh báo.</span></div>
+      <div class="line"><b>Không đụng</b><span>cách tính thành tiền từng dòng.</span></div>
+    </div>
+    <div class="aside"><div class="tag">Bậc đã có trong CLAUDE.md</div><p>Dưới 100 triệu 0% · 100–300 triệu 5% · 300–500 triệu 8% · 500 triệu–1 tỷ 11% · trên 1 tỷ 14%.</p><p>Không phải gõ lại trong prompt.</p></div>
+  </div>
+  <div class="warnbox" style="margin-top:22px"><b>Đây là chỗ báo giá hay sai.</b> Bậc nói một đằng, trần nói một nẻo. App phải lấy mức thấp hơn và hiện cảnh báo.</div>
+</section>
+
+<section class="slide" data-sec="1" data-title="1A. Kiểm lại con số">
+  <h2>Kiểm lại con số</h2>
+  <ul class="check">
+    <li><b>Tổng các dòng = tạm tính.</b> Cộng tay hai dòng đầu.</li>
+    <li><b>Chiết khấu thực tế không vượt trần format nào.</b> Nhìn dòng cảnh báo.</li>
+    <li><b>VAT tính trên tiền sau chiết khấu.</b> Không phải trên tạm tính.</li>
+  </ul>
+  <div class="split" style="margin-top:24px">
+    <p class="lede">Ba câu này bắt được gần hết lỗi số.</p>
+    <div class="aside"><div class="tag">Dùng lại</div><p>Áp cho mọi báo giá, kể cả báo giá làm tay trong Excel.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="1A. Bước 5: bản in A4">
+  <p class="kick">Bước 5</p>
+  <h2 style="max-width:22ch">Bản in A4: khách nhìn tờ giấy, không nhìn app</h2>
+  <div class="split" style="margin-top:18px">
+    <div class="quote">
+      <div class="qh"><b>Cốc Cốc<small>QUẢNG CÁO TRỰC TUYẾN</small></b><span class="doc">BÁO GIÁ<span style="display:block;font-size:8px;font-weight:400;color:var(--muted);letter-spacing:0">Số BG-121126-01</span></span></div>
+      <div class="meta"><span>Ngày gửi 12/11/2026</span><span>Hiệu lực 30 ngày</span><span>Chiến dịch 01/12 – 31/01</span></div>
+      <div class="client">Khách hàng: An Gia Media · Người nhận: Chị Hạnh</div>
+      <table>
+        <thead><tr><th>Hạng mục</th><th>ĐV</th><th class="n">SL</th><th class="n">Đơn giá</th><th class="n">Thành tiền</th></tr></thead>
+        <tbody>
+          <tr><td>Banner trang chủ</td><td>CPM</td><td class="n">1.000.000</td><td class="n">180.000</td><td class="n">180.000.000</td></tr>
+          <tr><td>Pre-roll 15s</td><td>CPM</td><td class="n">500.000</td><td class="n">220.000</td><td class="n">110.000.000</td></tr>
+          <tr><td>Bài PR</td><td>gói</td><td class="n">2</td><td class="n">18.000.000</td><td class="n">36.000.000</td></tr>
+        </tbody>
+      </table>
+      <div class="qsum">
+        <div><span>Tạm tính</span><span>326.000.000</span></div>
+        <div><span>Chiết khấu 8%</span><span>−26.080.000</span></div>
+        <div><span>VAT 10%</span><span>29.992.000</span></div>
+        <div class="tot"><span>Tổng cộng</span><span>329.912.000 đ</span></div>
+      </div>
+      <p class="terms">Giá tính bằng đồng, đã bao gồm VAT. Báo giá áp dụng cho đúng khối lượng và thời gian ghi trên. Thanh toán 50% khi ký hợp đồng, 50% khi kết thúc chiến dịch.</p>
+    </div>
+    <div class="aside"><div class="tag">Giao cho Claude</div><p><b>Việc:</b> thêm bản xem trước và bản in A4: số báo giá, tên khách, bảng hạng mục, tổng, điều khoản, chỗ ký. Khi in thì ẩn nút và ô nhập.</p><p><b>Xong khi:</b> Ctrl P ra đúng một trang.</p><p><b>Không đụng:</b> phần tính tiền.</p></div>
+  </div>
+  <p class="lede" style="margin-top:14px">Số trên giấy và số trong app lấy từ cùng một chỗ.</p>
+</section>
+
+<section class="slide" data-sec="2" data-title="1A. Bước 6: copy tóm tắt">
+  <p class="kick">Bước 6</p>
+  <h2>Copy để dán vào email</h2>
+  <div class="split" style="margin-top:22px">
+    <div>
+      <div class="clipboard">BÁO GIÁ BG-121126-01 — An Gia Media
+Chiến dịch: 01/12/2026 – 31/01/2027
+1. Banner trang chủ (CPM) · 1.000.000 · 180.000.000
+2. Pre-roll 15s (CPM) · 500.000 · 110.000.000
+3. Bài PR (gói) · 2 · 36.000.000
+Tổng: 329.912.000 đ (đã gồm VAT)</div>
+      <div class="prompt" style="margin-top:16px">Việc: thêm nút Copy: tên khách, từng dòng, tạm tính, chiết khấu, VAT, tổng.
+Xong khi: dán vào Zalo, số khớp bản in.
+Không đụng: bản in.</div>
+    </div>
+    <div class="aside"><div class="tag">Vai trò của app</div><p>App không gửi email. Nó viết sẵn đoạn tóm tắt để bạn dán vào Outlook hay Zalo.</p><p>Email và bản in dùng chung một nguồn số, nên không lệch nhau.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="1A. Thử app: khách hỏi ba tháng">
+  <p class="kick">Thử app vừa dựng</p>
+  <h2>Khách hỏi: “nếu chỉ chạy 3 tháng?”</h2>
+  <table class="tbl" style="margin-top:18px">
+    <thead><tr><th></th><th class="n">6 tháng</th><th class="n">3 tháng</th></tr></thead>
+    <tbody>
+      <tr><td>Tạm tính</td><td class="n">810.000.000</td><td class="n">405.000.000</td></tr>
+      <tr><td>Bậc chiết khấu</td><td class="n">11%</td><td class="n">8%</td></tr>
+      <tr><td>Sau chiết khấu</td><td class="n">720.900.000</td><td class="n">372.600.000</td></tr>
+      <tr><td>Mỗi ngày</td><td class="n">4.005.000</td><td class="n"><span class="stamp">4.140.000</span></td></tr>
+    </tbody>
+  </table>
+  <div class="split" style="margin-top:22px">
+    <p class="lede">Cùng format, nửa khối lượng. Giá mỗi ngày sau chiết khấu tăng khoảng 3%, vì bậc tụt từ 11% xuống 8%.</p>
+    <div class="aside"><div class="tag">Đổi một ô</div><p>Không đổi format, chỉ đổi số lượng. Đọc lại tổng và nói giá mỗi ngày.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="1B. Đưa lên mạng">
+  <p class="kick">1B · Publish apps to the Internet</p>
+  <h2>Đưa lên mạng bằng GitHub Pages</h2>
+  <div class="flow">
+    <div class="s"><div class="k">Bước 1</div><h3>Tạo repo</h3><p>Tên <code>bao-gia</code>, chọn Public. Làm trên trình duyệt.</p></div>
+    <div class="s"><div class="k">Bước 2</div><h3>Upload file</h3><p>Add file → Upload files. Kéo <code>app.html</code> vào, Commit.</p></div>
+    <div class="s"><div class="k">Bước 3</div><h3>Bật Pages</h3><p>Settings → Pages. Branch <code>main</code>, thư mục <code>/root</code>. Save.</p></div>
+    <div class="s"><div class="k">Bước 4</div><h3>Nhận link</h3><p>Đợi 1–2 phút. Mở <code>ten.github.io/bao-gia/app.html</code>.</p></div>
+  </div>
+  <div class="split" style="margin-top:34px">
+    <p class="lede">Không cần cài Git. Toàn bộ làm trên trang github.com.</p>
+    <div class="aside"><div class="tag">Đổi lại</div><p>Repo phải public, và mỗi lần sửa phải chờ 1–2 phút. Bù lại: miễn phí, không cần thẻ, link không hết hạn.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="1B. Kiểm trước khi gửi">
+  <h2>Kiểm trước khi gửi khách</h2>
+  <ul class="check">
+    <li><b>In ra PDF, đếm trang.</b> Phải đúng một trang.</li>
+    <li><b>Mở trên điện thoại.</b> Đọc được mà không phải phóng to.</li>
+    <li><b>Nhờ người chưa xem app.</b> Họ đọc đúng tổng tiền trong 10 giây.</li>
+  </ul>
+  <div class="split" style="margin-top:24px">
+    <p class="lede">Một mục hỏng là chưa xong. Sửa rồi upload lại.</p>
+    <div class="aside"><div class="tag">Trước khi gửi</div><p>Pages cần 1–2 phút để cập nhật. Nhiều người mở link ngay, chưa thấy gì và tưởng hỏng.</p><p>Repo public: đừng để tên khách thật trong file.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="1B. Lần sau sửa thế nào">
+  <h2>Lần sau sửa thế nào</h2>
+  <div class="cols">
+    <div>
+      <h3>Sửa app</h3>
+      <p>Nhắn Claude điều muốn đổi. Xong thì upload đè <code>app.html</code> lên repo, Commit.</p>
+      <p class="sm">Ví dụ: thêm dòng “điều khoản thanh toán”, đổi mẫu in, thêm format mới.</p>
+    </div>
+    <div>
+      <h3>Dữ liệu mới</h3>
+      <p>Xuất bảng giá mới. Mở app, bấm Nạp bảng giá.</p>
+      <p class="sm">Không sửa app, không nhập lại từng dòng.</p>
+    </div>
+  </div>
+  <div class="split" style="margin-top:30px">
+    <p class="lede">Sửa file rồi upload lại. Pages tự build, không có lệnh cài.</p>
+    <div class="aside"><div class="tag">Sau khi sửa</div><p>Đợi 1–2 phút, mở lại link, in thử, kiểm tổng. Còn bản cũ thì <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>R</kbd>.</p></div>
+  </div>
+</section>
+
+</div></div>
+
+<nav id="nav"><a id="b-home" href="https://coccoc.atento.vn/" aria-label="Về trang chủ chương trình" title="Về trang chủ coccoc.atento.vn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h5v-6h4v6h5V9"/></svg></a><button id="b-prev" aria-label="Slide trước">‹</button><button id="b-next" aria-label="Slide sau">›</button></nav>
+<div id="blackout"></div>
+<div id="overview" class="panel"><h2>Tất cả slide <span style="font-weight:400;color:#9DBBA6;font-size:15px">Bấm để chuyển, Esc để đóng</span></h2><div class="grid" id="ov-grid"></div></div>
+<div id="help" class="panel"><h2>Phím tắt</h2>
+  <div class="row"><span>Tiếp, lùi</span><span><kbd>→</kbd> <kbd>Space</kbd>, <kbd>←</kbd></span></div>
+  <div class="row"><span>Nút ‹ ›</span><span>góc dưới bên phải</span></div>
+  <div class="row"><span>Trang chủ</span><span>bấm logo, hoặc nút ⌂</span></div>
+  <div class="row"><span>Về đầu, tới cuối</span><span><kbd>Home</kbd>, <kbd>End</kbd></span></div>
+  <div class="row"><span>Toàn màn hình</span><span><kbd>F</kbd></span></div>
+  <div class="row"><span>Danh sách slide</span><span><kbd>O</kbd></span></div>
+  <div class="row"><span>Màn hình đen</span><span><kbd>B</kbd></span></div>
+  <div class="row"><span>In ra PDF</span><span><kbd>Ctrl</kbd> <kbd>P</kbd></span></div>
+</div>
+
+<script>window.DECK_SECTIONS=['Đích đến','Dựng app','Bản gửi khách','Publish'];</script>
+<script src="slide.js"></script>
+</body>
+</html>

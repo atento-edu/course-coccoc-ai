@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Atento × Cốc Cốc — Chương trình đào tạo AI 2 buổi</title>
-<meta name="description" content="Chương trình đào tạo AI 2 buổi cho Cốc Cốc: buổi 1 vận hành và office, buổi 2 build app CRM bằng Claude Code và deploy lên internet.">
+<meta name="description" content="Chương trình đào tạo AI 2 buổi cho Cốc Cốc: buổi 1 vận hành và office, buổi 2 dựng app báo giá bằng Claude Code rồi đưa lên mạng.">
 <meta name="theme-color" content="#25AF50">
 <meta property="og:title" content="Atento × Cốc Cốc — Chương trình đào tạo AI 2 buổi">
-<meta property="og:description" content="Buổi 1: vận hành và office. Buổi 2: build app CRM bằng Claude Code và deploy lên internet.">
+<meta property="og:description" content="Buổi 1: vận hành và office. Buổi 2: dựng app báo giá bằng Claude Code và đưa lên mạng.">
 <meta property="og:type" content="website">
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg?v=2">
@@ -80,6 +80,10 @@ a{color:inherit}
   transition:transform .2s var(--ease),background .2s;
 }
 .top-cta:hover{background:var(--green-2);transform:translateY(-1px)}
+.apps{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.apps .top-cta{margin-left:0;display:inline-block}
+.top-cta.alt{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.top-cta.alt:hover{background:var(--ink);color:#fff}
 
 /* ---------- hero ---------- */
 .hero{position:relative;overflow:hidden;padding:clamp(52px,8vw,96px) 0 clamp(36px,5vw,56px)}
@@ -361,7 +365,7 @@ td.res{color:var(--ink-2);width:48%}
       <a href="#b1">Buổi 1</a>
       <a href="#b2">Buổi 2</a>
     </nav>
-    <a class="top-cta" href="/crm" target="_blank" rel="noopener">Demo CRM ↗</a>
+    <a class="top-cta" href="#b2">Apps ↓</a>
   </div>
 </header>
 
@@ -490,60 +494,51 @@ td.res{color:var(--ink-2);width:48%}
   <div class="wrap prog">
     <aside class="side rv">
       <div class="s-label"><span class="num">03</span> Buổi 2</div>
-      <h2>Claude Code: từ bảng tính đến app CRM</h2>
-      <p>Buổi này không dạy code. Một nhóm không chuyên tự viết spec, đọc diff, kiểm thử và đưa một app CRM lên internet. Case chung là CRM bán quảng cáo Cốc Cốc, cùng bộ dữ liệu với Buổi 1; mỗi nhóm làm một lát cắt và deploy thành một đường link.</p>
-      <a class="top-cta" href="/crm" target="_blank" rel="noopener" style="display:inline-block">Mở demo CRM ↗</a>
+      <h2>Claude Code: từ bảng giá đến tờ báo giá in được</h2>
+      <p>Ba phần: lý thuyết Claude Code, dựng app báo giá bằng một file HTML rồi đưa lên Internet, và kiến trúc của một website.</p>
+      <div class="apps">
+        <a class="top-cta" href="buoi-2/mau/app-hoan-chinh.html" target="_blank" rel="noopener">App báo giá ↗</a>
+        <a class="top-cta" href="buoi-2/mau/bao-cao-chien-dich.html" target="_blank" rel="noopener">Báo cáo chiến dịch ↗</a>
+        <a class="top-cta" href="buoi-2/mau/media-plan.html" target="_blank" rel="noopener">Media plan ↗</a>
+        <a class="top-cta" href="buoi-2/mau/xem-truoc-quang-cao.html" target="_blank" rel="noopener">Xem trước quảng cáo ↗</a>
+        <a class="top-cta alt" href="/crm" target="_blank" rel="noopener">App CRM ↗</a>
+      </div>
     </aside>
 
     <ol class="timeline">
-      <li class="tl-group rv">Phần 0 · Đọc trước</li>
+      <li class="tl-group rv">Phần 0 · Lý thuyết</li>
       <li class="tl rv">
         <div class="tl-num">00</div>
         <div>
-          <h3 class="tl-title">Làm quen Claude Code</h3>
-          <p>Chat vs Code, cài đặt, vòng lặp, đọc diff, quyền, hoàn tác, lỗi thường gặp và an toàn dữ liệu. Gửi đọc trước buổi.</p>
+          <h3 class="tl-title">Claude Code</h3>
+          <p>Claude Code khác Chat thế nào, cách nó làm việc, thư mục dự án và CLAUDE.md, cài đặt, vòng lặp giao việc bốn bước.</p>
           <a class="tl-link" href="buoi-2/phan-0-claude-code.html">Slide →</a>
         </div>
       </li>
-      <li class="tl-group rv">Phần 1 · Vào việc</li>
+      <li class="tl-group rv">Phần 1 · Build apps</li>
       <li class="tl rv">
         <div class="tl-num">01</div>
         <div>
-          <h3 class="tl-title">Kiểm tra máy và vào việc</h3>
-          <p>Checklist máy, vòng lặp 4 bước, quyền và an toàn, demo đầu tiên, commit.</p>
-          <a class="tl-link" href="buoi-2/phan-1-claude-code.html">Slide →</a>
+          <h3 class="tl-title">Build HTML apps</h3>
+          <p>Dựng app báo giá trong một file HTML: nạp bảng giá CSV, tính thành tiền, chiết khấu theo bậc và trần, in một trang A4.</p>
+          <a class="tl-link" href="buoi-2/phan-1-build-apps.html">Slide →</a>
         </div>
       </li>
       <li class="tl rv">
         <div class="tl-num">02</div>
         <div>
-          <h3 class="tl-title">Kiến trúc một website</h3>
-          <p>Frontend, backend, database và API: mỗi phần làm gì, ghép với nhau ra sao.</p>
-          <a class="tl-link" href="buoi-2/phan-2-kien-truc.html">Slide →</a>
+          <h3 class="tl-title">Publish apps to the Internet</h3>
+          <p>Đưa app lên GitHub Pages để có một link gửi khách, kiểm trước khi gửi, sửa và cập nhật về sau.</p>
+          <a class="tl-link" href="buoi-2/phan-1-build-apps.html#13">Slide →</a>
         </div>
       </li>
+      <li class="tl-group rv">Phần 2 · Advanced</li>
       <li class="tl rv">
         <div class="tl-num">03</div>
         <div>
-          <h3 class="tl-title">Chọn bài toán và viết spec</h3>
-          <p>Chọn một lát cắt của CRM; mô tả đầu vào, đầu ra và tiêu chí đúng.</p>
-          <a class="tl-link" href="buoi-2/phan-3-spec.html">Slide →</a>
-        </div>
-      </li>
-      <li class="tl rv">
-        <div class="tl-num">04</div>
-        <div>
-          <h3 class="tl-title">Xây dựng và kiểm thử app</h3>
-          <p>Dựng app CRM theo spec: lead, deal, khách hàng, hoạt động; kiểm tra trên dữ liệu mô phỏng và sửa lỗi.</p>
-          <a class="tl-link" href="buoi-2/phan-4-build.html">Slide →</a>
-        </div>
-      </li>
-      <li class="tl rv">
-        <div class="tl-num">05</div>
-        <div>
-          <h3 class="tl-title">Đưa app lên internet</h3>
-          <p>GitHub → Vercel + Postgres, biến môi trường, migrate, mật khẩu, tên miền, lịch chạy và cách rollback.</p>
-          <a class="tl-link" href="buoi-2/phan-5-deploy.html">Slide →</a>
+          <h3 class="tl-title">Kiến trúc của một website</h3>
+          <p>Tên miền, DNS, hosting, HTML/CSS/JS, bốn tầng FE/API/BE/DB, và khi nào một file HTML không còn đủ cho cả team.</p>
+          <a class="tl-link" href="buoi-2/phan-2-kien-truc.html">Slide →</a>
         </div>
       </li>
     </ol>

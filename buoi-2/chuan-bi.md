@@ -4,72 +4,71 @@ Tài liệu cho giảng viên và trợ giảng. Không đưa vào image của t
 
 ## 1. Chốt trước buổi
 
-- [ ] Chốt số học viên, chia 4 nhóm, mỗi nhóm có một người dùng máy khỏe.
-- [ ] Chốt case: CRM bán quảng cáo Cốc Cốc, cùng bộ dữ liệu Buổi 1. Không dùng
-      social listening vì Facebook chặn public group và dễ đụng ToS.
-- [ ] Chốt đích đến: mỗi nhóm có một đường link công khai, có mật khẩu, có dữ liệu.
-- [ ] Xác nhận Cốc Cốc cho phép dùng Vercel/Neon hay cần môi trường nội bộ.
+- [ ] Chốt số học viên và cách chia cặp (một người dùng máy khỏe ngồi cạnh một người mới).
+- [ ] Chốt case: báo giá, dùng bảng giá mẫu 12 dòng.
+- [ ] Chốt đích đến: mỗi người in được một tờ báo giá đúng số và có một link.
+- [ ] Chốt host: một repo GitHub cho lớp, hoặc tài khoản GitHub của giảng viên.
+- [ ] Xác nhận tài khoản Claude của học viên mở được tab Code.
 
 ## 2. Máy học viên
 
 Kiểm tra trước buổi, không kiểm tra tại lớp:
 
-- [ ] Node 20 trở lên, npm chạy được.
-- [ ] Git và tài khoản GitHub đăng nhập sẵn.
-- [ ] Docker chạy được (dùng cho Postgres local).
-- [ ] Claude Code đã cài và đăng nhập; thử `claude --version`.
-- [ ] Mở được terminal tại thư mục dự án, chạy `npm install` không lỗi quyền.
-- [ ] Trình duyệt Chrome/Edge bản mới; có DevTools.
+- [ ] App Claude đã cài và đăng nhập.
+- [ ] Mở được tab Code, không phải tab Chat.
+- [ ] Thư mục `bao-gia` đã tải về, gồm `app.html`, `bang-gia.csv`, `CLAUDE.md`.
+- [ ] Trình duyệt Chrome/Edge bản mới.
+- [ ] Đã thử nhắn Claude một câu trong tab Code.
 
-## 3. Tài khoản và repo
+Không cần Node, npm, Git, Docker, tài khoản Vercel/Neon.
 
-- [ ] Tạo 4 repo GitHub từ template `buoi-2/crm-app/`, mời nhóm làm cộng tác viên.
-- [ ] Tạo 4 project Neon (Postgres), mỗi nhóm một project, lấy connection string.
-- [ ] Tạo 4 project Vercel, nối với repo, set biến môi trường.
-- [ ] Tạo sẵn một app đã deploy để chiếu dự phòng nếu mạng lớp hỏng.
-- [ ] Kiểm tra mạng lớp: GitHub, Vercel, Neon, npm registry không bị chặn.
+## 3. Host và dự phòng
+
+- [ ] Tạo sẵn repo `bao-gia-demo` (Public) và bật Pages, để chiếu mẫu khi mạng lớp hỏng.
+- [ ] Đặt sẵn `mau/app-hoan-chinh.html` trên repo demo để chiếu khi mạng lớp hỏng.
+- [ ] Nhắc học viên: repo Pages là public, đừng để tên khách thật trong file HTML.
+- [ ] Muốn link gọn (không có `/app.html`) thì đặt tên file trên repo là `index.html`.
+      Trên slide dạy tên `app.html` cho khớp file local; nói miệng phần này nếu có người hỏi.
+- [ ] Kiểm tra mạng lớp: github.com, `*.github.io` và trang chương trình.
+- [ ] Chuẩn bị USB hoặc thư mục chia sẻ chứa bộ file mẫu.
+- [ ] Máy in hoặc một máy có driver PDF để chiếu phần in A4.
 
 ## 4. Dữ liệu và app mẫu
 
-- [ ] 4 file CSV nằm trong `crm-app/data/`: customers, deals, leads, activities.
-- [ ] Chạy thử từ máy sạch:
-  ```bash
-  cd buoi-2/crm-app
-  docker compose up -d
-  npm install
-  npm run db:push
-  npm run db:seed
-  npm run dev
-  ```
-- [ ] Đăng nhập thử cả ba vai trò: Quản lý, Quản trị, Sales.
-- [ ] Thử tạo lead, giao sales, chuyển thành deal, ghi hoạt động, chuyển giai đoạn.
-- [ ] Thử cron: `curl -H "Authorization: Bearer $CRON_SECRET" .../api/cron/digest`.
-- [ ] Chụp lại màn hình nếu cần; ảnh mẫu đã có trong `buoi-2/img/`.
+- [ ] `mau/bang-gia.csv` có 12 dòng, đúng cột bảng giá thật.
+- [ ] **Không dùng bảng giá thật** trong file phát cho học viên. Số trong CSV là số mẫu.
+- [ ] Mở `mau/app-hoan-chinh.html`, thử: nạp CSV, thêm dòng, xoá dòng, đổi số lượng.
+- [ ] Thử một đơn vượt trần (ví dụ 616 triệu với Pre-roll) để thấy dòng cảnh báo.
+- [ ] Bấm In PDF, kiểm tra đúng một trang A4.
+- [ ] Chạy thử 6 prompt trên một máy sạch, bấm giờ.
+- [ ] Chuẩn bị 3–4 bản `app.html` đã dựng dở cho người tụt lại.
 
 ## 5. Trong buổi
 
 | Phút | Việc | Ghi chú |
 |---|---|---|
-| 0–10 | Demo lead từ điện thoại → dashboard | Chiếu app đã deploy, không chạy local |
-| 10–30 | Phần 1: kiểm tra máy và vào việc | Mỗi máy phải chạy được repo mẫu |
-| 30–55 | Phần 2: kiến trúc + deploy bộ khung | Deploy ngay, chưa cần DB đúng |
-| 55–75 | Phần 3: chốt lát cắt + spec | Thu spec trước khi code |
-| 75–130 | Phần 4: build + test | Trợ giảng đi từng nhóm |
-| 130–170 | Phần 5: deploy thật + cron + bảo vệ | Dùng runbook trong `crm-app/README.md` |
-| 170–180 | Nhóm khác dùng thử, ghi lỗi | Mỗi nhóm ghi 3 lỗi |
+| 0–8 | Chiếu app, in thử một tờ | Không giải thích code |
+| 8–28 | Cài đặt, chọn thư mục, đổi tiêu đề | Ai xong trước thì làm tiếp |
+| 28–42 | Spec ba dòng, hoàn tác | Thu spec trước khi giao việc |
+| 42–52 | Ba phần của app | Cắt còn 5 phút nếu chậm |
+| 52–95 | Nạp bảng giá, thêm dòng, tính tiền, chiết khấu | Trợ giảng đi từng cặp |
+| 105–140 | Bản in, câu hỏi 3 tháng, copy tóm tắt | Phần quyết định app có dùng được |
+| 140–152 | Ba câu kiểm số | Học viên tự bấm, không đọc code |
+| 152–170 | GitHub Pages, mở thử, kiểm trước khi gửi | Không cắt phần này |
+| 170–180 | Việc đáng làm app, 7 ngày | Giao việc cụ thể |
 
 ## 6. Câu hỏi nên hỏi trên lớp
 
-- “Việc này Excel làm được không? Nếu được thì đừng build app.”
-- “Dữ liệu này vào app bằng cách nào? Ai nhập? Có kiểm tra gì?”
-- “Nếu sales A mở link của sales B thì chuyện gì xảy ra?”
-- “Deploy xong, làm sao biết app còn sống?”
-- “Nếu bản mới hỏng, rollback bằng cách nào?”
-- “Dữ liệu thật có được đưa lên bản demo không?”
+- “Báo giá này Excel làm được không? Nếu được thì đừng dựng app.”
+- “Ai sở hữu bảng giá? Bao lâu đổi một lần?”
+- “Khách đổi khối lượng thì mất bao lâu để ra con số mới?”
+- “Nếu bậc nói 11% mà format chỉ cho 10%, ai duyệt?”
+- “Bản in này gửi khách được chưa, hay còn phải sửa tay?”
+- “Cái này có thay hệ thống giá không?”
 
 ## 7. Sau buổi
 
-- [ ] Gửi lại slide, link app mẫu, repo template và runbook deploy.
-- [ ] Ghi danh sách lỗi các nhóm gặp để sửa template.
-- [ ] Nhắc học viên tắt project Vercel/Neon không dùng để tránh phí.
-- [ ] Chốt việc tiếp theo: nhóm nào muốn đưa lát cắt vào công việc thật.
+- [ ] Gửi lại slide, link app mẫu và file CSV.
+- [ ] Ghi danh sách lỗi các cặp gặp để sửa file mẫu.
+- [ ] Nhắc học viên làm ba báo giá thật trong tuần.
+- [ ] Chốt việc tiếp theo: ai muốn đưa app vào quy trình báo giá thật.

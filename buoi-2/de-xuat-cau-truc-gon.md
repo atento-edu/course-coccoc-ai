@@ -54,18 +54,19 @@ Vấn đề không phải nội dung dở. Nội dung tốt nhưng **quá nhiề
 
 Giữ câu định vị cũ: **Excel để phân tích. App để vận hành.**
 
-Nhưng sản phẩm cuối buổi đổi từ "CRM đầy đủ" thành:
+Nhưng sản phẩm cuối buổi đổi từ "CRM đầy đủ" thành một việc hẹp hơn, làm nhiều lần
+trong tuần:
 
-> **CRM Hôm nay — bản 1 màn hình.** Một danh sách khách, một form cập nhật,
-> một câu trả lời cho "hôm nay gọi ai", một link công khai.
+> **Báo giá — một màn hình.** Chọn format từ bảng giá, ra thành tiền, áp chiết khấu,
+> in một tờ A4 gửi khách, và có một link công khai.
 
 | Trên lớp | Để demo / tự học |
 |---|---|
-| 1 bảng khách lấy từ CSV Buổi 1 | 6 bảng, quan hệ phức tạp |
-| 1 màn hình danh sách + tìm/lọc | 10 màn hình |
-| 1 form thêm/cập nhật | Kanban, báo cáo, audit log |
-| 1 trạng thái + 1 ngày gọi cuối | Đăng nhập, phân quyền theo dòng |
-| 1 câu "hôm nay gọi ai" | Cron 7:00, email, Zalo |
+| 1 bảng giá 12 dòng từ CSV | Bảng giá đầy đủ, nhiều ngành, nhiều đợt |
+| 1 màn hình nhập + bản xem trước | 10 màn hình quản trị giá |
+| 1 công thức thành tiền theo đơn vị | Đấu thầu, giá theo gói, giá theo mùa |
+| 1 bậc chiết khấu + trần từng format | Luồng duyệt nhiều cấp, lịch sử sửa giá |
+| 1 bản in A4 | Template theo khách, đa ngôn ngữ, phụ lục |
 | 1 lần deploy | Tên miền riêng, rollback, chi phí |
 | 3 quy tắc an toàn | 5 điều không làm, prompt injection |
 | 1 vòng lặp 4 bước | 6 kiểu hỏng, 5 loại kiểm thử |
@@ -76,50 +77,49 @@ Giảng viên mở **bản CRM đầy đủ** ở 5 phút cuối như "viễn c�
 
 | Phút | Phần | Việc | Sản phẩm |
 |---|---|---|---|
-| 0–8 | Đích đến | Demo: mở link, thêm khách, thấy "hôm nay gọi ai" | Học viên thấy đích |
-| 8–28 | Thắng lần đầu | Mở repo, sửa một câu, xem diff, hoàn tác, commit | 1 thay đổi + 1 commit |
-| 28–40 | Bản đồ | 4 khái niệm: file, app, database, internet; vòng lặp 4 bước | Trả lời được "app gồm gì" |
-| 40–85 | Build 1 | CSV → bảng → danh sách khách + tìm/lọc | Trang danh sách chạy |
-| 85–95 | Nghỉ | | |
-| 95–135 | Build 2 | Form cập nhật + trạng thái + "hôm nay gọi ai" | Một vòng vận hành |
-| 135–153 | Kiểm thử | 5 câu test, sửa một lỗi cố ý, commit | App đúng |
-| 153–173 | Deploy | Template → Vercel, dán link, smoke test 3 mục | 1 URL |
-| 173–180 | Chốt | 2 nhóm demo, cheat sheet, việc sau buổi | Đường đi tiếp |
+| 0–8 | Mở đầu | Chiếu app, in thử một tờ | Học viên thấy đích |
+| 8–28 | Bắt đầu | Cài đặt, mở tab Code, chọn thư mục, đổi một câu | Máy sẵn sàng |
+| 28–42 | Vòng lặp | Viết spec ba dòng, chạy thử, hoàn tác | 1 thay đổi chạy được |
+| 42–52 | Bản đồ | 3 phần: trang, dữ liệu, quy tắc | Trả lời được "app gồm gì" |
+| 52–95 | Bảng giá | Nạp CSV → thêm dòng → tính tiền → chiết khấu và trần | Ra đúng con số |
+| 95–105 | Nghỉ | | |
+| 105–140 | Báo giá | Bản in A4, câu hỏi "nếu 3 tháng", copy tóm tắt | Một tờ gửi được |
+| 140–152 | Kiểm | 3 câu kiểm số, báo lỗi bằng bằng chứng | Số đúng |
+| 152–170 | Lên mạng | GitHub Pages, mở thử, kiểm trước khi gửi | 1 link |
+| 170–180 | Chốt | Việc đáng làm app, cheat sheet, 7 ngày | Đường đi tiếp |
 
-Tỷ lệ: **~140 phút làm, ~40 phút giảng**. Hiện tại đang ngược lại.
+Tỷ lệ: **~145 phút làm, ~35 phút giảng**.
 
-## 7. Cấu trúc slide mới: 38 slide (thay vì 96)
+## 7. Cấu trúc slide đang dùng: 32 slide
 
-Đã viết thành 3 file: `00-doc-truoc.html` (7 slide), `01-buoi-hoc.html` (31 slide),
-`02-cheat-sheet.html` (1 trang A4).
+Đã viết thành 2 file: `01-buoi-hoc.html` (32 slide), `02-cheat-sheet.html` (1 trang A4).
+Không có phần đọc trước: cài đặt và làm quen dạy ngay đầu buổi 3 giờ.
 
 | Phần | Slide | Nội dung | Sản phẩm |
 |---|---|---|---|
-| Đọc trước | 7 | Code khác Chat; một dự án là một thư mục; cài đặt; ba lệnh; vòng lặp; checklist | Máy sẵn sàng |
-| 1. Đích đến | 3 | Câu định vị; demo; "bạn sẽ có gì" | Thấy đích |
-| 2. Thắng lần đầu | 5 | Vòng lặp 4 bước; sửa 1 câu; đọc diff; undo; commit | 1 commit |
-| 3. Bản đồ | 6 | Bốn chỗ của app; một lần bấm Lưu; một bảng khách; Excel chính là database; máy vs internet | Hiểu 4 khái niệm |
-| 4. Build 1 | 5 | CSV → database; danh sách; tìm/lọc; kiểm; commit | Danh sách chạy |
-| 5. Build 2 | 4 | Form; "hôm nay gọi ai"; thử một vòng | Một vòng vận hành |
-| 6. Kiểm thử + deploy | 5 | 4 câu test; báo lỗi; deploy 3 bước; smoke test; bảo vệ demo | 1 link |
-| 7. Chốt | 2 | Bản đầy đủ để làm gì tiếp; mang về | Việc sau buổi |
+| 0. Bắt đầu | 5 | Chat khác Code; một dự án là một thư mục; cài đặt; Claude hỏi trước khi sửa; checklist máy | Máy sẵn sàng |
+| 1. Đích đến | 3 | Mở bản hoàn chỉnh; phạm vi; cuối buổi có gì | Thấy đích |
+| 2. Vòng lặp | 4 | Bốn bước; đổi một câu; spec ba dòng; hoàn tác | 1 thay đổi chạy được |
+| 3. Bản đồ | 4 | Ba phần của app; bảng giá là dữ liệu; máy và mạng | Hiểu app gồm gì |
+| 4. Bảng giá | 5 | Nạp CSV; đơn vị và thành tiền; bậc chiết khấu và trần; kiểm số | Ra đúng con số |
+| 5. Báo giá | 4 | Bản in A4; câu hỏi “nếu 3 tháng”; copy tóm tắt | Một tờ gửi được |
+| 6. Lên mạng | 3 | GitHub Pages; kiểm trước khi gửi; sửa về sau | 1 link |
+| 7. Chốt | 3 | Khi cả team cần dùng; việc nào đáng làm app; mang về | Việc sau buổi |
 
-Mỗi phần mở bằng "Sau 20 phút, bạn có: …" và kết bằng checklist 3 ô.
+Mỗi phần mở bằng một slide chuyển ý (trừ phần 0 và phần 7) và kết bằng một việc
+học viên tự bấm được. Case đổi từ bảng gọi khách sang báo giá vì tần suất và chi phí
+sai cao hơn: mỗi rep 3–10 báo giá một tuần, 20–60 phút mỗi lần.
 
 ## 8. Cắt gì, giữ gì
 
 **Giữ trên lớp**
+- Code khác Chat; cài đặt, quyền, checklist máy ở đầu buổi.
 - Vòng lặp: giao việc → xem thay đổi → chạy thử → chốt.
-- Đọc diff trước khi đồng ý; hoàn tác bằng commit.
+- Spec ba dòng trước khi giao việc; hoàn tác bằng Claude.
 - 4 khái niệm: file, app, database, internet.
 - Một màn hình, một form, một câu hỏi vận hành.
 - Deploy một lần, ba bước.
 - Ba quy tắc an toàn: dữ liệu giả, không dán bí mật, không bấm Yes mù.
-
-**Chuyển sang đọc trước**
-- Cài đặt, quyền, checklist máy.
-- Code khác Chat ở đâu.
-- 3 lệnh terminal đủ dùng.
 
 **Chuyển sang tài liệu tự học (1 trang PDF, không lên lớp)**
 - CLAUDE.md, skill, MCP, subagent, hook.
@@ -140,7 +140,7 @@ Mỗi phần mở bằng "Sau 20 phút, bạn có: …" và kết bằng checkli
 2. **Mỗi slide một ý**, tối đa 3 dòng, một hình hoặc một sơ đồ.
 3. **Từ kỹ thuật xuất hiện một lần**, in đậm, kèm một câu giải thích và chữ
    "(không cần nhớ)".
-4. **Một ví dụ CRM từ đầu đến cuối**, một phép so sánh nhà hàng từ đầu đến cuối.
+4. **Một ví dụ báo giá từ đầu đến cuối**, một phép so sánh nhà hàng từ đầu đến cuối.
    Không đổi metaphor giữa chừng.
 5. **Một con số cho mỗi thứ**: 4 bước, 3 câu hỏi, 3 quy tắc, 1 link. Bỏ các bộ
    "5 loại / 6 kiểu / 7 bước / 10 mục".
@@ -154,9 +154,9 @@ Mỗi phần mở bằng "Sau 20 phút, bạn có: …" và kết bằng checkli
 3. Có bỏ 4 nhóm/lát cắt không? (Đề xuất: bỏ; nhóm chỉ để hỗ trợ nhau.)
 4. Deploy bằng template dựng sẵn + tài khoản tạo trước được không? (Đề xuất: có.)
 
-Chốt xong thì viết lại thành 3 file: `00-doc-truoc.html` (7 slide),
-`01-buoi-hoc.html` (31 slide), `02-cheat-sheet.html` (1 trang). Bản cũ giữ nguyên
-trong thư mục để đối chiếu. **Đã thực hiện.**
+Chốt xong thì viết lại thành 2 file: `01-buoi-hoc.html` (32 slide),
+`02-cheat-sheet.html` (1 trang). Bản cũ 5 phần đã xoá.
+**Đã thực hiện.**
 
 ## Nguồn
 

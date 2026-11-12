@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buổi 2 · Báo giá trong 15 phút</title>
+<meta name="description" content="Demo 15 phút: Claude Code khác Chat thế nào, dựng một trang báo giá từ trang trắng, đưa lên GitHub Pages, và kiến trúc FE/BE/DB đằng sau.">
+<meta name="theme-color" content="#F4F6EC">
+<link rel="icon" href="../assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="slide.css">
+<style>
+.trk{grid-template-columns:repeat(5,auto)}
+.cols .k{font-size:12px;font-weight:600;color:var(--green-deep);margin:0 0 6px;letter-spacing:.02em}
+.p2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:26px}
+.p2 .prompt{margin-top:0;font-size:16px;line-height:1.6;padding:18px 20px}
+.p2 .lab{font-size:12px;font-weight:600;color:var(--green-deep);margin:0 0 7px}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="viewport"><div id="stage">
+
+<section class="slide cover" data-title="Bìa">
+  <div class="head">
+    <div>
+      <p class="kick">Claude Code cho Sales · Demo 15 phút</p>
+      <h1>Báo giá<br>trong 15 phút</h1>
+      <p class="lede">Từ trang trắng đến một tờ báo giá mở được trên mạng. Một file HTML, một link, không cài thêm gì.</p>
+      <p class="meta">Atento × Cốc Cốc. Buổi học đầy đủ 30–45 phút.</p>
+    </div>
+    <div>
+      <div class="quotecard">
+        <div class="qh"><b>Cốc Cốc<small>BÁO GIÁ · BG-121126-01</small></b><span class="doc">A4 · 1 TRANG</span></div>
+        <div class="r"><span>Banner trang chủ</span><span>180.000.000</span></div>
+        <div class="r"><span>Pre-roll 15s</span><span>110.000.000</span></div>
+        <div class="r"><span>Bài PR × 2</span><span>36.000.000</span></div>
+        <div class="r"><span>Tạm tính</span><span>326.000.000</span></div>
+        <div class="r neg"><span>Chiết khấu 8%</span><span>−26.080.000</span></div>
+        <div class="r tot"><span>Tổng, gồm VAT</span><span>329.912.000</span></div>
+      </div>
+      <p class="cap">Bản in từ app. Số liệu mẫu.</p>
+    </div>
+  </div>
+  <div class="keys"><span><kbd>→</kbd> sang slide</span><span><kbd>F</kbd> toàn màn hình</span><span><kbd>O</kbd> danh sách slide</span></div>
+</section>
+
+<section class="slide" data-sec="0" data-title="Mở app mẫu">
+  <p class="kick">Mở app mẫu</p>
+  <h2>Ba thứ, ba mức độ.</h2>
+  <div class="cols three" style="margin-top:34px">
+    <div>
+      <div class="k">01 · Hôm nay</div>
+      <h3>App báo giá</h3>
+      <p>Một file HTML. Chọn hàng, nhập số lượng, ra tờ báo giá in được.</p>
+      <p class="sm">Học viên tự làm trong 15 phút.</p>
+    </div>
+    <div>
+      <div class="k">02 · Viễn cảnh</div>
+      <h3>Demo CRM</h3>
+      <p>Nhiều màn hình, dữ liệu dùng chung, có phân quyền.</p>
+      <p class="sm">FE + BE + DB. Cả team dùng.</p>
+    </div>
+    <div>
+      <div class="k">03 · Tiếp theo</div>
+      <h3>App chúng ta sẽ làm</h3>
+      <p>Báo cáo cuối chiến dịch, radar gia hạn, checklist tuần.</p>
+      <p class="sm">Cùng một cách làm, việc khác.</p>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:40px;max-width:62ch">Hôm nay làm cái thứ nhất. Hiểu cái thứ hai. Chọn cái thứ ba.</p>
+</section>
+
+<section class="slide" data-sec="1" data-title="Chat và Code">
+  <p class="kick">Phần 1 · Claude Code là gì</p>
+  <h2>Chat trả lời. Code sửa file.</h2>
+  <div class="ledger">
+    <div class="r"><b>Chat</b><span>Bạn hỏi, nó trả lời trong khung chat. File trên máy vẫn nguyên.<em>Dùng để nghĩ, viết, tóm tắt.</em></span></div>
+    <div class="r"><b>Claude Code</b><span>Nó mở thư mục, đọc file, sửa file và chạy thử. Bạn xem thay đổi rồi mới đồng ý.<em>Dùng để làm ra một thứ chạy được.</em></span></div>
+  </div>
+  <div class="split" style="margin-top:26px">
+    <p class="lede">Khác biệt nằm ở quyền ghi file, không phải ở model.</p>
+    <div class="aside"><div class="tag">Vì sao sales làm được</div><p>Không cần học cú pháp. Cần nói đúng việc và đọc đúng kết quả.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="Bốn tính năng">
+  <p class="kick">Phần 1 · Tính năng đủ dùng</p>
+  <h2>Bốn thứ làm nên khác biệt</h2>
+  <div class="flow">
+    <div class="s"><div class="k">01</div><h3>Đọc cả thư mục</h3><p>Hiểu file nào liên quan, không cần bạn dán từng đoạn.</p></div>
+    <div class="s"><div class="k">02</div><h3>Sửa nhiều file</h3><p>Một câu, nó đổi HTML, CSS và dữ liệu cùng lúc.</p></div>
+    <div class="s"><div class="k">03</div><h3>Chạy thử</h3><p>Mở trình duyệt, thấy kết quả, không phải tưởng tượng.</p></div>
+    <div class="s"><div class="k">04</div><h3>Hỏi trước, hoàn tác</h3><p>Xem thay đổi rồi mới đồng ý. Sai thì lùi.</p></div>
+  </div>
+  <div class="split" style="margin-top:38px">
+    <p class="lede">Không cần nhớ tên tính năng. Cần biết nó làm được gì.</p>
+    <div class="aside"><div class="tag">Giới hạn</div><p>Nó không tự biết giá, không tự biết luật công ty. Bạn phải đưa vật liệu.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="1" data-title="Công thức giao việc">
+  <p class="kick">Phần 1 · Cách giao việc</p>
+  <h2>Bốn dòng trước khi bấm Enter</h2>
+  <div class="split" style="margin-top:16px">
+    <div class="ticket">
+      <div class="line"><b>Vật liệu</b><span>file, bảng giá, ảnh mẫu, đường dẫn.</span></div>
+      <div class="line"><b>Việc</b><span>một việc, một câu, không gộp ba việc.</span></div>
+      <div class="line"><b>Xong khi</b><span>ba điều kiện bạn tự kiểm được.</span></div>
+      <div class="line"><b>Không đụng</b><span>phần đang đúng, để nó khỏi sửa lan.</span></div>
+    </div>
+    <div class="aside"><div class="tag">Đủ để làm, đủ để kiểm</div><p>Thiếu “xong khi”, nó làm xong mà bạn không biết đã đúng chưa.</p><p>Thiếu “không đụng”, nó sửa cả phần bạn không nhờ.</p></div>
+  </div>
+  <div class="prompt" style="font-size:16px;line-height:1.6;margin-top:20px">Vật liệu: index.html đang mở.
+Việc: thêm bảng 3 dòng hàng, mỗi dòng có tên, số lượng, đơn giá.
+Xong khi: bấm Tính, thấy thành tiền từng dòng và tổng.
+Không đụng: tiêu đề và màu.</div>
+</section>
+
+<section class="slide" data-sec="2" data-title="15 phút làm app">
+  <p class="kick">Phần 2 · Làm app</p>
+  <h2>15 phút, từ trang trắng</h2>
+  <div class="flow three" style="margin-top:32px">
+    <div class="s"><div class="k">0–4 phút</div><h3>Trang nhập</h3><p>Tên khách, ba dòng hàng, nút Tính. Chưa cần đẹp.</p></div>
+    <div class="s"><div class="k">4–11 phút</div><h3>Ra con số</h3><p>Thành tiền từng dòng, tổng, định dạng tiền Việt.</p></div>
+    <div class="s"><div class="k">11–15 phút</div><h3>Có link</h3><p>Đưa lên GitHub Pages. Mở trên máy khách.</p></div>
+  </div>
+  <div class="split" style="margin-top:34px">
+    <p class="lede">Mỗi người tự làm. Giảng viên đi từng cặp.</p>
+    <div class="aside"><div class="tag">Cắt để kịp</div><p>Không CSV, không chiết khấu, không bản in A4, không đăng nhập.</p><p>Bốn thứ đó để bản 30–45 phút.</p></div>
+  </div>
+  <div class="warnbox" style="margin-top:22px"><b>15 phút chỉ đủ một đường thẳng:</b> nhập → tính → link. Ai xong trước thì thêm.</div>
+</section>
+
+<section class="slide" data-sec="2" data-title="Hai prompt">
+  <p class="kick">Phần 2 · Giao việc cho Claude</p>
+  <h2>Hai prompt là đủ</h2>
+  <div class="p2">
+    <div>
+      <p class="lab">Prompt 1 · Dựng trang</p>
+      <div class="prompt">Tạo index.html: tiêu đề “Báo giá”, ô tên khách, bảng 3 dòng hàng gồm tên, số lượng, đơn giá; thêm nút Tính.
+Một file HTML + CSS, không thư viện.</div>
+    </div>
+    <div>
+      <p class="lab">Prompt 2 · Ra con số</p>
+      <div class="prompt">Bấm Tính: thành tiền = số lượng × đơn giá. Cộng tổng. Hiện số kiểu 1.234.567 đ.
+Giữ nguyên bố cục.</div>
+    </div>
+  </div>
+  <div class="split" style="margin-top:28px">
+    <p class="lede">Prompt thứ ba không phải prompt: bốn bước đưa file lên mạng.</p>
+    <div class="aside"><div class="tag">Khi nó làm sai</div><p>“Hoàn tác thay đổi vừa rồi.” Rồi giao lại một việc hẹp hơn.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="2" data-title="GitHub Pages">
+  <p class="kick">Phần 2 · Đưa lên mạng</p>
+  <h2>Bốn bước, không cần Git</h2>
+  <div class="flow">
+    <div class="s"><div class="k">Bước 1</div><h3>Tạo repo</h3><p><code>bao-gia</code>, chọn Public. Làm trên trình duyệt.</p></div>
+    <div class="s"><div class="k">Bước 2</div><h3>Upload file</h3><p>Add file → Upload files. Kéo <code>index.html</code> vào, Commit.</p></div>
+    <div class="s"><div class="k">Bước 3</div><h3>Bật Pages</h3><p>Settings → Pages. Branch <code>main</code>, thư mục <code>/root</code>. Save.</p></div>
+    <div class="s"><div class="k">Bước 4</div><h3>Nhận link</h3><p>Đợi 1–2 phút. Mở <code>ten.github.io/bao-gia</code>.</p></div>
+  </div>
+  <div class="split" style="margin-top:36px">
+    <p class="lede">Cùng một file. Trên máy là <code>file://</code>, trên mạng là <code>https://</code>.</p>
+    <div class="aside"><div class="tag">Trước khi gửi</div><p>Repo public. Đừng để tên khách thật trong file.</p><p>Mở link trên điện thoại, đọc tổng trong 10 giây.</p></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="3" data-title="Kiến trúc">
+  <p class="kick">Phần 3 · Đằng sau một website</p>
+  <h2>Một website đủ bốn tầng</h2>
+  <div class="flow" style="margin-top:30px">
+    <div class="s"><div class="k">01 · FE</div><h3>Trình duyệt</h3><p>Trang HTML bạn vừa làm. Chạy trên máy khách.</p></div>
+    <div class="s"><div class="k">02 · API</div><h3>Cửa nhận yêu cầu</h3><p>“Lấy báo giá BG-01.” Kiểm tra, chuyển tiếp.</p></div>
+    <div class="s"><div class="k">03 · BE</div><h3>Máy chủ</h3><p>Kiểm quyền, tính tiền, ghi lịch sử.</p></div>
+    <div class="s"><div class="k">04 · DB</div><h3>Database</h3><p>Bảng giá, báo giá, người dùng.</p></div>
+  </div>
+  <div class="cols" style="margin-top:36px">
+    <div>
+      <h3>Hôm nay: một file</h3>
+      <p>FE và dữ liệu nằm chung trong <code>index.html</code>. Không có gì để cài, không có gì để trả tiền.</p>
+    </div>
+    <div>
+      <h3>Cả team: bốn tầng</h3>
+      <p>Dữ liệu một chỗ, phân quyền, lịch sử. Đây là Demo CRM.</p>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:22px">Cùng một tờ báo giá. Khác ở chỗ ai được sửa và dữ liệu nằm đâu.</p>
+</section>
+
+<section class="slide" data-sec="4" data-title="Chốt">
+  <p class="kick">Chốt</p>
+  <h2>15 phút thấy nó chạy. <span style="white-space:nowrap">30–45 phút</span> để làm được.</h2>
+  <table class="tbl" style="margin-top:20px">
+    <thead><tr><th></th><th>Demo 15 phút</th><th>Buổi học 30–45 phút</th></tr></thead>
+    <tbody>
+      <tr><td>Sản phẩm</td><td>Một trang có link</td><td>Mỗi người một trang, có số đúng</td></tr>
+      <tr><td>Dữ liệu</td><td>Ba dòng gõ tay</td><td>Bảng giá CSV 12 format</td></tr>
+      <tr><td>Tính tiền</td><td>Số lượng × đơn giá</td><td>CPM/CPC/CPT, bậc, trần, VAT</td></tr>
+      <tr><td>Bản in</td><td>Xem trên trình duyệt</td><td>A4 một trang, điều khoản, chữ ký</td></tr>
+    </tbody>
+  </table>
+  <div class="split" style="margin-top:22px">
+    <p class="lede">Điểm chung: một file HTML, một link, không cài đặt.</p>
+    <div class="aside"><div class="tag">Việc tiếp theo</div><p>Chọn 5 sales, một việc thật, bảy ngày. Đo bằng số báo giá làm được, không bằng số slide.</p></div>
+  </div>
+</section>
+
+</div></div>
+
+<nav id="nav"><a id="b-home" href="https://coccoc.atento.vn/" aria-label="Về trang chủ chương trình" title="Về trang chủ coccoc.atento.vn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11h5v-6h4v6h5V9"/></svg></a><button id="b-prev" aria-label="Slide trước">‹</button><button id="b-next" aria-label="Slide sau">›</button></nav>
+<div id="blackout"></div>
+<div id="overview" class="panel"><h2>Tất cả slide <span style="font-weight:400;color:#9DBBA6;font-size:15px">Bấm để chuyển, Esc để đóng</span></h2><div class="grid" id="ov-grid"></div></div>
+<div id="help" class="panel"><h2>Phím tắt</h2>
+  <div class="row"><span>Tiếp, lùi</span><span><kbd>→</kbd> <kbd>Space</kbd>, <kbd>←</kbd></span></div>
+  <div class="row"><span>Nút ‹ ›</span><span>góc dưới bên phải</span></div>
+  <div class="row"><span>Trang chủ</span><span>bấm logo, hoặc nút ⌂</span></div>
+  <div class="row"><span>Về đầu, tới cuối</span><span><kbd>Home</kbd>, <kbd>End</kbd></span></div>
+  <div class="row"><span>Toàn màn hình</span><span><kbd>F</kbd></span></div>
+  <div class="row"><span>Danh sách slide</span><span><kbd>O</kbd></span></div>
+  <div class="row"><span>Màn hình đen</span><span><kbd>B</kbd></span></div>
+  <div class="row"><span>In ra PDF</span><span><kbd>Ctrl</kbd> <kbd>P</kbd></span></div>
+</div>
+
+<script>window.DECK_SECTIONS=['Mở app','Claude Code','Làm app','Kiến trúc','Chốt'];</script>
+<script src="slide.js"></script>
+</body>
+</html>

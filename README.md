@@ -17,7 +17,7 @@ Mở trực tiếp `index.html` cũng được (font self-host tải bình thư�
 1. Hero + mạch hai buổi
 2. Năm nhóm việc cần AI hỗ trợ (vấn đề)
 3. Buổi 1 — Vận hành & Office (5 mục, không lộ lịch trình)
-4. Buổi 2 — Claude Code: từ bảng tính đến app CRM, deploy lên internet (5 mục + phần đọc trước)
+4. Buổi 2 — Claude Code: từ bảng giá đến tờ báo giá in được, đưa lên mạng (3 giờ, ba phần)
 
 Liên hệ nằm ở footer (mailto).
 
@@ -34,7 +34,7 @@ Liên hệ nằm ở footer (mailto).
 
 - Số người (20–25), vai trò tham gia, và việc thật sẽ dùng trong lớp.
 - Công cụ chuẩn của Cốc Cốc: Claude / Claude Code hay Copilot.
-- Dữ liệu Buổi 2 là bộ CRM mô phỏng của Buổi 1; không dùng dữ liệu khách thật.
+- Dữ liệu Buổi 2 là bảng giá mẫu 12 dòng; không dùng bảng giá thật trong file phát cho học viên.
 - Social listening không còn là case thực hành vì Facebook chặn truy cập public group.
 - Câu về Đỗ Thu Hương (HR Director tại Cốc Cốc) đang lấy từ hồ sơ công khai của
   Atento; cân nhắc cách nói nếu phía Cốc Cốc thấy nhạy cảm.
@@ -86,23 +86,44 @@ mật khẩu `coccoc2026`.
 
 ## Slide Buổi 2
 
-Mở `/buoi-2/`. Ba file:
+Mở `/buoi-2/`. Bài giảng 37 slide, một app xuyên suốt: **Báo giá trong 5 phút**.
 
-- `00-doc-truoc.html` — 7 slide gửi học viên đọc trước: Code khác Chat,
-  một dự án là một thư mục, cài đặt, ba lệnh terminal, vòng lặp bốn bước, checklist.
-- `01-buoi-hoc.html` — 31 slide trên lớp. Một app xuyên suốt: CRM Hôm nay bản một
-  màn hình. Bảy phần: đích đến, vòng lặp, bản đồ app, build danh sách, build form,
-  kiểm thử và deploy, chốt.
-- `02-cheat-sheet.html` — một trang A4: bốn bước, ba lệnh, năm prompt, bốn lỗi và
-  ba điều không làm.
+- Bài giảng 3 giờ, mỗi phần một file slide:
+  - `phan-0-claude-code.html` · Lý thuyết (30 phút): Claude Code khác Chat, bốn nhịp làm việc,
+    `CLAUDE.md`, cài đặt, vòng lặp bốn bước, spec ba dòng, sai thì nhắn lại.
+  - `phan-1-build-apps.html` · Build apps (110 phút): 1A dựng app báo giá bằng một file HTML (nạp
+    bảng giá, tính tiền, chiết khấu theo bậc và trần, bản in A4); 1B publish lên
+    Internet bằng GitHub Pages.
+  - `phan-2-kien-truc.html` · Advanced (40 phút): kiến trúc của một website, gồm tên miền, DNS,
+    hosting, HTML/CSS/JS (app HTML); bốn lớp FE/API/BE/DB qua App CRM, minh hoạ bằng nhà hàng.
+- `03-bao-gia-15-phut.html` — 10 slide cho suất pitch 15 phút hoặc buổi dạy thử
+  30–45 phút: Claude Code khác Chat, bốn tính năng, công thức giao việc, dựng một
+  trang báo giá từ trang trắng, GitHub Pages, kiến trúc FE/BE/DB. Kịch bản nhịp
+  và demo nằm trong `03-pitch-15-phut.md`.
 
-Bản cũ 5 phần nằm trong `buoi-2/phan-*.html`, vẫn mở được từ mục "Bản cũ" ở
-`/buoi-2/`, để đối chiếu. Thiết kế của bản gọn: một ý mỗi slide, tối đa ba dòng,
-một ví dụ CRM từ đầu đến cuối, phần lớn thời gian là thực hành.
+Thiết kế: nền giấy xanh nhạt, đường kẻ mảnh, tem đỏ, bảng như sổ báo giá in ra.
+Mỗi slide một ý; phần lớn thời gian là thực hành. Không có phần đọc trước. Bản cũ
+5 phần (`phan-*.html`) đã xoá.
 
-App mẫu nằm trong `buoi-2/crm-app/` (Next.js + Prisma + Postgres) và đang chạy tại
-`/crm`. Đọc `buoi-2/crm-app/README.md` để chạy local, deploy Vercel + Neon hoặc gắn
-vào site có sẵn. Mã nguồn app bị loại khỏi Docker image của trang tĩnh.
+App mẫu nằm trong `buoi-2/mau/`:
+
+- `app.html` — file bắt đầu cho học viên.
+- `app-hoan-chinh.html` — bản tham chiếu: nạp CSV, tính tiền, chiết khấu theo bậc và
+  trần, in A4 một trang, copy tóm tắt.
+- `bang-gia.csv` — 12 format mẫu, đúng cột bảng giá thật.
+- Ba app thêm, cùng khuôn một file HTML, có sẵn dữ liệu mẫu:
+  - `bao-cao-chien-dich.html` — nạp số liệu theo ngày (`ngay, ma, ten, hien_thi, click, chi_phi`),
+    ra báo cáo A4: chỉ số, biểu đồ, bảng theo format, nhận xét tự viết, đề xuất.
+  - `media-plan.html` — từ ngân sách suy ra format và số lượng, so ba phương án; cùng luật
+    bậc và trần với app báo giá.
+  - `xem-truoc-quang-cao.html` — xem banner trên New tab, Search, CCNews, Splash; kiểm quy
+    cách mẫu (kích thước, dung lượng, độ dài chữ).
+    Ảnh demo nằm trong `anh-mau.js` (bộ đúng quy cách và bộ cố tình lỗi, thương hiệu giả).
+- `CLAUDE.md` — luật làm việc cho Claude Code.
+
+Bản CRM đầy đủ vẫn nằm trong `buoi-2/crm-app/` (Next.js + Prisma + Postgres), chạy
+tại `/crm`, chỉ để tham khảo. Đọc `buoi-2/crm-app/README.md` để chạy local hoặc
+deploy Vercel + Neon. Mã nguồn app bị loại khỏi Docker image của trang tĩnh.
 
 ## Cấu trúc
 
@@ -118,22 +139,25 @@ buoi-1/phan-5-noi-dung-da-kenh.html  # slide Phần 5: nội dung đa kênh, vid
 buoi-1/phan-5-noi-dung-da-kenh.md    # cấu trúc, việc trước buổi, nguồn đã kiểm (không đưa vào image)
 buoi-2/index.html             # mục lục tài liệu giảng Buổi 2 (/buoi-2/)
 buoi-2/de-xuat-cau-truc-gon.md # lý do cắt gọn, so sánh với các khoá non-tech
-buoi-2/ke-hoach.md            # kế hoạch buổi, case CRM, timing, deploy runbook
+buoi-2/ke-hoach.md            # kế hoạch buổi, app báo giá, công thức, chuẩn bị
 buoi-2/chuan-bi.md            # việc cần chuẩn bị cho giảng viên và trợ giảng
 buoi-2/slide.css              # khung slide dùng chung
 buoi-2/slide.js               # điều hướng slide dùng chung
-buoi-2/00-doc-truoc.html      # đọc trước: 7 slide làm quen Claude Code
-buoi-2/01-buoi-hoc.html       # 31 slide trên lớp: một app, một buổi
-buoi-2/02-cheat-sheet.html    # một trang A4 in ra cho học viên
-buoi-2/phan-0-claude-code.html       # bản cũ: đọc trước 24 slide
-buoi-2/phan-0-claude-code.md         # cấu trúc, việc trước buổi (không đưa vào image)
-buoi-2/phan-1-claude-code.html       # bản cũ
-buoi-2/phan-2-kien-truc.html         # bản cũ
-buoi-2/phan-3-spec.html              # bản cũ
-buoi-2/phan-4-build.html             # bản cũ
-buoi-2/phan-5-deploy.html            # bản cũ
-buoi-2/img/*.png              # ảnh app mẫu dùng trong slide
-buoi-2/crm-app/               # app mẫu Next.js + Prisma + Postgres (không copy vào image)
+buoi-2/phan-0-claude-code.html # Phần 0: Claude Code (13 slide)
+buoi-2/phan-1-build-apps.html  # Phần 1: build app báo giá + publish (15 slide)
+buoi-2/phan-2-kien-truc.html   # Phần 2: kiến trúc website + chốt (14 slide)
+buoi-2/03-bao-gia-15-phut.html # 10 slide: pitch 15 phút / dạy thử 30–45 phút
+buoi-2/03-pitch-15-phut.md    # nhịp pitch, kịch bản demo, nhịp buổi 30–45 phút
+buoi-2/img/*.png              # ảnh chụp bản CRM đầy đủ (còn dùng cho crm-app)
+buoi-2/mau/app.html           # file bắt đầu cho học viên
+buoi-2/mau/app-hoan-chinh.html # app tham chiếu đã chạy được
+buoi-2/mau/bang-gia.csv       # 12 format mẫu
+buoi-2/mau/bao-cao-chien-dich.html  # app thêm: báo cáo cuối chiến dịch
+buoi-2/mau/media-plan.html          # app thêm: media plan ngược
+buoi-2/mau/xem-truoc-quang-cao.html # app thêm: xem trước quảng cáo
+buoi-2/mau/anh-mau.js               # ảnh demo (base64) cho app xem trước quảng cáo
+buoi-2/mau/CLAUDE.md          # luật làm việc cho Claude Code
+buoi-2/crm-app/               # bản CRM đầy đủ, chỉ để tham khảo (không copy vào image)
 crm.htpasswd                  # mật khẩu tuỳ chọn cho /crm (user crm)
 assets/media/CocCoc_Gioi_thieu_v5_90s.mp4  # video minh hoạ Phần 5 (Claude làm), nhúng trong slide
 assets/media/flow-claude.mp4  # clip ghép Flow + Claude, nhúng trong slide 17
